@@ -1,1 +1,71 @@
-/* You can add global styles to this file, and also import other style files */
+/* PALETA DE COLORES */
+$dark-slate-900: #212529;
+$dark-slate-700: #495057;
+
+$maroon: #641134;
+
+$gray: #808080;
+
+$peru: #BC955C;
+
+$gainsboro: #DCDCDC;
+$burlywood: #DDC9A3;
+
+$white-smoke: #ECEEEF;
+$ghost-white: #F9F9F9;
+$snow: #FAFAFA;
+
+/*    VARIABLES   */
+.text-ghost-write{
+  color:#DCDCDC
+}
+
+.text-snow{
+  color:#FAFAFA
+}
+
+.text-dark-slate {
+  color: $dark-slate-900;
+}
+
+.text-maroon {
+  color: $maroon;
+}
+
+.bg-maroon {
+  background-color: $maroon;
+  color: $snow;
+}
+
+.bg-peru {
+  background-color: $peru;
+  color: $dark-slate-900;
+}
+
+.bg-write{
+  background-color: #ECEEEF;
+  color: #FFFFFF;
+}
+
+.btn {
+  &:focus,
+  &:active,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+.btn-outline-primary {
+  color: $maroon;
+  border-color: $maroon;
+
+  &:hover,
+  &:active,
+  &:focus,
+  &:focus-visible {
+    background-color: $maroon;
+    color: $snow;
+    box-shadow: none;
+  }
+}
