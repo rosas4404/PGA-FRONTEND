@@ -1,6 +1,5 @@
 export interface usuarioDTO{
-  tipo: 'ALUMNO' | 'DOCENTE';
-
+  rol: 'ALUMNO' | 'DOCENTE';
   nombre: string;
   apellidoPaterno: string;
   apellidoMaterno: string;
@@ -8,11 +7,4 @@ export interface usuarioDTO{
   telefono: string;
   direccion: string;
 
-  password: string;
-  confirmPassword: string;
-
-  // Campos opcionales
-  universidad?: string;
-  carrera?: string;
-  fechaTermino?: Date;
 }
