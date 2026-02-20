@@ -36,7 +36,10 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item">
-            <a class="nav-link text-dark-slate fs-6 fw-bold"> INICIAR SESIÓN </a>
+            <a *ngIf="!loginService.isLoggedIn()" class="nav-link text-dark-slate fs-6 fw-bold" routerLink="/login"> INICIAR SESIÓN </a>
+        </li>
+        <li class="nav-item">
+            <a *ngIf="loginService.isLoggedIn()" class="nav-link text-dark-slate fs-6 fw-bold" (click)="logout()"> Cerrar Sesión </a>
         </li>
       </ul>
     </div>
