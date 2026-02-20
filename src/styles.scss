@@ -69,3 +69,60 @@ $snow: #FAFAFA;
     box-shadow: none;
   }
 }
+/* Base */
+.toast {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Success */
+.toast-success {
+  background-color: linear-gradient(135deg, #198754, #20c997) !important;
+  color: white !important;
+}
+
+/* Error */
+.toast-error {
+  background-color: linear-gradient(135deg, #dc3545, #ff6b6b) !important;
+  color: white !important;
+}
+
+/* Título */
+.toast-title {
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Mensaje */
+.toast-message {
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Contenedor centrado completamente */
+#toast-container.toast-center-center {
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translate(-50%, -50%) !important;
+  position: fixed !important;
+}
+
+/* Opcional: ancho más elegante */
+#toast-container {
+  width: auto !important;
+  max-width: 400px;
+}
+
+/* Estética más limpia */
+.toast {
+  border-radius: 14px !important;
+  text-align: left !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+}
+.toast:before {
+  font-size: 20px !important;
+}
+
+
