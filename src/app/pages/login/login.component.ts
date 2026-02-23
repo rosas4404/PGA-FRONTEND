@@ -12,7 +12,7 @@ import { jwtDecode } from 'jwt-decode';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'

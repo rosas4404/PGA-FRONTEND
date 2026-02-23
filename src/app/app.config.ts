@@ -11,6 +11,8 @@ import { authInterceptorProviders } from './services/auth.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
              provideHttpClient(),
+             provideHttpClient(withInterceptorsFromDi()),
+             authInterceptorProviders,
              provideAnimations(),
              provideToastr({
               timeOut: 3000,

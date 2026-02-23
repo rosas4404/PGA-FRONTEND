@@ -7,15 +7,19 @@ import { docenteGuard } from './services/guard/docente.guard';
 import { alumnoGuard } from './services/guard/alumno.guard';
 import { LoginComponent } from './pages/login/login.component';
 import { PasswordComponent } from './pages/password/password.component';
+import { docenteAlumnoGuard } from './services/guard/docente-alumno.guard';
+import { authGuard } from './services/guard/auth.guard';
+import { DocenteDashboardComponent } from './pages/dashboard/docente-dashboard/docente-dashboard.component';
+import { AlumnoDashboardComponent } from './pages/dashboard/alumno-dashboard/alumno-dashboard.component';
 
 
 export const routes: Routes = [
     {path:'registro', component: RegistroUsuarioComponent},
     {path:'home', component:HomeComponent},
     {path: 'admin-dashboard', component:AdminDashboardComponent, canActivate:[adminGuard]},
-    {path: 'docente-dashboard', component:AdminDashboardComponent, canActivate:[docenteGuard]},
-    {path: 'alumno-dashboard', component:AdminDashboardComponent, canActivate:[alumnoGuard]},
+    {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard]},
+    {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard]},
     {path: 'login', component:LoginComponent},
-    {path: 'password', component:PasswordComponent},
+    {path: 'password', component:PasswordComponent, canActivate:[authGuard]},
     {path: '**', redirectTo:''}//por si la ruta no existe 
 ];

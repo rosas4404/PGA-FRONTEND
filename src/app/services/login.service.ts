@@ -62,6 +62,11 @@ export class LoginService {
     let user = this.getUser();
     return user.authorities[0].authority;
   }
+  //obtener claim para cambio de contraseña forzoso
+  getDebeCambiarContraseña(){
+    let user = this.getUser();
+    return user.debeCambiarContraseña;
+  }
 
   getCurrentUser(): Observable<any> {
     return this.http.get(`${this.apiUrl}/usuario-actual`);
