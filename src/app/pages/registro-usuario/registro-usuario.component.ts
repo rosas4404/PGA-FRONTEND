@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TitleStrategy } from '@angular/router';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { UserService } from '../../services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-registro-usuario',
@@ -15,7 +16,7 @@ import { UserService } from '../../services/user.service';
 export class RegistroUsuarioComponent implements OnInit {
     registroForm!: FormGroup;
 
-    constructor(private fb: FormBuilder, private userService:UserService){}
+    constructor(private fb: FormBuilder, private userService:UserService, private toastr: ToastrService){}
 
     ngOnInit(): void {
       this.registroForm = this.fb.group({
@@ -25,7 +26,7 @@ export class RegistroUsuarioComponent implements OnInit {
           apellidoPaterno: ['',Validators.required],
           apellidoMaterno: ['',Validators.required],
           direccion: ['',Validators.required],
-          email: ['',[Validators.required, Validators.email]],
+          email: ['',[Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)]],
           telefono: ['',[Validators.required, Validators.minLength(10), Validators.maxLength(10),Validators.pattern("[0-9]*")]],
         }); 
     }
@@ -45,14 +46,16 @@ export class RegistroUsuarioComponent implements OnInit {
 
     this.userService.register(formValue).subscribe({
         next: (data:any)=>{
-        
+        this.toastr.success('Usuario registrado correctamente', 'Éxito')
+        this.registroForm.reset();
         },
         error: (err)=>{
-          //
+          this. toastr.error('Ocurrió un error al registrar' + err.massage, 'Error')
         }
       });
-      
       console.log(formValue);
     }
-
+    
 }
+
+
