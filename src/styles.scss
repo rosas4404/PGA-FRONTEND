@@ -46,29 +46,47 @@ $snow: #FAFAFA;
   background-color: #ECEEEF;
   color: #FFFFFF;
 }
+.bg-arena{
+  background-color:  #e5dbbb;
+  color: #FFFFFF;
+}
+.bg-smoke{
+  background-color:$white-smoke;
+  color: #FFFFFF;
+}
 
+
+//botones
 .btn {
   &:focus,
   &:active,
   &:focus-visible {
-    outline: none;
-    box-shadow: none;
+    outline: none !important;
+    box-shadow: none !important;
   }
 }
+//botones
 
 .btn-outline-primary {
   color: $maroon;
   border-color: $maroon;
-
-  &:hover,
+  &:hover{
+    background-color: $maroon !important;
+  border-color: $maroon !important;
+  color: $snow !important;
+  }
   &:active,
   &:focus,
   &:focus-visible {
-    background-color: $maroon;
+    background-color: $maroon !important;
     color: $snow;
-    box-shadow: none;
-  }
+    box-shadow: none !important;
+   
+  };
 }
+
+
+//notificaciones
 /* Base */
 .toast {
   border-radius: 12px !important;
@@ -126,3 +144,52 @@ $snow: #FAFAFA;
 }
 
 
+//menu desplegable
+.sidebar {
+  width: 250px;
+   transition: all 0.3s ease;
+}
+
+/* Color base */
+.sidebar-link {
+  color: $maroon !important;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover */
+.sidebar-link:hover {
+  background-color: rgba(128, 0, 0, 0.1); 
+  color:$maroon !important;
+  padding-left: 12px;
+}
+
+/* Activo */
+.sidebar-link.active {
+  background-color: rgba(128, 0, 0, 0.2) !important;
+  color:$maroon !important;
+  font-weight: 600;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.btn-toggle {
+  background: transparent;
+  border: none;
+  color: maroon;
+}
+
+//conytorno inputs
+input:focus {
+  outline: none !important;
+  border-color: #8b5e3c !important;
+  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.25) !important;
+}
+//contorno select 
+select:focus {
+  outline: none !important;
+  border-color: #8b5e3c !important;
+  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.25) !important;
+}

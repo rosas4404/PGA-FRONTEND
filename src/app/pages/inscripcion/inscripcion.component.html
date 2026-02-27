@@ -1,0 +1,320 @@
+<div class="card shadow-sm border-0">
+
+  <!-- Titulo -->
+  <div class="card-header bg-smoke d-flex justify-content-between align-items-center">
+    <h5 class="m-0 fw-bold text-maroon">Gestión de Inscripciones</h5>
+    <button class="btn btn-outline-primary"   data-bs-toggle="modal" data-bs-target="#crearForm">
+      <i class="bi bi-plus-circle me-1"></i> Nueva Inscripción
+    </button>
+  </div>
+
+  <div class="card-body">
+
+    <!-- Buscador de filtros-->
+ <form [formGroup]="filtroForm" (ngSubmit)="buscar()">
+  <div class="row g-3 mb-4 ">
+
+    <!-- Busqueda por Alumno -->
+    <div class="col-md-4">
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Buscar alumno..."
+        formControlName="alumno">
+    </div>
+   
+     <!-- filtro por Tipo -->
+    <div class="col-md-2">
+      <select class="form-select" formControlName="tipo">
+        <option value="">Filtrar por tipo</option>
+        <option *ngFor="let t of tipos" [value]="t.value">
+          {{ t.label }}
+        </option>
+      </select>
+    </div>
+    <!-- filtro por Grupo -->
+    <div class="col-md-2">
+      <select class="form-select" formControlName="idGrupo">
+        <option value="">Filtrar por grupo</option>
+        <option *ngFor="let g of grupos" [value]="g.id">
+          {{ g.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Botón -->
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-outline-primary w-100">
+        Buscar
+      </button>
+    </div>
+      <div class="col-md-2">
+      <button type="button"
+        class="btn btn-outline-primary w-100"
+        (click)="limpiarFiltros()">
+        Limpiar
+      </button>
+   </div>
+
+  </div>
+</form>
+
+    <!-- tabla de inscripciones -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped w-100">
+
+        <thead class="table-light text-center">
+          <tr>
+            <th>Alumno</th>
+            <th>N. Inscripción</th>
+            <th>Grupo</th>
+            <th>Estado</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let i of inscripciones"  >
+            <td>{{i.alumno}}</td>
+            <td class = "text-center">{{i.idInscripcion}}</td>
+            <td class = "text-center">{{i.nombreGrupo}}</td>
+            <td class = "text-center"><span *ngIf="i.estado" class="badge bg-success | bg-danger">{{i.estado}}</span></td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-primary me-2">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+    <!-- Ppaginación-->
+    <nav *ngIf="totalPages > 0" class="mt-4">
+      <ul class="pagination justify-content-center">
+
+    <!-- Anterior -->
+    <li class="page-item " [class.disabled]="page === 0">
+      <button class="page-link bg-maroon"
+              (click)="cambiarPagina(page - 1)"
+              [disabled]="page === 0">
+        «
+      </button>
+    </li>
+
+    <!-- Números -->
+    <li class="page-item"
+        *ngFor="let p of paginas"
+        [class.active]="p === page">
+      <button class="page-link bg-maroon"
+              (click)="cambiarPagina(p)">
+        {{ p + 1 }}
+      </button>
+    </li>
+
+    <!-- Siguiente -->
+    <li class="page-item"
+        [class.disabled]="page + 1 >= totalPages">
+      <button class="page-link bg-maroon"
+              (click)="cambiarPagina(page + 1)"
+              [disabled]="page + 1 >= totalPages">
+        »
+      </button>
+    </li>
+
+  </ul>
+</nav>
+
+<!-- Información -->
+<div class="text-center text-muted small">
+  Mostrando {{ inscripciones.length }} de {{ totalElements }} registros
+</div>
+
+  </div>
+</div>
+
+<!--Modal Detalles-->
+<div class="modal fade" 
+     id="crearForm" tabindex="-1" 
+     aria-labelledby="crearModalLabel" 
+     aria-hidden="true" 
+     data-bs-backdrop="static"
+     data-bs-keyboard="false">
+
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Header --> 
+      <div class="modal-header bg-smoke">
+        <!--Titulo paso 1-->
+        <h5 class="modal-title fw-bold text-maroon" *ngIf="paso==1">Nueva Inscripción</h5>
+        <!--Titulo paso 2-->
+        <h5 class="modal-title fw-bold text-maroon" *ngIf="paso==2">Asignar Grupo</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+      </div>
+
+      <div class="modal-body">
+       
+        <!-- Body 1-paso 1 crear -->
+        <div  *ngIf="paso==1">
+        <form [formGroup]="crearForm" (ngSubmit)="crear()">
+
+        <!-- Escuela -->
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text" style="font-size:0.9rem;">Escuela</span>
+            <input 
+              type="text"
+              formControlName="escuela"
+              class="form-control"
+              [ngClass]="{'is-invalid': crearForm.get('escuela')?.invalid && crearForm.get('escuela')?.touched}">
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+                Campo Obligatorio
+              </div>
+          </div>
+        </div>  
+        <div class="mb-3">
+          <!--Nivel Estudio -->
+          <div class="input-group">
+            <span class="input-group-text" style="font-size:0.9rem;">Nivel Estudio</span>
+            <select
+              class="form-select"
+              formControlName ="nivelEstudio"
+              [ngClass]="{'is-invalid': crearForm.get('nivelEstudio')?.invalid && crearForm.get('nivelEstudio')?.touched}">
+              <option *ngFor="let n of nivelEstudio" [value]="n.value">
+                {{ n.label }}
+              </option>
+            </select>
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo Obligatorio
+            </div>
+          </div>
+        </div> 
+        <!-- Carrera -->
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text" style="font-size:0.9rem;">Carrera</span>
+            <input 
+              type="text"
+              formControlName="carrera"
+              class="form-control"
+              [ngClass]="{'is-invalid': crearForm.get('carrera')?.invalid && crearForm.get('carrera')?.touched}">
+
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo Obligatorio
+            </div>
+          </div>
+        </div> 
+        <div class="row mb-3">
+          <!-- Fecha inicio -->
+          <div class="col-md-6">
+            <div class="input-group" >
+              <span class="input-group-text" style="font-size:0.9rem;">Inicio</span>
+              <input 
+                type="date"
+                formControlName="fechaInicio"
+                class="form-control"
+                [ngClass]="{'is-invalid': crearForm.get('fechaInicio')?.invalid && crearForm.get('fechaInicio')?.touched}">
+
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+                Campo Obligatorio
+              </div>
+            </div>
+          </div>
+          <!-- Fecha Fin -->
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text" style="font-size:0.9rem;">Fin</span>
+              <input 
+                type="date"
+                formControlName="fechaFin"
+                class="form-control"
+                [ngClass]="{'is-invalid': crearForm.get('fechaFin')?.invalid && crearForm.get('fechaFin')?.touched}">
+
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+                Campo Obligatorio
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Tipo de Inscripción -->
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text" style="font-size:0.9rem;">Tipo Inscripción</span>
+            <select
+              class="form-select"
+              formControlName ="tipo"
+              [ngClass]="{'is-invalid': crearForm.get('tipo')?.invalid && crearForm.get('tipo')?.touched}">
+              <option *ngFor="let t of tipos" [value]="t.label">
+                {{ t.label }}
+              </option>
+            </select>
+            <div class="invalid-feedback">
+              Campo Obligatorio
+            </div>
+          </div>
+        </div>
+        <!-- Id usuario -->
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text" style="font-size:0.9rem;">Numero de usuario</span>
+            <input 
+              type="number"
+              formControlName="idUsuario"
+              Class="form-control"
+              [ngClass]="{'is-invalid': crearForm.get('idUsuario')?.invalid && crearForm.get('idUsuario')?.touched}">
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+                Campo Obligatorio
+              </div>
+          </div>
+        </div>    
+      </form>
+      </div>
+      <!--Paso 2- Asignar grupo-->
+      <div *ngIf = "paso==2">
+        <h6 class="fw-bold mb-3">Seleccionar Grupo</h6>
+          <div class="mb-3">
+            <select 
+              class="form-select" [(ngModel)]="asignarGrupoData.idGrupo">
+              <option *ngFor="let g of grupos" [value]="g.id">
+                 {{ g.nombre }}
+              </option>
+            </select>
+          </div>
+      </div>
+    </div>
+      <!-- Footer -->
+      <div class="modal-footer">
+        <!--Paso 1-->
+        <button 
+          *ngIf = "paso == 1"
+          type="submit" 
+          class="btn btn-primary w-100" 
+          [disabled]="!crearForm.valid || cargando" 
+          >
+          <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
+          Crear
+        </button>
+        <!--pASO 2. -->
+        <div *ngIf="paso == 2" class="w-100 d-flex justify-content-between">
+          <button class="btn btn-outline-secondary" (click)="ommitir()">
+            Omitir
+          </button>
+          <button class="btn btn-success" (click)="asignarGrupo()">
+            Guardar Grupo
+          </button>
+
+        </div>
+        <!-- Botón oculto para cerrar modal -->
+        <button id="btnCerrarModal" data-bs-dismiss="modal" hidden></button>
+      </div>
+    
+
+    </div>
+  </div>
+</div>
