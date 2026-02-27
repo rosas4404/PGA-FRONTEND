@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { cambioContraseñaDTO } from '../../models/cambioContraseñaDTO';
+import { cambioContraseñaDTO } from '../../models/dto/cambioContraseñaDTO';
 import { CambioPasswordService } from '../../services/cambio-password.service';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';

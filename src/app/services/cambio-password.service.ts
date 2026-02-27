@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { cambioContraseñaDTO } from '../models/cambioContraseñaDTO';
+import { cambioContraseñaDTO } from '../models/dto/cambioContraseñaDTO';
 import { Observable } from 'rxjs';
 
 @Injectable({
