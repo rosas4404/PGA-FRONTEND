@@ -11,12 +11,15 @@ import { docenteAlumnoGuard } from './services/guard/docente-alumno.guard';
 import { authGuard } from './services/guard/auth.guard';
 import { DocenteDashboardComponent } from './pages/dashboard/docente-dashboard/docente-dashboard.component';
 import { AlumnoDashboardComponent } from './pages/dashboard/alumno-dashboard/alumno-dashboard.component';
+import { InscripcionComponent } from './pages/inscripcion/inscripcion.component';
 
 
 export const routes: Routes = [
     {path:'registro', component: RegistroUsuarioComponent},
     {path:'home', component:HomeComponent},
-    {path: 'admin-dashboard', component:AdminDashboardComponent, canActivate:[adminGuard]},
+    {path: 'admin-dashboard', component:AdminDashboardComponent, canActivate:[adminGuard],
+        children:[{path:'inscripcion', component: InscripcionComponent}]
+    },
     {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard]},
     {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard]},
     {path: 'login', component:LoginComponent},
