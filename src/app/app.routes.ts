@@ -11,6 +11,7 @@ import { docenteAlumnoGuard } from './services/guard/docente-alumno.guard';
 import { authGuard } from './services/guard/auth.guard';
 import { DocenteDashboardComponent } from './pages/dashboard/docente-dashboard/docente-dashboard.component';
 import { AlumnoDashboardComponent } from './pages/dashboard/alumno-dashboard/alumno-dashboard.component';
+import { GrupoComponent } from './pages/grupo/grupo.component';
 
 
 export const routes: Routes = [
@@ -20,6 +21,7 @@ export const routes: Routes = [
     {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard]},
     {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard]},
     {path: 'login', component:LoginComponent},
+    {path: 'grupos', component:GrupoComponent},
     {path: 'password', component:PasswordComponent, canActivate:[authGuard]},
     {path: '**', redirectTo:''}//por si la ruta no existe 
 ];

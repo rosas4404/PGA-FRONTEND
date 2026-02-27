@@ -1,3 +1,9 @@
+$primary: #641134;
+$secondary: #BC955C;
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
 /* PALETA DE COLORES */
 $dark-slate-900: #212529;
 $dark-slate-700: #495057;
@@ -78,13 +84,13 @@ $snow: #FAFAFA;
 
 /* Success */
 .toast-success {
-  background-color: linear-gradient(135deg, #198754, #20c997) !important;
+  background: linear-gradient(135deg, #198754, #20c997) !important;
   color: white !important;
 }
 
 /* Error */
 .toast-error {
-  background-color: linear-gradient(135deg, #dc3545, #ff6b6b) !important;
+  background: linear-gradient(135deg, #dc3545, #ff6b6b) !important;
   color: white !important;
 }
 
@@ -124,5 +130,6 @@ $snow: #FAFAFA;
 .toast:before {
   font-size: 20px !important;
 }
+
 
 
