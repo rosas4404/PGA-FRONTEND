@@ -11,7 +11,7 @@
             <!------------ EMAIL ------------------>
             <div class="mb-3">
               <label class="form-label" style="font-size:0.9rem;"> Email </label>
-              <input type="text" class="form-control" 
+              <input type="text" class="form-control input:focus" 
                 [(ngModel)]="loginData.username" name="username" required #u="ngModel"
                 [ngClass]="{ 'is-invalid': u.invalid && u.touched}">
                 <div class="invalid-feedback" style="font-size:0.6rem;">
@@ -31,7 +31,7 @@
 
             <!-- Botón -->
             <div class="text-center mt-3">
-              <button type="submit" class = "btn btn-sm bg-maroon px-4" >
+              <button type="submit" class = "btn btn-sm btn-outline-primary px-4"  >
                 <i class="bi bi-box-arrow-in-right fs-5 me-3"></i> Ingresar
               </button>
             </div>
