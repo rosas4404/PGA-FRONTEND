@@ -3,7 +3,7 @@
   <!-- Titulo -->
   <div class="card-header bg-smoke d-flex justify-content-between align-items-center">
     <h5 class="m-0 fw-bold text-maroon">Gestión de Inscripciones</h5>
-    <button class="btn btn-outline-primary"   data-bs-toggle="modal" data-bs-target="#crearForm">
+    <button class="btn btn-outline-primary"  (click)="abrirModal(crearModal)">
       <i class="bi bi-plus-circle me-1"></i> Nueva Inscripción
     </button>
   </div>
@@ -36,7 +36,7 @@
     <div class="col-md-2">
       <select class="form-select" formControlName="idGrupo">
         <option value="">Filtrar por grupo</option>
-        <option *ngFor="let g of grupos" [value]="g.id">
+        <option *ngFor="let g of grupos" [value]="g.idGrupo">
           {{ g.nombre }}
         </option>
       </select>
@@ -68,6 +68,7 @@
             <th>Alumno</th>
             <th>N. Inscripción</th>
             <th>Grupo</th>
+            <th>Tipo</th>
             <th>Estado</th>
             <th class="text-center">Acciones</th>
           </tr>
@@ -77,14 +78,30 @@
           <tr *ngFor="let i of inscripciones"  >
             <td>{{i.alumno}}</td>
             <td class = "text-center">{{i.idInscripcion}}</td>
-            <td class = "text-center">{{i.nombreGrupo}}</td>
-            <td class = "text-center"><span *ngIf="i.estado" class="badge bg-success | bg-danger">{{i.estado}}</span></td>
+            <td class = "text-center">{{i.nombreGrupo || 'Sin Asignar'}}</td>
+            <td class = "text-center">{{i.tipo}}</td>
+            <td class = "text-center"><span [ngClass]="i.estado == true? 'badge bg-success' : 'badge bg-danger' "> 
+            {{i.estado}}</span></td>
+            
             <td class="text-center">
-              <button class="btn btn-sm btn-outline-primary me-2">
-                <i class="bi bi-pencil"></i>
+            
+              <!--mas informacion-->
+              <button class="btn btn-sm btn-outline-primary me-2"
+              (click)="abrirDetalle(i,detallesModal)">
+                <i class="bi bi-eye"></i>
               </button>
-              <button class="btn btn-sm btn-outline-danger">
-                <i class="bi bi-trash"></i>
+              <!--Alta / Baja -->
+              <button class="btn btn-sm me-2"
+              [ngClass]="i.estado ? 'btn-outline-danger':'btn-outline-success'"
+              (click)="AbrirConfirmacion(i,confirmarModal)">
+                <i class="bi"
+                 [ngClass]="i.estado ? 'bi-chevron-double-down' : 'bi-chevron-double-up'"></i>
+              </button>
+                <!--asignar grupo-->
+               <button class="btn btn-sm btn-outline-primary me-2" 
+               *ngIf="i.nombreGrupo==null && i.estado == true "
+               (click)="abrirAsignacion(i,crearModal)">
+                <i class="bi bi-box-arrow-in-right"></i>
               </button>
             </td>
           </tr>
@@ -98,7 +115,7 @@
 
     <!-- Anterior -->
     <li class="page-item " [class.disabled]="page === 0">
-      <button class="page-link bg-maroon"
+      <button class="page-link "
               (click)="cambiarPagina(page - 1)"
               [disabled]="page === 0">
         «
@@ -109,7 +126,7 @@
     <li class="page-item"
         *ngFor="let p of paginas"
         [class.active]="p === page">
-      <button class="page-link bg-maroon"
+      <button class="page-link "
               (click)="cambiarPagina(p)">
         {{ p + 1 }}
       </button>
@@ -118,7 +135,7 @@
     <!-- Siguiente -->
     <li class="page-item"
         [class.disabled]="page + 1 >= totalPages">
-      <button class="page-link bg-maroon"
+      <button class="page-link"
               (click)="cambiarPagina(page + 1)"
               [disabled]="page + 1 >= totalPages">
         »
@@ -136,33 +153,41 @@
   </div>
 </div>
 
-<!--Modal Detalles-->
-<div class="modal fade" 
-     id="crearForm" tabindex="-1" 
-     aria-labelledby="crearModalLabel" 
-     aria-hidden="true" 
-     data-bs-backdrop="static"
-     data-bs-keyboard="false">
-
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-
-      <!-- Header --> 
-      <div class="modal-header bg-smoke">
-        <!--Titulo paso 1-->
-        <h5 class="modal-title fw-bold text-maroon" *ngIf="paso==1">Nueva Inscripción</h5>
-        <!--Titulo paso 2-->
-        <h5 class="modal-title fw-bold text-maroon" *ngIf="paso==2">Asignar Grupo</h5>
-
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+<!--Modal crear inscripcion-->
+<ng-template #crearModal let-modal>
+  <!-- Header --> 
+  <div class="modal-header bg-smoke flex-column align-items-start">
+    <!-- Títulos -->
+    <h5 class="modal-title fw-bold text-maroon" *ngIf="paso==1">
+      Nueva Inscripción
+    </h5>
+    <h5 class="modal-title fw-bold text-maroon" *ngIf="paso==2">
+      Asignar Grupo
+    </h5>
+    <!-- Barra de progreso -->
+    <div class="w-100 mt-2">
+      <div class="progress" style="height: 5px;">
+        <div class="progress-bar bg-maroon" [style.width.%]="paso == 1 ? 50 : 100">
+        </div>
+      </div>
+      <div class="d-flex justify-content-between small mt-1">
+        <span [ngClass]="paso==1 ? 'fw-bold text-maroon' : 'text-muted'">Registro</span>
+        <span [ngClass]="paso==2 ? 'fw-bold text-maroon' : 'text-muted'">Grupo</span>
+      </div>
+    </div>
+    <!-- Botón cerrar -->
+        <button type="button" 
+          class="btn-close position-absolute end-0 top-0 m-3"
+          (click) = "cerrarModal()">
+        </button>
 
       </div>
-
-      <div class="modal-body">
+      <div class="modal-body modal-body-step">
        
+
         <!-- Body 1-paso 1 crear -->
         <div  *ngIf="paso==1">
-        <form [formGroup]="crearForm" (ngSubmit)="crear()">
+        <form [formGroup]="crearForm">
 
         <!-- Escuela -->
         <div class="mb-3">
@@ -171,13 +196,15 @@
             <input 
               type="text"
               formControlName="escuela"
+        
               class="form-control"
               [ngClass]="{'is-invalid': crearForm.get('escuela')?.invalid && crearForm.get('escuela')?.touched}">
               <div class="invalid-feedback" style="font-size:0.6rem;">
                 Campo Obligatorio
               </div>
           </div>
-        </div>  
+        </div
+        >  
         <div class="mb-3">
           <!--Nivel Estudio -->
           <div class="input-group">
@@ -239,6 +266,9 @@
               <div class="invalid-feedback" style="font-size:0.6rem;">
                 Campo Obligatorio
               </div>
+               <div *ngIf="crearForm.hasError('fechaFinPasada')">
+                <small style="color:red; font-size: 0.6rem;">La fecha de final debe ser mayor a la fecha de inicio.</small>
+              </div>
             </div>
           </div>
         </div>
@@ -254,7 +284,7 @@
                 {{ t.label }}
               </option>
             </select>
-            <div class="invalid-feedback">
+            <div class="invalid-feedback" style="font-size:0.6rem;">
               Campo Obligatorio
             </div>
           </div>
@@ -281,7 +311,7 @@
           <div class="mb-3">
             <select 
               class="form-select" [(ngModel)]="asignarGrupoData.idGrupo">
-              <option *ngFor="let g of grupos" [value]="g.id">
+              <option *ngFor="let g of grupos" [value]="g.idGrupo">
                  {{ g.nombre }}
               </option>
             </select>
@@ -293,15 +323,18 @@
         <!--Paso 1-->
         <button 
           *ngIf = "paso == 1"
-          type="submit" 
-          class="btn btn-primary w-100" 
-          [disabled]="!crearForm.valid || cargando" 
+          class="btn btn-outline-primary w-100 align-items-center" 
+          [disabled]="!crearForm.valid || cargando"
+          (click) = "crear()" 
           >
           <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
           Crear
         </button>
         <!--pASO 2. -->
         <div *ngIf="paso == 2" class="w-100 d-flex justify-content-between">
+        
+        
+        
           <button class="btn btn-outline-secondary" (click)="ommitir()">
             Omitir
           </button>
@@ -310,11 +343,127 @@
           </button>
 
         </div>
-        <!-- Botón oculto para cerrar modal -->
-        <button id="btnCerrarModal" data-bs-dismiss="modal" hidden></button>
       </div>
-    
+</ng-template>
 
-    </div>
+<!--modal de confirmacion-->
+<ng-template #confirmarModal let-modal>
+  <div class="modal-header bg-warning-subtle">
+    <h5 class="modal-title text-maroon">Confirmar acción</h5>
+    <button type="button"
+      class="btn-close"
+      (click)="modal.dismiss()">
+    </button>
   </div>
-</div>
+
+  <div class="modal-body text-center">
+    ¿Desea {{accionTexto}} ?
+  </div>
+  <div class="modal-footer justify-content-center">
+    <button class="btn btn-outline-secondary"
+    (click)="modal.dismiss()">
+    Cancelar
+    </button>
+    <button class="btn btn-danger"
+    (click)="activarDesactivar(modal)">
+    Confirmar
+    </button>
+    </div>
+</ng-template>
+
+<!--Detalles modal-->
+<ng-template #detallesModal let-modal>
+  <div class="modal-header bg-light">
+    <h5 class="modal-title fw-bold text-maroon">
+      Detalles de Inscripción
+    </h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>ID:</strong></div>
+      <div class="col-6">{{ detalleSeleccionado?.idInscripcion }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>Alumno:</strong></div>
+      <div class="col-6">{{ detalleSeleccionado?.alumno }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>Estado:</strong></div>
+      <div class="col-6">
+        <span 
+          class="badge"
+          [ngClass]="detalleSeleccionado?.estado ? 'bg-success' : 'bg-danger'">
+          {{ detalleSeleccionado?.estado ? 'Activa' : 'Inactiva' }}
+        </span>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>Escuela:</strong></div>
+      <div class="col-6">{{ detalleSeleccionado?.escuela }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>Nivel:</strong></div>
+      <div class="col-6">{{ detalleSeleccionado?.nivelEstudio }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>Carrera:</strong></div>
+      <div class="col-6">{{ detalleSeleccionado?.carrera }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>Tipo:</strong></div>
+      <div class="col-6">{{ detalleSeleccionado?.tipo }}</div>
+    </div>
+
+    <hr>
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>Fecha inscripción:</strong></div>
+      <div class="col-6">{{ detalleSeleccionado?.fechaInscripcion }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>Inicio:</strong></div>
+      <div class="col-6">{{ detalleSeleccionado?.fechaInicio }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>Fin:</strong></div>
+      <div class="col-6">{{ detalleSeleccionado?.fechaFin }}</div>
+    </div>
+
+    <div class="row mb-2" *ngIf="detalleSeleccionado?.fechaBaja">
+      <div class="col-6"><strong>Fecha baja:</strong></div>
+      <div class="col-6 text-danger">
+        {{ detalleSeleccionado?.fechaBaja }}
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row mb-2">
+      <div class="col-6"><strong>Grupo:</strong></div>
+      <div class="col-6">
+        {{ detalleSeleccionado?.nombreGrupo || 'Sin asignar' }}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer justify-content-center">
+    <button class="btn btn-outline-secondary" (click)="modal.dismiss()">
+      Cerrar
+    </button>
+  </div>
+
+</ng-template>

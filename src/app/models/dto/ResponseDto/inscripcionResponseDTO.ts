@@ -1,4 +1,5 @@
-import { Tipo } from './tipo';
+import { Tipo } from "../../enum/tipo";
+
 export interface InscripcionResponseDTO{
         idInscripcion : number,
 

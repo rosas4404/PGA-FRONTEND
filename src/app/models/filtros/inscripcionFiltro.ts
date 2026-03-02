@@ -1,4 +1,4 @@
-import { Tipo } from "../dto/tipo";
+import { Tipo } from "../enum/tipo";
 
 export interface InscripcionFiltro{
     estado : boolean | null ;

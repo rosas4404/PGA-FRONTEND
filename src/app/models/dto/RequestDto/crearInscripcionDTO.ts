@@ -1,4 +1,4 @@
-import { Tipo } from "./tipo";
+import { Tipo } from "../../enum/tipo";
 
 export interface crearInscripcionDTO{
   fechaInicio: string,

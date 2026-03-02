@@ -1,4 +1,4 @@
 export interface asignarGrupoDTO{
-    idAlumno:number | null,
+    idInscripcion:number | null,
     idGrupo:number | null
 }

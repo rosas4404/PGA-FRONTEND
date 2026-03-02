@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import baseUrl from './helper';
-import { InscripcionResponseDTO } from '../models/dto/inscripcionResponseDTO';
+import { InscripcionResponseDTO } from '../models/dto/ResponseDto/inscripcionResponseDTO';
 import { InscripcionFiltro } from '../models/filtros/inscripcionFiltro';
 import { PageResponse } from '../models/pageable/PageResponseDTO';
-import { crearInscripcionDTO } from '../models/dto/crearInscripcionDTO';
+import { crearInscripcionDTO } from '../models/dto/RequestDto/crearInscripcionDTO';
 import { asignarGrupoDTO } from '../models/asignarGrupoDTO';
 
 @Injectable({
@@ -47,6 +47,10 @@ export class InscripcionService {
   }
 
   asignar (asignarGrupoDto:asignarGrupoDTO){
-    return this.httpClient.put<any>(`${this.baseUrl}/${asignarGrupoDto.idAlumno}/asignarGrupo/${asignarGrupoDto.idGrupo}`,{})
+    return this.httpClient.put<any>(`${this.baseUrl}/${asignarGrupoDto.idInscripcion}/asignarGrupo/${asignarGrupoDto.idGrupo}`,{})
+  }
+
+  habilitarDeshabilitar(idInscripcion : number){
+    return this.httpClient.put <InscripcionResponseDTO> (`${this.baseUrl}/desactivar/${idInscripcion}`,{})
   }
 }

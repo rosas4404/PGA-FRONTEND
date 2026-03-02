@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { InscripcionResponseDTO } from '../../models/dto/inscripcionResponseDTO';
-import { Tipo } from '../../models/dto/tipo';
+import { InscripcionResponseDTO } from '../../models/dto/ResponseDto/inscripcionResponseDTO';
+import { Tipo } from '../../models/enum/tipo';
 import { InscripcionService } from '../../services/inscripcion.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule, NgForOf } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, MinValidator, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InscripcionFiltro } from '../../models/filtros/inscripcionFiltro';
-import { crearInscripcionDTO } from '../../models/dto/crearInscripcionDTO';
+import { crearInscripcionDTO } from '../../models/dto/RequestDto/crearInscripcionDTO';
 import { asignarGrupoDTO } from '../../models/asignarGrupoDTO';
 import { ToastrService } from 'ngx-toastr';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { GrupoService } from '../../services/grupo.service';
+import { grupoDTOResponse } from '../../models/dto/ResponseDto/grupoDTOResponse';
 
 @Component({
   selector: 'app-inscripcion',
@@ -18,11 +21,13 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './inscripcion.component.scss'
 })
 export class InscripcionComponent implements OnInit{
+  inscripcionSeleccionada = 0;
   //modal dinamico
-  paso=1
+  modalRef: any;
+  paso = 1;
   cargando = false;
   asignarGrupoData: asignarGrupoDTO = {
-    idAlumno : 0,
+    idInscripcion : 0,
     idGrupo : 0
   }
 
@@ -46,11 +51,11 @@ export class InscripcionComponent implements OnInit{
     idUsuario: 0
   } 
 
-  grupos: any[] = [1,2,3,4,5,6,7,8];
+   grupos: grupoDTOResponse [] = [];
 
   tipos = [ { value: 'Servicio_Social', label: 'Servicio Social' },
-            { value: 'Practicas_Profesionales', label: 'Prácticas Profesionales' },
-            { value: 'Jovenes_Construyendo_El_Futuro', label: 'Jóvenes Construyendo el Futuro' }
+            { value: 'Practicas_Profesionales', label: 'Practicas Profesionales' },
+            { value: 'Jovenes_Construyendo_El_Futuro', label: 'Jovenes Construyendo el Futuro' }
           ];
   
   nivelEstudio = [ { value: 'MEDIO SUPERIOR', label: 'MEDIO SUPERIOR' },
@@ -64,17 +69,26 @@ export class InscripcionComponent implements OnInit{
             estado : null,
             tipo : null
   };
-constructor( private inscripcionService: InscripcionService, private route: ActivatedRoute, private fb:FormBuilder, private toastr : ToastrService){}
+
+accionTexto : string = '';
+detalleSeleccionado : InscripcionResponseDTO | null = null;
+
+constructor( private inscripcionService: InscripcionService, 
+             private route: ActivatedRoute, 
+             private fb:FormBuilder, 
+             private toastr : ToastrService, 
+             private modalService:NgbModal,
+             private grupoService:GrupoService){}
 
 ngOnInit(): void {
   this.crearForm = this.fb.group({
-    fechaInicio: ["",Validators.required],
-    fechaFin: ["",Validators.required ] ,
-    escuela: ["",Validators.required ],
-    nivelEstudio: ["",Validators.required ],
-    carrera: ["",Validators.required ],
-    tipo: ["",Validators.required ],
-    idUsuario: ["",Validators.required ]
+    fechaInicio: ['',Validators.required],
+    fechaFin: ['',Validators.required ] ,
+    escuela: ['',Validators.required ],
+    nivelEstudio: ['',Validators.required ],
+    carrera: ['',Validators.required ],
+    tipo: ['',Validators.required ],
+    idUsuario: ['',Validators.required ]
   },{
     Validators:[this.validatorFechaFin]
   });
@@ -86,6 +100,7 @@ ngOnInit(): void {
   });
 
   this.cargarInscripciones();
+  this.cargarGruposActivos();
 }
 cargarInscripciones(){
   const filtros: InscripcionFiltro = {
@@ -101,6 +116,13 @@ cargarInscripciones(){
       this.totalElements = data.totalElements;
   })
   
+}
+
+cargarGruposActivos(){
+  this.grupoService.getgruposActivos().subscribe(
+    data => {
+      this.grupos = data;
+  });
 }
 buscar(){
   this.cargarInscripciones();
@@ -120,6 +142,9 @@ cambiarPagina(nuevaPagina: number) {
   this.page = nuevaPagina;
   this.buscar();
 }
+
+
+
 
 crear(){
   if(this.crearForm.invalid) return;
@@ -143,15 +168,16 @@ crear(){
     tipo: this.crearForm.value.tipo,
     idUsuario: this.crearForm.value.idUsuario
   } 
-
+  
   this.inscripcionService.crear(this.crearInscripcion).subscribe({
-    next:(data)=>{
+    next:(data) => {
       this.cargando = false;
       this.toastr.success ('Inscripción creada correctamente');
-      this.asignarGrupoData.idAlumno = data.idInscripcion;
+      this.asignarGrupoData.idInscripcion = data.idInscripcion;
       this.paso = 2;
+      this.cargarGruposActivos();
     },
-    error: (err)=> () =>{
+    error: (err) => {
       this.cargando = false;
       this.toastr.error ('Error al crear inscripción')
     }
@@ -160,15 +186,17 @@ crear(){
 
 validatorFechaFin(form:AbstractControl){
 const fechaInicio = form.get('fechaInicio')?.value;
+console.log(fechaInicio)
 if (!fechaInicio) return null;
 const fechaFin = form.get('fechaFin')?.value;
 if (!fechaFin) return null;
+console.log(fechaFin)
 
   const inicio = new Date(fechaInicio);
   const fin = new Date(fechaFin);
 
-  return fin > inicio 
-    ? { fechaFinFutura: true }
+  return fin < inicio 
+    ? { fechaFinPasada: true }
     : null;
 }
 
@@ -189,22 +217,96 @@ if (!this.asignarGrupoData.idGrupo) return;
 
 
 ommitir(){
-  this.toastr.info('Inscripción creada sin grupo');
   this.cerrarModal();
-  this.resetear();
+  this.toastr.info('Inscripción creada sin grupo');
+ 
+  
 }
 resetear() {
   this.paso = 1;
   this.crearForm.reset();
   this.asignarGrupoData.idGrupo = null;
-  this.asignarGrupoData.idAlumno = null;
+  this.asignarGrupoData.idInscripcion = null;
+}
+
+abrirModal(content: any) {
+  this.resetear();
+  this.modalRef = this.modalService.open(content, {
+    backdrop: 'static',
+    keyboard: false,
+    centered: true
+  });
+  this.modalRef.result.finally(() => {
+    this.resetear();
+  });
 }
 cerrarModal() {
-  document.getElementById('btnCerrarModal')?.click();
+  this.resetear();
+  this.modalRef.dismiss();
+  this.cargarInscripciones();
 }
 
 
+abrirAsignacion(inscripcion: any, content: any) {
+  this.resetear(); 
+  this.paso = 2;
+  this.asignarGrupoData.idInscripcion= inscripcion.idInscripcion;
+
+  this.modalRef = this.modalService.open(content, {
+    centered: true,
+    backdrop: 'static',
+    keyboard: false
+  });
+  this.modalRef.result.finally(() => {
+    this.resetear();
+  });
 }
+
+AbrirConfirmacion(inscripcion:InscripcionResponseDTO, content:any){
+this.inscripcionSeleccionada = inscripcion.idInscripcion; 
+if(inscripcion.estado === true){
+      this.accionTexto='desactivar la inscripcion con número: ' + inscripcion.idInscripcion
+      + ' perteneciente al alumno ' + inscripcion.alumno
+    }else{
+      this.accionTexto='activar la inscripcion con número: ' + inscripcion.idInscripcion
+      + ' perteneciente al alumno ' + inscripcion.alumno
+    }
+  const modalRef = this.modalService.open(content, {
+    centered: true,
+    backdrop: 'static',
+    keyboard: false
+  });
+
+}
+activarDesactivar(modal:any){
+
+   this.inscripcionService.habilitarDeshabilitar(this.inscripcionSeleccionada)
+      .subscribe({
+        next: () => {
+          this.toastr.success('Estado actualizado correctamente');
+
+          this.cargarInscripciones();
+          modal.close();
+
+        },
+        error: (err) => {
+          this.toastr.error(err.error.message || 'Error al cambiar estado');
+        }
+      });
+}
+
+abrirDetalle(i: InscripcionResponseDTO , content: any){
+  this.detalleSeleccionado = i;
+  this.modalService.open(content, {
+    centered: true,
+    backdrop: 'static',
+    keyboard: false
+  });
+
+}
+}
+
+
 
 
 

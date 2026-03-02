@@ -53,7 +53,7 @@ export class GrupoService {
 
   //consulta de cursos activos
     getgruposActivos(){
-      return this.http.get<grupoDTOResponse>(`${this.apiUrl}/activos`);
+      return this.http.get<grupoDTOResponse[]>(`${this.apiUrl}/activos`);
     }
 
   //paginacion
