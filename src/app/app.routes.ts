@@ -19,12 +19,14 @@ export const routes: Routes = [
     {path:'registro', component: RegistroUsuarioComponent},
     {path:'home', component:HomeComponent},
     {path: 'admin-dashboard', component:AdminDashboardComponent, canActivate:[adminGuard],
-        children:[{path:'inscripcion', component: InscripcionComponent}]
+        children:[
+            {path:'inscripcion', component: InscripcionComponent},
+            {path: 'grupos', component:GrupoComponent}
+        ]
     },
     {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard]},
     {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard]},
     {path: 'login', component:LoginComponent},
-    {path: 'grupos', component:GrupoComponent},
     {path: 'password', component:PasswordComponent, canActivate:[authGuard]},
     {path: '**', redirectTo:''}//por si la ruta no existe 
 ];
