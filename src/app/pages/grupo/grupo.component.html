@@ -26,13 +26,12 @@
    
      <!-- filtro por docente -->
     <div class="col-md-2">
-      <select class="form-select" formControlName="docente">
-        <option value="">Filtrar por docente</option>
-        <option *ngFor="let d of docentes" [value]="d.nombre">
-          {{ d.nombre }}
-        </option>
-      </select>
+      <input type="text"
+            class="form-control"
+            placeholder="Buscar por docente"
+            formControlName="docente">
     </div>
+
     <!-- filtro por estado -->
     <div class="col-md-2">
       <select class="form-select" formControlName="estado">
@@ -166,23 +165,38 @@
               </ng-template>
     </div>
     <!-- Componente del paginador -->
-            <div class="d-flex justify-content-center mt-3">
-              <button class="btn btn-dark me-2"
-                      (click)="anterior()"
-                      [disabled]="page === 0">
-                          Anterior
-              </button>
-                <span class="mx-3 mt-2 fw-bold">
-                  Página {{ page + 1 }} de {{ totalPages }}
-                </span>
-              <button class="btn btn-dark"
-                      (click)="siguiente()"
-                      [disabled]="page >= totalPages - 1">
-                          Siguiente
-              </button>
-            </div>
-  </div>
+    <nav *ngIf="totalPages > 0" class="mt-4">
+      <ul class="pagination justify-content-center">
 
+        <li class="page-item" [class.disabled]="page === 0">
+          <button class="page-link"
+                  (click)="cambiarPagina(page - 1)"
+                  [disabled]="page === 0">
+            «
+          </button>
+        </li>
+
+        <li class="page-item"
+            *ngFor="let p of paginas"
+            [class.active]="p === page">
+          <button class="page-link"
+                  (click)="cambiarPagina(p)">
+            {{ p + 1 }}
+          </button>
+        </li>
+
+        <li class="page-item"
+            [class.disabled]="page + 1 >= totalPages">
+          <button class="page-link"
+                  (click)="cambiarPagina(page + 1)"
+                  [disabled]="page + 1 >= totalPages">
+            »
+          </button>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
 </div>
 
 <!-- MODAL FORMULARIO -->
@@ -193,7 +207,11 @@
 
     <div class="modal-header">
       <h5 class="modal-title">
-        {{ editMode ? 'Datos del grupo' : 'Crear Grupo' }}
+         {{ 
+          modo === 'crear' ? 'Crear Grupo' :
+          modo === 'editarDocente' ? 'Actualizar docente' :
+          'Datos del grupo'
+        }}
       </h5>
       <button type="button"
               class="btn-close"
@@ -236,25 +254,25 @@
                   <!-- Ícono lápiz -->
             <i class="bi bi-pencil-square text-primary"
               style="cursor:pointer"
-              *ngIf="!editandoDocente"
-              (click)="editandoDocente = true">
+              *ngIf="modo==='ver'"
+              (click)="activarEdicionDocente()">
             </i>
           </label>
 
           <!-- Modo vista -->
           <input type="text"
-                  class="form-control bg-light"
-                  [value]="docenteSeleccionadoNombre"
-                  readonly
-                  *ngIf="!editandoDocente">
+                class="form-control bg-light"
+                [value]="docenteSeleccionadoNombre"
+                readonly
+                *ngIf="modo === 'ver'">
 
-          <!-- Modo edición -->
+          <!-- Select -->
           <select class="form-select"
                   formControlName="idDocente"
-                  *ngIf="editandoDocente">
+                  *ngIf="modo === 'crear' || modo === 'editarDocente'">
             <option *ngFor="let d of docentes"
                     [value]="d.idUsuario">
-              {{ d.nombreCompleto }}
+              {{ d.nombre }} {{ d.apellidoPaterno }} {{ d.apellidoMaterno }}
             </option>
           </select>
         </div>
@@ -272,8 +290,16 @@
 
       <button type="submit"
               class="btn btn-success"
-              [disabled]="grupoForm.invalid">
-        {{ editMode ? 'Actualizar' : 'Guardar' }}
+              [disabled]="grupoForm.invalid"
+              *ngIf="modo === 'crear'">
+        Guardar
+      </button>
+
+      <button type="submit"
+              class="btn btn-success"
+              [disabled]="grupoForm.invalid"
+              *ngIf="modo === 'editarDocente'">
+        Actualizar
       </button>
     </div>
 
