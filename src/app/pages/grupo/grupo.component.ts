@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { grupoDTORequest } from '../../models/dto/RequestDto/grupoDTORequest';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CursoService } from '../../services/curso.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 
 @Component({
@@ -24,7 +25,6 @@ export class GrupoComponent implements OnInit{
 
   grupoSeleccionadoId! : number;
   accionTexto! : string;//ayuda para cambiar el mensaje en el estado
-  editandoDocente : boolean=false;
   docenteSeleccionadoNombre: string ='';
   //conteo de tarjetas
   totalGrupos=0;
@@ -41,14 +41,14 @@ export class GrupoComponent implements OnInit{
   filtroFormulario!: FormGroup;
   totalElements = 0;
 
-  editMode = false;//false = crear, true=editar
   selectedId!: number;
   mostrarFormulario = false;
+  modo: 'crear' | 'ver' | 'editarDocente' = 'crear';
 
   
   
   //fata añadir el servicio de docente y curso NOTA
-  constructor(private grupoService: GrupoService, private cursoService: CursoService, private fb:FormBuilder, private toastr:ToastrService, private modalService:NgbModal){}
+  constructor(private grupoService: GrupoService, private cursoService: CursoService, private usuarioServicie: UsuarioService, private fb:FormBuilder, private toastr:ToastrService, private modalService:NgbModal){}
 
   ngOnInit(): void {
     this.filtroFormulario = this.fb.group({
@@ -72,9 +72,9 @@ export class GrupoComponent implements OnInit{
   }
 
   cargarDocentes(){
-    /*this.docenteService.getDocentesActivos().subscribe({
+    this.usuarioServicie.getDocentesActivos().subscribe({
       next: data => this.docentes = data
-    });*/  
+    });  
   }
 
   cargarCursos(){
@@ -92,9 +92,8 @@ export class GrupoComponent implements OnInit{
   }
 
   nuevoGrupo(){
-    this.editMode=false;
+    this.modo= 'crear';
     this.grupoForm.reset();
-
     //habilitar campos
     this.grupoForm.enable();
   }
@@ -104,7 +103,7 @@ export class GrupoComponent implements OnInit{
 
     const formValue: grupoDTORequest=this.grupoForm.value;
 
-    if(this.editMode){
+    if(this.modo=='editarDocente'){
       this.grupoService.actualizarDocenteGrupo(this.selectedId, formValue.idDocente!, formValue).subscribe({
         next: () => {
           this.toastr.success('Actulizado', 'Docente actualizado correctamente');
@@ -121,6 +120,7 @@ export class GrupoComponent implements OnInit{
         next: () => {
           this.toastr.success('Creado', 'Grupo creado correctamente');
           this.gruposPaginacion();
+          this.cargarConteos();
           modal.close();
           this.cancelar();
         },
@@ -132,9 +132,8 @@ export class GrupoComponent implements OnInit{
   }
 
   editar(grupo: grupoDTOResponse, content:any){
-    this.editMode = true;
+    this.modo = 'ver';
     this.selectedId = grupo.idGrupo!;
-    this.editandoDocente=false;//para rfitar al docente
 
      this.grupoForm.patchValue({
       nombre: grupo.nombre,
@@ -143,16 +142,20 @@ export class GrupoComponent implements OnInit{
       idDocente: grupo.idUsuario
     });
 
-    // Buscar el nombre del docente por id
-    const docente = this.docentes.find(d => d.idUsuario === grupo.idUsuario);
-    this.docenteSeleccionadoNombre = docente ? docente.nombreCompleto : '';
+    this.docenteSeleccionadoNombre=grupo.docente;
 
     //bloquear campos que no se pueden editar
+    this.grupoForm.disable();
+
+    this.abrirModal(content);
+  }
+
+  activarEdicionDocente() {
+    this.modo = 'editarDocente';
+    this.grupoForm.enable(); // primero habilita todo
     this.grupoForm.get('nombre')?.disable();
     this.grupoForm.get('periodo')?.disable();
     this.grupoForm.get('idCurso')?.disable();
-
-    this.abrirModal(content);
   }
 
 
@@ -186,10 +189,9 @@ export class GrupoComponent implements OnInit{
   }
 
   cancelar() {
-    this.editMode = false;
-    this.mostrarFormulario = false;
-    this.grupoForm.enable();
+    this.modo = 'crear';
     this.grupoForm.reset();
+    this.grupoForm.enable();
   }
 
   gruposPaginacion(){
@@ -206,19 +208,14 @@ export class GrupoComponent implements OnInit{
     });
   }
   
-
-  siguiente() {
-    if (this.page < this.totalPages - 1) {
-      this.page++;
-      this.gruposPaginacion();
-    }
+  get paginas(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i);
   }
-
-  anterior() {
-    if (this.page > 0) {
-      this.page--;
-      this.gruposPaginacion();
-    }
+  
+  cambiarPagina(nuevaPagina: number) {
+    if (nuevaPagina < 0 || nuevaPagina >= this.totalPages) return;
+    this.page = nuevaPagina;
+    this.buscar();
   }
 
   cargarConteos(){
@@ -231,7 +228,6 @@ export class GrupoComponent implements OnInit{
 
   //filtros
   buscar() {
-    this.page = 0;
     this.gruposPaginacion();
   }
 
