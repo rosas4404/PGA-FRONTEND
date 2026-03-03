@@ -77,17 +77,22 @@ $snow: #FAFAFA;
   color: $maroon;
   border-color: $maroon;
   &:hover{
-    background-color: $maroon !important;
+  background-color: $maroon !important;
   border-color: $maroon !important;
   color: $snow !important;
   }
-  &:active,
+  //al hacer click
+  &:active{
+    background-color: darken($maroon, 10%) !important;
+    color: $snow !important;
+  }
+  //quital el color persistente despues de soltar el clic
   &:focus,
   &:focus-visible {
-    background-color: $maroon !important;
-    color: $snow;
+    background-color: transparent !important; // O vuelve al color original
+    color: $maroon !important;
     box-shadow: none !important;
-   
+    outline: none !important;
   };
 }
 
@@ -199,4 +204,23 @@ select:focus {
   outline: none !important;
   border-color: #8b5e3c !important;
   box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.25) !important;
+}
+
+.table-light{
+  thead, th{
+    color: maroon !important;
+    font-weight: bold;
+  }
+}
+
+select.form-select:focus {
+  border-color: $maroon !important;
+  /* Un resplandor sutil en color peru/dorado */
+  box-shadow: 0 0 0 0.25rem rgba(188, 149, 92, 0.25) !important; 
+}
+
+.form-select option {
+  background-color: $white-smoke; /* Fondo gris claro */
+  color: $dark-slate-900;         /* Texto oscuro */
+  padding: 10px;
 }

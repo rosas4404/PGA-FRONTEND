@@ -52,9 +52,9 @@ export class GrupoComponent implements OnInit{
 
   ngOnInit(): void {
     this.filtroFormulario = this.fb.group({
-      curso: [''],
-      docente: [''],
-      estado: ['']
+      curso: [null],
+      docente: [null],
+      estado: [null]
     });
     
     this.grupoForm = this.fb.group({

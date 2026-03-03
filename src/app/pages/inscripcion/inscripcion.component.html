@@ -25,8 +25,8 @@
    
      <!-- filtro por Tipo -->
     <div class="col-md-2">
-      <select class="form-select" formControlName="tipo">
-        <option value="">Filtrar por tipo</option>
+      <select class="form-select" formControlName="tipo" >
+        <option value=null>Filtrar por tipo</option>
         <option *ngFor="let t of tipos" [value]="t.value">
           {{ t.label }}
         </option>
@@ -35,7 +35,7 @@
     <!-- filtro por Grupo -->
     <div class="col-md-2">
       <select class="form-select" formControlName="idGrupo">
-        <option value="">Filtrar por grupo</option>
+        <option value=null>Filtrar por grupo</option>
         <option *ngFor="let g of grupos" [value]="g.idGrupo">
           {{ g.nombre }}
         </option>
@@ -63,7 +63,7 @@
     <div class="table-responsive">
       <table class="table table-hover table-striped w-100">
 
-        <thead class="table-light text-center">
+        <thead class="table-light text-center ">
           <tr>
             <th>Alumno</th>
             <th>N. Inscripción</th>
@@ -87,13 +87,15 @@
             
               <!--mas informacion-->
               <button class="btn btn-sm btn-outline-primary me-2"
-              (click)="abrirDetalle(i,detallesModal)">
+              (click)="abrirDetalle(i,detallesModal)"
+              title="Detalles" >
                 <i class="bi bi-eye"></i>
               </button>
               <!--Alta / Baja -->
               <button class="btn btn-sm me-2"
               [ngClass]="i.estado ? 'btn-outline-danger':'btn-outline-success'"
-              (click)="AbrirConfirmacion(i,confirmarModal)">
+              (click)="AbrirConfirmacion(i,confirmarModal)" 
+                          [title]="i.estado === true ? 'Deshabilitar inscripcion' : 'Habilitar inscripcion' ">
                 <i class="bi"
                  [ngClass]="i.estado ? 'bi-chevron-double-down' : 'bi-chevron-double-up'"></i>
               </button>
@@ -103,6 +105,11 @@
                (click)="abrirAsignacion(i,crearModal)">
                 <i class="bi bi-box-arrow-in-right"></i>
               </button>
+            </td>
+          </tr>
+           <tr *ngIf="inscripciones.length === 0">
+            <td colspan="6" class="text-center text-muted py-4">
+              No hay inscripciones registradas
             </td>
           </tr>
         </tbody>
@@ -144,11 +151,6 @@
 
   </ul>
 </nav>
-
-<!-- Información -->
-<div class="text-center text-muted small">
-  Mostrando {{ inscripciones.length }} de {{ totalElements }} registros
-</div>
 
   </div>
 </div>
@@ -383,13 +385,16 @@
   <div class="modal-body">
 
     <div class="row mb-2">
-      <div class="col-6"><strong>ID:</strong></div>
-      <div class="col-6">{{ detalleSeleccionado?.idInscripcion }}</div>
+      <div class="col-5"><strong>ID Inscripción:</strong></div>
+      <div class="col-2">{{ detalleSeleccionado?.idInscripcion }}</div>
+      
+      <div class="col-3"><strong>ID Alumno:</strong></div>
+      <div class="col-2">{{ detalleSeleccionado?.idUsuario }}</div>
     </div>
 
     <div class="row mb-2">
-      <div class="col-6"><strong>Alumno:</strong></div>
-      <div class="col-6">{{ detalleSeleccionado?.alumno }}</div>
+      <div class="col-4"><strong>Alumno:</strong></div>
+      <div class="col-8">{{ detalleSeleccionado?.alumno }}</div>
     </div>
 
     <div class="row mb-2">

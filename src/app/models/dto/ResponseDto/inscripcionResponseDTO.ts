@@ -15,6 +15,7 @@ export interface InscripcionResponseDTO{
         carrera : string,
         tipo : Tipo,
         alumno : string,
+        idUsuario: number,
         idGrupo : number,
         nombreGrupo : string
 }

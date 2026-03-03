@@ -6,6 +6,7 @@ import { InscripcionFiltro } from '../models/filtros/inscripcionFiltro';
 import { PageResponse } from '../models/pageable/PageResponseDTO';
 import { crearInscripcionDTO } from '../models/dto/RequestDto/crearInscripcionDTO';
 import { asignarGrupoDTO } from '../models/asignarGrupoDTO';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class InscripcionService {
 
   //
 
-  obtenerInscripciones(page: number, size: number, filtros:InscripcionFiltro){
+  obtenerInscripciones(page: number, size: number, filtros:InscripcionFiltro) : Observable <PageResponse<InscripcionResponseDTO>>{
     let params= new HttpParams()
     .set ('page', page.toString())
     .set('size', size.toString());
@@ -41,16 +42,16 @@ export class InscripcionService {
 
 
 
-
-  crear (crearInscripcionDto: crearInscripcionDTO){
+  //crear inscripción
+  crear (crearInscripcionDto: crearInscripcionDTO): Observable <InscripcionResponseDTO> {
     return this.httpClient.post<InscripcionResponseDTO>(this.baseUrl,crearInscripcionDto);
   }
 
-  asignar (asignarGrupoDto:asignarGrupoDTO){
+  asignar (asignarGrupoDto:asignarGrupoDTO) : Observable <any> {
     return this.httpClient.put<any>(`${this.baseUrl}/${asignarGrupoDto.idInscripcion}/asignarGrupo/${asignarGrupoDto.idGrupo}`,{})
   }
 
-  habilitarDeshabilitar(idInscripcion : number){
+  habilitarDeshabilitar(idInscripcion : number) : Observable <InscripcionResponseDTO> {
     return this.httpClient.put <InscripcionResponseDTO> (`${this.baseUrl}/desactivar/${idInscripcion}`,{})
   }
 }

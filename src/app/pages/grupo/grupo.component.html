@@ -1,15 +1,15 @@
-<div class="container mt-4">
+<div class="card shadow-sm border-0">
 
   <!-- cabecera -->
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="fw-bold">Gestión de Grupos</h2>
+  <div class="card-header bg-smoke d-flex justify-content-between align-items-center">
+    <h5 class="m-0 fw-bold text-maroon">Gestión de Grupos</h5>
 
-    <button class="btn bg-maroon"
-            (click)="nuevoGrupo(); abrirModal(grupoModal)">
-      <i class="bi bi-plus-circle"></i>
-      Nuevo Grupo
+    <button class="btn btn-outline-primary" (click)="nuevoGrupo(); abrirModal(grupoModal)">
+      <i class="bi bi-plus-circle me-1"></i> Nuevo Grupo
     </button>
  </div>
+
+ <div class="card-body">
 <!--Fitlro dinamico-->
  <form [formGroup]="filtroFormulario" (ngSubmit)="buscar()">
   <div class="row g-3 mb-4 ">
@@ -17,7 +17,7 @@
     <!-- Busqueda por curso -->
     <div class="col-md-4">
       <select class="form-select" formControlName="curso">
-        <option value="">Filtrar por curso</option>
+        <option value=null>Filtrar por curso</option>
         <option *ngFor="let c of cursos" [value]="c.nombre">
           {{ c.nombre }}
         </option>
@@ -35,7 +35,7 @@
     <!-- filtro por estado -->
     <div class="col-md-2">
       <select class="form-select" formControlName="estado">
-        <option value="">Filtrar por estado</option>
+        <option value=null>Filtrar por estado</option>
         <option value="HABILITADO">Habilitado</option>
         <option value="DESHABILITADO">Deshabilitado</option>
       </select>
@@ -84,15 +84,10 @@
   </div>
  
   <!-- TABLA -->
-  <div class="card shadow-sm">
-    <div class="card-header bg-light">
-      <strong>Lista de Grupos</strong>
-    </div>
-
     <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
+      <table class="table table-hover table-striped w-100">
 
-        <thead class="table-light">
+        <thead class="table-light text-center text-maroon">
           <tr>
             <th>Nombre</th>
             <th>Periodo</th>
@@ -106,22 +101,28 @@
         <tbody>
           <tr *ngFor="let g of grupos; let i = index">
 
-            <td>{{ g.nombre }}</td>
-            <td>{{ g.periodo }}</td>
-            <td>{{ g.nombreCurso }}</td>
-            <td>{{ g.docente }}</td>
-            <td>{{ g.estado }}</td>
+            <td class = "text-center">{{ g.nombre }}</td>
+            <td class = "text-center">{{ g.periodo }}</td>
+            <td class = "text-center">{{ g.nombreCurso }}</td>
+            <td class = "text-center">{{ g.docente }}</td>
+            <td class = "text-center"><span [ngClass]="g.estado == 'HABILITADO' ? 'badge bg-success' : 'badge bg-danger' ">
+              {{ g.estado }}</span></td>
 
             <td class="text-center">
 
               <!-- Editar -->
-              <button class="btn btn-sm btn-outline-primary me-2"
-                      (click)="editar(g, grupoModal)">
-                <i class="bi bi-pencil"></i>
+              <button class="btn btn-sm btn-outline-primary me-2" 
+                      (click)="editar(g, grupoModal)"
+                       title="Detalles">
+                <i class="bi bi-eye"></i>
               </button>
-              <button class="btn btn-sm btn-outline-danger"
-                          (click)="abrirconfirmacion(g, confirmModal)">
-                    <i class="bi bi-toggle-off"></i>
+
+              <button class="btn btn-sm"
+              [ngClass]="g.estado == 'HABILITADO' ? 'btn-outline-danger':'btn-outline-success'"
+                          (click)="abrirconfirmacion(g, confirmModal)"
+                          [title]="g.estado === 'HABILITADO' ? 'Deshabilitar grupo ' + g.nombre : 'Habilitar grupo ' + g.nombre">
+                   <i class="bi"
+                 [ngClass]="g.estado == 'HABILITADO' ? 'bi-chevron-double-down' : 'bi-chevron-double-up'"></i>
               </button>
 
             </td>
@@ -205,8 +206,8 @@
   <form [formGroup]="grupoForm"
         (ngSubmit)="guardar(modal)">
 
-    <div class="modal-header">
-      <h5 class="modal-title">
+    <div class="modal-header bg-smoke flex-column align-items-start">
+      <h5 class="modal-title fw-bold text-maroon">
          {{ 
           modo === 'crear' ? 'Crear Grupo' :
           modo === 'editarDocente' ? 'Actualizar docente' :
@@ -224,21 +225,26 @@
       <div class="row g-3">
 
         <div class="col-md-6">
-          <label class="form-label">Nombre</label>
-          <input type="text"
-                 class="form-control"
-                 formControlName="nombre">
+          <div class="input-group">
+            <span class="input-group-text" style="font-size:0.9rem;">Nombre</span>
+            <input type="text"
+                  class="form-control"
+                  formControlName="nombre">
+          </div>
         </div>
 
         <div class="col-md-6">
-          <label class="form-label">Periodo</label>
+          <div class="input-group">
+          <span class="input-group-text" style="font-size:0.9rem;">Periodo</span>
           <input type="text"
                  class="form-control"
                  formControlName="periodo">
+          </div>
         </div>
 
         <div class="col-md-6">
-          <label class="form-label">Curso</label>
+          <div class="input-group">
+          <span class="input-group-text" style="font-size:0.9rem;">Curso</span>
           <select class="form-select"
                   formControlName="idCurso">
             <option value="">Seleccione</option>
@@ -247,17 +253,19 @@
               {{ c.nombre }}
             </option>
           </select>
+          </div>
         </div>
 
         <div class="col-md-6">
-          <label class="form-label">Docente
+          <div class="input-group">
+          <span class="input-group-text" style="font-size:0.9rem;">Docente
                   <!-- Ícono lápiz -->
             <i class="bi bi-pencil-square text-primary"
               style="cursor:pointer"
-              *ngIf="modo==='ver'"
+              *ngIf="modo==='ver'" title="Cambiar Docente"
               (click)="activarEdicionDocente()">
             </i>
-          </label>
+          </span>
 
           <!-- Modo vista -->
           <input type="text"
@@ -276,14 +284,14 @@
             </option>
           </select>
         </div>
-
+        </div>
       </div>
 
     </div>
 
-    <div class="modal-footer">
+    <div class="modal-footer justify-content-center">
       <button type="button"
-              class="btn btn-secondary"
+              class="btn btn-outline-primary align-items-center"
               (click)="modal.dismiss()">
         Cancelar
       </button>
