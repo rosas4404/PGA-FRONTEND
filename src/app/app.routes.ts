@@ -13,6 +13,7 @@ import { DocenteDashboardComponent } from './pages/dashboard/docente-dashboard/d
 import { AlumnoDashboardComponent } from './pages/dashboard/alumno-dashboard/alumno-dashboard.component';
 import { GrupoComponent } from './pages/grupo/grupo.component';
 import { InscripcionComponent } from './pages/inscripcion/inscripcion.component';
+import { CursoComponent } from './pages/curso/curso.component';
 
 
 export const routes: Routes = [
@@ -21,7 +22,8 @@ export const routes: Routes = [
     {path: 'admin-dashboard', component:AdminDashboardComponent, canActivate:[adminGuard],
         children:[
             {path:'inscripcion', component: InscripcionComponent},
-            {path: 'grupos', component:GrupoComponent}
+            {path: 'grupos', component:GrupoComponent},
+            {path: 'cursos', component:CursoComponent},
         ]
     },
     {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard]},
