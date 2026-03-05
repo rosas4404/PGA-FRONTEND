@@ -1,0 +1,27 @@
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+th:nth-child(1) { width: 10%; }
+th:nth-child(2) { width: 30%; }
+th:nth-child(3) { width: 40%; }
+th:nth-child(4) { width: 15%; }
+th:nth-child(5) { width: 20%; }
+
+
+.modal-body {
+  min-height: 100px; 
+}
+
+.grid-checkbox {
+  display: grid;
+  /* Crea 10 columnas del mismo tamaño */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 10px; /* Espacio entre elementos */
+  align-items: center;
+}
+
+.checkbox-item {
+  font-size: 0.8rem; /* Opcional: ajusta el tamaño para que quepan bien los 10 */
+  white-space: nowrap; /* Evita que el texto se parta en dos líneas */
+}

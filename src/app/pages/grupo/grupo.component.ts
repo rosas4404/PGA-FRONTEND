@@ -42,12 +42,8 @@ export class GrupoComponent implements OnInit{
   totalElements = 0;
 
   selectedId!: number;
-  mostrarFormulario = false;
   modo: 'crear' | 'ver' | 'editarDocente' = 'crear';
 
-  
-  
-  //fata añadir el servicio de docente y curso NOTA
   constructor(private grupoService: GrupoService, private cursoService: CursoService, private usuarioServicie: UsuarioService, private fb:FormBuilder, private toastr:ToastrService, private modalService:NgbModal){}
 
   ngOnInit(): void {

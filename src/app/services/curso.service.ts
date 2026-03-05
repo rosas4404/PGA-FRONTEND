@@ -1,8 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { cursoDTORequest } from '../models/dto/RequestDto/cursoDTORequest';
 import { Observable } from 'rxjs';
 import { cursoDTOResponse } from '../models/dto/ResponseDto/cursoDTOResponse';
+import { agregarActividadCursoDTORequest } from '../models/dto/RequestDto/agregarActividadCursoDTORequest';
+import { PageResponse } from '../models/pageResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +47,34 @@ export class CursoService {
     return this.http.put<cursoDTOResponse>(`${this.apiUrl}/${idCurso}`, cursoDTORequest);
   }
 
-  //PENDIENTE LA ASIGNACION DE ACTIVIDES BASE
+  //asignacion de actividades curso
+  asignarActividadesCurso(idCurso: number, agregarActividadCursoDTORequest:agregarActividadCursoDTORequest):Observable<cursoDTOResponse>{
+    return this.http.put<cursoDTOResponse>(`${this.apiUrl}/${idCurso}/asignarActividades`, agregarActividadCursoDTORequest);
+ }
+
+ //eliminar actividades
+ eliminarActividadees(idCurso:number, idActividad:number):Observable<void>{
+  return this.http.delete<void>(`${this.apiUrl}/${idCurso}/quitarActividades/${idActividad}`);
+ }
+
+ //filtro de api criteria y paginacion
+ consultaGeneralPage(page: number,size: number,filtros?: any): Observable<PageResponse<cursoDTOResponse>> {
+  let params = new HttpParams()
+    .set('page', page)
+    .set('size', size);
+ 
+    if (filtros) {
+       if (filtros.nombre) {
+         params = params.set('nombre', filtros.nombre);
+       }
+       if (filtros.activo !== null && filtros.activo !== undefined) {
+         params = params.set('activo', filtros.activo);
+       }
+     }
+ 
+   return this.http.get<PageResponse<cursoDTOResponse>>(`${this.apiUrl}/listPage`,{ params });
+}
+
 }
 
 
