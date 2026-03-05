@@ -202,29 +202,20 @@
 
 <!-- MODAL FORMULARIO -->
 <ng-template #grupoModal let-modal>
+  <div class="modal-header bg-smoke flex-column align-items-center">
+    <h5 class="modal-title fw-bold text-maroon">
+      {{ modo === 'crear' ? 'Crear Grupo' : modo === 'editarDocente' ? 'Actualizar docente' : 'Datos del grupo'}}
+    </h5>
+    <button type="button"
+      class="btn-close position-absolute end-0 top-0 m-3"
+      (click)="modal.dismiss()">
+    </button>
+  </div>
 
-  <form [formGroup]="grupoForm"
-        (ngSubmit)="guardar(modal)">
-
-    <div class="modal-header bg-smoke flex-column align-items-start">
-      <h5 class="modal-title fw-bold text-maroon">
-         {{ 
-          modo === 'crear' ? 'Crear Grupo' :
-          modo === 'editarDocente' ? 'Actualizar docente' :
-          'Datos del grupo'
-        }}
-      </h5>
-      <button type="button"
-              class="btn-close"
-              (click)="modal.dismiss()">
-      </button>
-    </div>
-
-    <div class="modal-body">
-
+  <div class="modal-body">
+    <form [formGroup]="grupoForm" (ngSubmit)="guardar(modal)">
       <div class="row g-3">
-
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="input-group">
             <span class="input-group-text" style="font-size:0.9rem;">Nombre</span>
             <input type="text"
@@ -233,7 +224,7 @@
           </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="input-group">
           <span class="input-group-text" style="font-size:0.9rem;">Periodo</span>
           <input type="text"
@@ -242,7 +233,7 @@
           </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="input-group">
           <span class="input-group-text" style="font-size:0.9rem;">Curso</span>
           <select class="form-select"
@@ -256,7 +247,7 @@
           </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="input-group">
           <span class="input-group-text" style="font-size:0.9rem;">Docente
                   <!-- Ícono lápiz -->
@@ -285,9 +276,11 @@
           </select>
         </div>
         </div>
-      </div>
-
+        </div>
+      </form>
     </div>
+
+    
 
     <div class="modal-footer justify-content-center">
       <button type="button"
@@ -310,7 +303,5 @@
         Actualizar
       </button>
     </div>
-
-  </form>
 
 </ng-template>
