@@ -81,7 +81,7 @@
             <td class = "text-center">{{i.nombreGrupo || 'Sin Asignar'}}</td>
             <td class = "text-center">{{i.tipo}}</td>
             <td class = "text-center"><span [ngClass]="i.estado == true? 'badge bg-success' : 'badge bg-danger' "> 
-            {{i.estado}}</span></td>
+             {{ i.estado ? 'Habilitado' : 'Deshabilitado' }}</span></td>
             
             <td class="text-center">
             
@@ -158,7 +158,7 @@
 <!--Modal crear inscripcion-->
 <ng-template #crearModal let-modal>
   <!-- Header --> 
-  <div class="modal-header bg-smoke flex-column align-items-start">
+  <div class="modal-header bg-smoke flex-column align-items-center">
     <!-- Títulos -->
     <h5 class="modal-title fw-bold text-maroon" *ngIf="paso==1">
       Nueva Inscripción
@@ -183,7 +183,7 @@
           (click) = "cerrarModal()">
         </button>
 
-      </div>
+  </div>
       <div class="modal-body modal-body-step">
        
 

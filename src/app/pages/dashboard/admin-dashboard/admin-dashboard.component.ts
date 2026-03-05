@@ -3,6 +3,7 @@ import { RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
 import { routes } from '../../../app.routes';
 import { NgModel } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { UsuariosComponent } from '../../usuarios/usuarios.component';
 
 @Component({
   selector: 'app-admin-dashboard',

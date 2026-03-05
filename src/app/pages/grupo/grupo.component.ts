@@ -81,7 +81,6 @@ export class GrupoComponent implements OnInit{
 
    abrirModal(content: any) {
     this.modalService.open(content, {
-      size: 'lg',
       centered: true,
       backdrop: 'static'
     });

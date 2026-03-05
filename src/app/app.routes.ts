@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { RegistroUsuarioComponent } from './pages/registro-usuario/registro-usuario.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AdminDashboardComponent } from './pages/dashboard/admin-dashboard/admin-dashboard.component';
 import { adminGuard } from './services/guard/admin.guard';
@@ -13,14 +12,21 @@ import { DocenteDashboardComponent } from './pages/dashboard/docente-dashboard/d
 import { AlumnoDashboardComponent } from './pages/dashboard/alumno-dashboard/alumno-dashboard.component';
 import { GrupoComponent } from './pages/grupo/grupo.component';
 import { InscripcionComponent } from './pages/inscripcion/inscripcion.component';
+import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { CursoComponent } from './pages/curso/curso.component';
 
 
 export const routes: Routes = [
-    {path:'registro', component: RegistroUsuarioComponent},
+    
     {path:'home', component:HomeComponent},
     {path: 'admin-dashboard', component:AdminDashboardComponent, canActivate:[adminGuard],
         children:[
+            {path:'usuarios',
+                children:[ 
+                    { path: 'alumnos', component: UsuariosComponent, data: {usuario: 'alumnos'}},
+                    { path: 'docentes', component: UsuariosComponent, data: {usuario: 'docentes'}}
+                ]
+            },
             {path:'inscripcion', component: InscripcionComponent},
             {path: 'grupos', component:GrupoComponent},
             {path: 'cursos', component:CursoComponent},
