@@ -14,6 +14,9 @@ import { GrupoComponent } from './pages/grupo/grupo.component';
 import { InscripcionComponent } from './pages/inscripcion/inscripcion.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { CursoComponent } from './pages/curso/curso.component';
+import { DocumentoComponent } from './pages/documento/documento.component';
+import { ExpedienteComponent } from './pages/expediente/expediente.component';
+import { ConsultaRevisonComponent } from './pages/consulta-revision/consulta-revision.component';
 
 
 export const routes: Routes = [
@@ -30,6 +33,14 @@ export const routes: Routes = [
             {path:'inscripcion', component: InscripcionComponent},
             {path: 'grupos', component:GrupoComponent},
             {path: 'cursos', component:CursoComponent},
+            {path: 'documentos', component:DocumentoComponent},
+            {path: 'consulta-revision',
+                children:[
+                    { path: '', component: ConsultaRevisonComponent },
+                    { path: ':idUsuario', component: ConsultaRevisonComponent },
+                    { path: ':idUsuario/expedientes', component: ExpedienteComponent }
+                ]
+            }
         ]
     },
     {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard]},

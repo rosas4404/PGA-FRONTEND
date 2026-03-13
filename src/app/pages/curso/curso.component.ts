@@ -40,6 +40,12 @@ export class CursoComponent implements OnInit{
   filtroFormulario!: FormGroup;
   totalElements = 0;
 
+  //modal dinamico
+  modalRef: any;
+  paso = 1;
+  cargando = false;
+  idCursoRecienCreado = 0;
+
   modo: 'crear' | 'ver' | 'editarCurso' = 'crear';
 
   constructor(private cursoService: CursoService,private actividadService:ActividadBaseService, private fb:FormBuilder, private toastr:ToastrService, private modalService:NgbModal){}
@@ -48,7 +54,7 @@ export class CursoComponent implements OnInit{
     this.cursoForm=this.fb.group({
       nombre : ['', Validators.required],
       descripcion : ['', Validators.required],
-      idActividadesBase: [[], Validators.required],//nota: es un array de numeros
+      idActividadesBase: [[]],//nota: es un array de numeros
       activo: [null]
     });
 
@@ -78,75 +84,103 @@ export class CursoComponent implements OnInit{
   }
 
   nuevoCurso(){
-    this.modo ='crear';
-    this.cursoForm.reset();
-    //habilitar campos
+    this.modo = 'crear';
+    this.paso = 1;
+
     this.cursoForm.enable();
+    this.cursoForm.reset({
+      nombre: '',
+      descripcion: '',
+      idActividadesBase: []
+    });
+
+    this.cursoSeleccionado = {} as cursoDTOResponse;
   }
 
   guardar(modal:any){
     if(this.cursoForm.invalid)return;
-  
+
+    //paso 1
+    if(this.modo==='crear'&& this.paso===1){
+      this.paso=2;
+      return;
+    }
       const formValue: cursoDTORequest=this.cursoForm.value;
 
-        if(this.modo=='editarCurso'){
-          this.cursoService.actualizarCurso(this.cursoSeleccionado.idCurso, formValue)
-            .subscribe({
-              next: () => {
-                this.toastr.success('Actualizado correctamente');
-                this.cursosPaginacion();
-                this.cargarConteos();
-                modal.close();
-                this.modo = 'crear'; // SOLO cambia modo
-              },
-              error: (err)=>{
-                this.toastr.error(err.error.message || 'Error');
-              }
-          });
-        }else{
-          this.cursoService.crearCurso(formValue).subscribe({
+      if (!formValue.idActividadesBase) { //para evitar que la lista de actividades llegue nula ppor el checkbox
+        formValue.idActividadesBase = [];
+      }
+
+      //crear curso - paso 2
+      if (this.modo==='crear'&& this.paso===2){
+        this.cursoService.crearCurso(formValue).subscribe({
             next: () => {
               this.toastr.success('Creado', 'Curso creado correctamente');
+              
               this.cursosPaginacion();
               this.cargarConteos();
-              modal.close();
+              
+              this.paso=1;
               this.cancelar();
+
+              modal.close();
             },
             error: (err)=>{
               this.toastr.error(err.error.message || 'err', 'Error al crear');
             }
         });
-    }
+        return;
+      }
+      //editar curso
+      if(this.modo==='editarCurso'){
+        this.cursoService.actualizarCurso(this.cursoSeleccionado.idCurso, formValue)
+          .subscribe({
+            next: () => {
+              this.toastr.success('Actualizado correctamente');
+              this.cursosPaginacion();
+              this.cargarConteos();
+              modal.close();
+              },
+              error: (err)=>{
+                this.toastr.error(err.error.message || 'Error');
+              }
+          });
+    }   
   }
 
-  editar(id: number, modal: any){
+  private cargarCurso(id:number, modo:'ver'|'editarCurso', paso=1){
     this.cursoService.getcurso(id).subscribe(curso => {
-
       this.cursoSeleccionado = curso;
-
       const ids = curso.actividades.map(a => a.idActividad);
-
       this.cursoForm.patchValue({
         nombre: curso.nombre,
         descripcion: curso.descripcion,
         idActividadesBase: ids
       });
 
-      this.modo = 'ver';
+      this.modo = modo;
+      this.paso = paso;
 
-      this.cursoForm.disable();
+      if(modo === 'ver'){
+        this.cursoForm.disable();
+      }else{
+        this.cursoForm.enable();
+        this.cursoForm.get('nombre')?.disable();
+      }
 
-      this.abrirModal(modal);
     });
+  }
+
+  editar(id: number, modal: any){
+    this.abrirModal(modal);
+    this.cargarCurso(id, 'ver',1);
   }
 
   activarEdicionCurso(){
     this.modo='editarCurso';
     this.cursoForm.enable();
     this.cursoForm.get('nombre')?.disable();
-    //pendiente
   }
-
   
   abrirconfirmacion(curso: cursoDTOResponse, content: any) {
     this.cursoSeleccionado = curso;
@@ -286,34 +320,46 @@ export class CursoComponent implements OnInit{
     }
   }
 
-  estaActividadAsignada(idActividad: number): boolean {
-    if (!this.cursoSeleccionado || !this.cursoSeleccionado.actividades) {
-      return false;
-    }
-
-    return this.cursoSeleccionado.actividades
-      .some(a => a.idActividad === idActividad);
+  editarModoDirecto(id: number, modal:any){
+    this.abrirModal(modal);
+    this.cargarCurso(id,'editarCurso',1);
   }
 
-  editarModoDirecto(id: number, modal:any){
-    this.cursoService.getcurso(id).subscribe(curso => {
+  omitir(modal:any){
+    const formValue: cursoDTORequest = this.cursoForm.value;
 
-      this.cursoSeleccionado = curso;
+    formValue.idActividadesBase = [];
 
-      const ids = curso.actividades.map(a => a.idActividad);
+    this.cursoService.crearCurso(formValue).subscribe({
+      next:()=>{
+        this.toastr.success('Curso creado sin actividades');
 
-      this.cursoForm.patchValue({
-        nombre: curso.nombre,
-        descripcion: curso.descripcion,
-        idActividadesBase: ids
-      });
+        this.cursosPaginacion();
+        this.cargarConteos();
 
-      this.modo = 'editarCurso';
+        this.cancelar();
+        this.paso = 1;
 
-      this.cursoForm.enable();
-      this.cursoForm.get('nombre')?.disable();
-
-      this.abrirModal(modal);
+        modal.close();
+      }
     });
   }
+
+  editarActividades(id: number, modal: any){
+    this.modo='editarCurso';
+    this.abrirModal(modal);
+    this.cargarCurso(id,'editarCurso',2);
+  }
+
+  cerrarModal(modal:any){
+    modal.dismiss();
+    setTimeout(() => {
+        this.paso = 1;
+        this.modo = 'crear';
+
+        this.cursoForm.enable();
+        this.cursoForm.reset();
+      }, 200);
+  }
+
 }

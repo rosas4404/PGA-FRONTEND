@@ -1,0 +1,237 @@
+<div class="card shadow-sm border-0">
+
+  <!-- cabecera -->
+  <div class="card-header bg-smoke d-flex justify-content-between align-items-center">
+    <h5 class="m-0 fw-bold text-maroon">Gestión de Documentos</h5>
+
+    <button class="btn btn-outline-primary" (click)="nuevoDocumento(); abrirModal(documentoModal)">
+      <i class="bi bi-plus-circle me-1"></i> Nuevo Documento
+    </button>
+ </div>
+
+ <div class="card-body">
+<!--Fitlro dinamico-->
+ <form [formGroup]="filtroFormulario" (ngSubmit)="buscar()">
+  <div class="row g-3 mb-4 ">
+   
+     <!-- filtro por nombre -->
+    <div class="col-md-4 mb-4">
+      <input type="text"
+            class="form-control"
+            placeholder="Buscar documento..."
+            formControlName="nombre">
+    </div>
+
+    <!-- filtro por activo -->
+    <div class="col-md-2 me-5 ms-5">
+      <select class="form-select" formControlName="activo">
+        <option value="">Filtrar por estado</option>
+        <option value="true">Habilitado</option>
+        <option value="false">Deshabilitado</option>
+      </select>
+    </div>
+
+    <!-- Botón -->
+    <div class="col-md-2 ms-5">
+      <button type="submit" class="btn btn-outline-primary w-100">
+        Buscar
+      </button>
+    </div>
+      <div class="col-md-2">
+      <button type="button"
+        class="btn btn-outline-primary w-100"
+        (click)="limpiarFiltros()">
+        Limpiar
+      </button>
+   </div>
+
+  </div>
+</form>
+ 
+  <!-- TABLA -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped w-100">
+
+        <thead class="table-light text-center text-maroon">
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let d of documentos; let i = index">
+            <td class = "text-center">{{ d.idDocumento }}</td>
+            <td class = "text-center">{{ d.nombre }}</td>
+            <td class = "text-center">{{ d.tipo }}</td>
+            <td class = "text-center"><span [ngClass]="d.activo == true ? 'badge bg-success' : 'badge bg-danger' ">
+              {{ d.activo ? 'Habilitado' : 'Deshabilitado' }}</span></td>
+            <td class="text-center">
+
+              <!-- Editar -->
+              <button class="btn btn-sm btn-outline-warning me-2" *ngIf="d.activo !==false"
+                      (click)="editarModoDirecto(d.idDocumento, documentoModal)"
+                      title="Editar">
+                       <!-- Ícono lápiz -->
+                <i class="bi bi-pencil"></i>
+              </button>
+               <button class="btn btn-sm me-2"
+              [ngClass]="d.activo == true ? 'btn-outline-danger':'btn-outline-success'"
+                          (click)="abrirconfirmacion(d, confirmModal)"
+                          [title]="d.activo === true ? 'Deshabilitar grupo ' + d.tipo : 'Habilitar grupo ' + d.tipo">
+                   <i class="bi"
+                 [ngClass]="d.activo == true ? 'bi-chevron-double-down' : 'bi-chevron-double-up'"></i>
+              </button>
+            </td>
+
+          </tr>
+
+          <tr *ngIf="documentos.length === 0">
+            <td colspan="6" class="text-center text-muted py-4">
+              No hay documentos registrados
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <!-- Desactivar -->
+             <ng-template #confirmModal let-modal>
+                <div class="modal-header bg-warning-subtle flex-column">
+                  <h5 class="modal-title text-maroon text-center">Confirmar acción</h5>
+                  <button type="button"
+                          class="btn-close position-absolute end-0 top-0 m-3"
+                          (click)="modal.dismiss()">
+                  </button>
+                </div>
+
+                <div class="modal-body text-center">
+                  ¿Desea {{accionTexto}} ?
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                  <button class="btn btn-outline-secondary"
+                          (click)="modal.dismiss()">
+                    Cancelar
+                  </button>
+                  <button class="btn btn-danger"
+                          (click)="confirmarDesactivacion(modal)">
+                    Confirmar
+                  </button>
+                </div>
+              </ng-template>
+    </div>
+    <!-- Componente del paginador -->
+    <nav *ngIf="totalPages > 0" class="mt-4">
+      <ul class="pagination justify-content-center">
+
+        <li class="page-item" [class.disabled]="page === 0">
+          <button class="page-link"
+                  (click)="cambiarPagina(page - 1)"
+                  [disabled]="page === 0">
+            «
+          </button>
+        </li>
+
+        <li class="page-item"
+            *ngFor="let p of paginas"
+            [class.active]="p === page">
+          <button class="page-link"
+                  (click)="cambiarPagina(p)">
+            {{ p + 1 }}
+          </button>
+        </li>
+
+        <li class="page-item"
+            [class.disabled]="page + 1 >= totalPages">
+          <button class="page-link"
+                  (click)="cambiarPagina(page + 1)"
+                  [disabled]="page + 1 >= totalPages">
+            »
+          </button>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<!-- MODAL FORMULARIO -->
+<ng-template #documentoModal let-modal>
+
+  <form [formGroup]="documentoForm"
+        (ngSubmit)="guardar(modal)">
+
+    <div class="modal-header bg-smoke flex-column align-items-center">
+      <h5 class="modal-title fw-bold text-maroon">
+         {{ 
+          modo === 'crear' ? 'Registrar Documento' :
+          modo === 'editarDocumento' ? 'Actualizar' :
+          'Datos del documento'
+        }}
+      </h5>
+      <button type="button"
+              class="btn-close"
+              (click)="modal.dismiss()">
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="row g-3">
+        <div class="col-md-12">
+          <div class="input-group">
+            <span class="input-group-text" style="font-size:0.9rem;">Nombre</span>
+            <input type="text" class="form-control"
+              formControlName="nombre"
+              [ngClass]="{'is-invalid': documentoForm.get('nombre')?.invalid && documentoForm.get('nombre')?.touched}">
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="input-group">
+          <span class="input-group-text" style="font-size:0.9rem;">Tipo</span>
+          <input type="text" class="form-control"
+              formControlName="tipo"
+              [ngClass]="{
+              'is-invalid': documentoForm.get('tipo')?.invalid && documentoForm.get('tipo')?.touched}">
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer justify-content-center">
+      <button type="button"
+              class="btn btn-outline-primary align-items-center"
+              (click)="modal.dismiss()">
+        Cancelar
+      </button>
+
+      <button type="submit"
+              class="btn btn-success"
+              [disabled]="documentoForm.invalid"
+              *ngIf="modo === 'crear'">
+        Guardar
+      </button>
+
+      <button type="submit"
+              class="btn btn-success"
+              [disabled]="documentoForm.invalid"
+              *ngIf="modo === 'editarDocumento'">
+        Actualizar
+      </button>
+    </div>
+
+  </form>
+
+</ng-template>

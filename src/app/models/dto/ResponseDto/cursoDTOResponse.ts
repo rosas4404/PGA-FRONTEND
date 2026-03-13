@@ -7,5 +7,6 @@ export interface cursoDTOResponse{
     fechaAlta : string;
     fechaBaja : string;
     activo : boolean;
+    created_At: string;
     actividades : actividadBaseDTOResponse[];
 }

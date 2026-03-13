@@ -141,10 +141,10 @@
 
       <!-- Desactivar -->
              <ng-template #confirmModal let-modal>
-                <div class="modal-header bg-warning-subtle">
-                  <h5 class="modal-title text-maroon">Confirmar acción</h5>
+                <div class="modal-header bg-warning-subtle flex-column">
+                  <h5 class="modal-title text-maroon text-center">Confirmar Acción</h5>
                   <button type="button"
-                          class="btn-close"
+                          class="btn-close position-absolute end-0 top-0 m-3"
                           (click)="modal.dismiss()">
                   </button>
                 </div>
@@ -204,7 +204,7 @@
 <ng-template #grupoModal let-modal>
   <div class="modal-header bg-smoke flex-column align-items-center">
     <h5 class="modal-title fw-bold text-maroon">
-      {{ modo === 'crear' ? 'Crear Grupo' : modo === 'editarDocente' ? 'Actualizar docente' : 'Datos del grupo'}}
+      {{ modo === 'crear' ? 'Registrar Grupo' : modo === 'editarDocente' ? 'Actualizar Docente' : 'Información Grupo'}}
     </h5>
     <button type="button"
       class="btn-close position-absolute end-0 top-0 m-3"
@@ -218,18 +218,25 @@
         <div class="col-md-12">
           <div class="input-group">
             <span class="input-group-text" style="font-size:0.9rem;">Nombre</span>
-            <input type="text"
-                  class="form-control"
-                  formControlName="nombre">
+            <input type="text" class="form-control"
+              formControlName="nombre"
+              [ngClass]="{'is-invalid': grupoForm.get('nombre')?.invalid && grupoForm.get('nombre')?.touched}">
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
           </div>
         </div>
 
         <div class="col-md-12">
           <div class="input-group">
           <span class="input-group-text" style="font-size:0.9rem;">Periodo</span>
-          <input type="text"
-                 class="form-control"
-                 formControlName="periodo">
+          <input type="text" class="form-control"
+              formControlName="periodo"
+              [ngClass]="{
+              'is-invalid': grupoForm.get('periodo')?.invalid && grupoForm.get('periodo')?.touched}">
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
           </div>
         </div>
 
@@ -237,13 +244,16 @@
           <div class="input-group">
           <span class="input-group-text" style="font-size:0.9rem;">Curso</span>
           <select class="form-select"
-                  formControlName="idCurso">
-            <option value="">Seleccione</option>
+                  formControlName="idCurso"
+                  [ngClass]="{'is-invalid': grupoForm.get('idCurso')?.invalid && grupoForm.get('idCurso')?.touched}">
             <option *ngFor="let c of cursos"
                     [value]="c.idCurso">
               {{ c.nombre }}
             </option>
           </select>
+          <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
           </div>
         </div>
 
@@ -268,12 +278,16 @@
           <!-- Select -->
           <select class="form-select"
                   formControlName="idDocente"
+                  [ngClass]="{'is-invalid': grupoForm.get('idDocente')?.invalid && grupoForm.get('idDocente')?.touched}"
                   *ngIf="modo === 'crear' || modo === 'editarDocente'">
             <option *ngFor="let d of docentes"
                     [value]="d.idUsuario">
               {{ d.nombre }} {{ d.apellidoPaterno }} {{ d.apellidoMaterno }}
             </option>
           </select>
+          <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+          </div>
         </div>
         </div>
         </div>
@@ -283,8 +297,15 @@
     
 
     <div class="modal-footer justify-content-center">
+      <button *ngIf="modo === 'ver'"
+                  type="button"
+                  class="btn btn-secondary"
+                  (click)="modal.close()">
+        Cerrar
+      </button>
       <button type="button"
               class="btn btn-outline-primary align-items-center"
+              *ngIf="modo!== 'ver'"
               (click)="modal.dismiss()">
         Cancelar
       </button>

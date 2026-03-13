@@ -11,7 +11,7 @@ import { PageResponse } from '../models/pageResponse';
 })
 export class GrupoService {
   private apiUrl: string = 'http://localhost:8080/api/grupo';
-  private httpHeaders = new HttpHeaders({'Content_Type' : 'aplication/json'});
+  private httpHeaders = new HttpHeaders({'Content-Type' : 'application/json'});
 
   //inyectamos la dependencia en el constructor, es equivalente a que el http sea un atributo en la clase
   constructor(private http:HttpClient) { }
