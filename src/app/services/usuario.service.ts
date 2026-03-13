@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { usuarioDTOResponse } from '../models/dto/ResponseDto/usuarioDTOResponse';
 import { PageResponse } from '../models/pageResponse';
+import baseUrl from './helper';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class UsuarioService {
 
   
 
-  private apiUrl: string = 'http://localhost:8080/api/usuario';
+  private apiUrl: string = `${baseUrl}/usuario`;
   private httpHeaders = new HttpHeaders({'Content_Type' : 'aplication/json'});
 
 
@@ -71,4 +72,7 @@ export class UsuarioService {
   desactivarActivarUsuario(idUsuario: number): Observable<usuarioDTOResponse[]>{
     return this.httpClient.put<usuarioDTOResponse[]>(`${this.apiUrl}/desactivar/${idUsuario}`,"");
   }
+
+
+  
 }

@@ -59,8 +59,8 @@ export class CursoComponent implements OnInit{
     });
 
     this.filtroFormulario = this.fb.group({
-      nombre: [null],
-      activo: [null]
+      nombre: [''],
+      activo: ['']
     });
 
     //pendiente
@@ -238,7 +238,7 @@ export class CursoComponent implements OnInit{
   cambiarPagina(nuevaPagina: number) {
     if (nuevaPagina < 0 || nuevaPagina >= this.totalPages) return;
     this.page = nuevaPagina;
-    this.buscar();
+    this.cursosPaginacion();
   }
 
   cargarConteos(){
@@ -251,11 +251,15 @@ export class CursoComponent implements OnInit{
 
   //filtros
   buscar() {
+    this.page=0;
     this.cursosPaginacion();
   }
 
   limpiarFiltros() {
-    this.filtroFormulario.reset();
+    this.filtroFormulario.reset({
+      nombre: '',
+      activo: ''
+  });
     this.page = 0;
     this.cursosPaginacion();
   }

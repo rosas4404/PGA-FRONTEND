@@ -83,20 +83,20 @@ constructor( private inscripcionService: InscripcionService,
 ngOnInit(): void {
   this.crearForm = this.fb.group({
     fechaInicio: ['',Validators.required],
-    fechaFin: ['',Validators.required ] ,
+    fechaFin: ['',Validators.required] ,
     escuela: ['',Validators.required ],
     nivelEstudio: ['',Validators.required ],
     carrera: ['',Validators.required ],
     tipo: ['',Validators.required ],
     idUsuario: ['',Validators.required ]
   },{
-    Validators:[this.validatorFechaFin]
+    validators:[this.validatorFechaFin]
   });
 
   this.filtroForm = this.fb.group({
-  alumno: [null],
-  idGrupo: [null],
-  tipo:[null]
+  alumno: [""],
+  idGrupo: [""],
+  tipo:[""]
   });
 
   this.cargarInscripciones();
@@ -125,11 +125,16 @@ cargarGruposActivos(){
   });
 }
 buscar(){
+  this.page=0;
   this.cargarInscripciones();
 }
 
 limpiarFiltros(){
-  this.filtroForm.reset();
+  this.filtroForm.reset({
+  alumno : '',
+  idGrupo : '',
+  tipo : ''
+  });
   this.page=0;
   this.cargarInscripciones();
 }
@@ -140,7 +145,7 @@ get paginas(): number[] {
 cambiarPagina(nuevaPagina: number) {
   if (nuevaPagina < 0 || nuevaPagina >= this.totalPages) return;
   this.page = nuevaPagina;
-  this.buscar();
+  this.cargarInscripciones();
 }
 
 
@@ -162,10 +167,10 @@ crear(){
    
     fechaInicio: this.crearForm.value.fechaInicio,
     fechaFin: this.crearForm.value.fechaFin,
-    escuela: this.crearForm.value.escuela,
-    nivelEstudio: this.crearForm.value.nivelEstudio,
-    carrera: this.crearForm.value.carrera,
-    tipo: this.crearForm.value.tipo,
+    escuela: this.crearForm.value.escuela.toUpperCase(),
+    nivelEstudio: this.crearForm.value.nivelEstudio.toUpperCase(),
+    carrera: this.crearForm.value.carrera.toUpperCase(),
+    tipo: this.crearForm.value.tipo.toUpperCase(),
     idUsuario: this.crearForm.value.idUsuario
   } 
   
@@ -184,20 +189,23 @@ crear(){
   });
 }
 
-validatorFechaFin(form:AbstractControl){
-const fechaInicio = form.get('fechaInicio')?.value;
-console.log(fechaInicio)
-if (!fechaInicio) return null;
-const fechaFin = form.get('fechaFin')?.value;
-if (!fechaFin) return null;
-console.log(fechaFin)
+validatorFechaFin(form: AbstractControl) {
+
+  const fechaInicio = form.get('fechaInicio')?.value;
+  const fechaFin = form.get('fechaFin')?.value;
+
+  if (!fechaInicio || !fechaFin) {
+    return null;
+  }
 
   const inicio = new Date(fechaInicio);
   const fin = new Date(fechaFin);
 
-  return fin < inicio 
-    ? { fechaFinPasada: true }
-    : null;
+  if (fin < inicio) {
+    return { fechaFinPasada: true };
+  }
+
+  return null;
 }
 
 asignarGrupo(){

@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { usuarioDTOResponse } from '../../models/dto/ResponseDto/usuarioDTOResponse';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UsuarioService } from '../../services/usuario.service';
+import { ReporteService } from '../../services/reporte.service';
+import baseUrl from '../../services/helper';
 
 @Component({
   selector: 'app-usuarios',
@@ -43,14 +45,15 @@ export class UsuariosComponent implements OnInit {
     private toastr: ToastrService, 
     private route: ActivatedRoute,
     private modalService : NgbModal,
-    private usuarioService : UsuarioService
+    private usuarioService : UsuarioService,
+    private reporteService : ReporteService
   ){}
 
     ngOnInit(): void {
       //filtro form
       this.filtroForm = this.fb.group({
-        nombre : [null],
-        estado : [null]
+        nombre : [''],
+        estado : ['']
       })
       //registro form
       this.registroForm = this.fb.group({
@@ -63,6 +66,7 @@ export class UsuariosComponent implements OnInit {
           email: ['',[Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)]],
           telefono: ['',[Validators.required, Validators.minLength(10), Validators.maxLength(10),Validators.pattern("[0-9]*")]],
         }); 
+        
       // cargar usuarios
       this.tipo = this.route.snapshot.data['usuario'];
       console.log(this.tipo);
@@ -100,6 +104,7 @@ export class UsuariosComponent implements OnInit {
     }
 
     buscar(){
+      this.page = 0
       if (this.tipo == 'alumnos'){
           this.cargarAlumnos();
       }else {  
@@ -109,7 +114,10 @@ export class UsuariosComponent implements OnInit {
     }
 
     limpiarFiltros(){
-      this.filtroForm.reset();
+      this.filtroForm.reset({
+        nombre : '',
+        estado : ''
+    });
       this.page=0;
        if (this.tipo == 'alumnos'){
           this.cargarAlumnos();
@@ -125,7 +133,11 @@ export class UsuariosComponent implements OnInit {
     cambiarPagina(nuevaPagina: number) {
       if (nuevaPagina < 0 || nuevaPagina >= this.totalPages) return;
       this.page = nuevaPagina;
-      this.buscar();
+       if (this.tipo == 'alumnos'){
+          this.cargarAlumnos();
+      }else {  
+          this.cargarDocentes();
+      }
     }
     submit() {
       if (this.registroForm.invalid) {
@@ -149,7 +161,13 @@ export class UsuariosComponent implements OnInit {
     this.userService.register(formValue).subscribe({
         next: (data:any)=>{
         this.toastr.success('Usuario registrado correctamente', 'Éxito')
-        this.registroForm.reset();
+        this.cerrarModal();
+        if (this.tipo == 'alumnos'){
+          this.cargarAlumnos();
+        }else {
+          this.cargarDocentes();
+        }
+        
         },
         error: (err)=>{
           this. toastr.error('Ocurrió un error al registrar' + err.massage, 'Error')
@@ -163,10 +181,10 @@ export class UsuariosComponent implements OnInit {
     if(usuario.activo === true){
 
           this.accionTexto='desactivar el usuario con Id : ' + usuario.idUsuario
-          + ' perteneciente a  ' + usuario.nombre + usuario.apellidoPaterno
+          + ' perteneciente a  ' + usuario.nombre + ' ' +usuario.apellidoPaterno
         }else{
           this.accionTexto='activar la inscripcion con Id : ' + usuario.idUsuario
-          + ' perteneciente a  ' + usuario.nombre + usuario.apellidoPaterno
+          + ' perteneciente a  ' + usuario.nombre + ' ' +usuario.apellidoPaterno
         }
        this.usuarioSeleccionado = usuario.idUsuario; 
       const modalRef = this.modalService.open(content, {
@@ -178,13 +196,10 @@ export class UsuariosComponent implements OnInit {
     }
 
     cerrarModal(){
-      this.resetear();
+      
       this.modalRef.dismiss();
-      if (this.tipo == 'alumnos'){
-          this.cargarAlumnos();
-      }else {
-          this.cargarDocentes();
-      }
+      this.resetear();
+
 
     }
     resetear() {
@@ -232,6 +247,10 @@ export class UsuariosComponent implements OnInit {
         backdrop: 'static',
         keyboard: false
       });
-}
+    }
+    descargarReporte(id: number) { 1
+      window.open(`${baseUrl}/reporte/alumnos/${id}/reporte`, '_blank');
+    }
+  
 }
 

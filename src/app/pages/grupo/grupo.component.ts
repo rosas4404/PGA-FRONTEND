@@ -48,9 +48,9 @@ export class GrupoComponent implements OnInit{
 
   ngOnInit(): void {
     this.filtroFormulario = this.fb.group({
-      curso: [null],
-      docente: [null],
-      estado: [null]
+      curso: [""],
+      docente: [""],
+      estado: [""]
     });
     
     this.grupoForm = this.fb.group({
@@ -210,7 +210,7 @@ export class GrupoComponent implements OnInit{
   cambiarPagina(nuevaPagina: number) {
     if (nuevaPagina < 0 || nuevaPagina >= this.totalPages) return;
     this.page = nuevaPagina;
-    this.buscar();
+    this.gruposPaginacion();
   }
 
   cargarConteos(){
@@ -223,11 +223,17 @@ export class GrupoComponent implements OnInit{
 
   //filtros
   buscar() {
+    this.page=0;
     this.gruposPaginacion();
   }
 
   limpiarFiltros() {
-    this.filtroFormulario.reset();
+    this.filtroFormulario.reset({
+      curso:'',
+      docente: '',
+      estado:''
+    }
+    );
     this.page = 0;
     this.gruposPaginacion();
   }

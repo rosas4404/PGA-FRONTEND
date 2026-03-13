@@ -17,7 +17,7 @@
     <!-- Busqueda por curso -->
     <div class="col-md-4">
       <select class="form-select" formControlName="curso">
-        <option value=null>Filtrar por curso</option>
+        <option value="">Filtrar por curso</option>
         <option *ngFor="let c of cursos" [value]="c.nombre">
           {{ c.nombre }}
         </option>
@@ -35,7 +35,7 @@
     <!-- filtro por estado -->
     <div class="col-md-2">
       <select class="form-select" formControlName="estado">
-        <option value=null>Filtrar por estado</option>
+        <option value="">Filtrar por estado</option>
         <option value="HABILITADO">Habilitado</option>
         <option value="DESHABILITADO">Deshabilitado</option>
       </select>

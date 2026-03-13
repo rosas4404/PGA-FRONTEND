@@ -26,7 +26,7 @@
      <!-- filtro por Tipo -->
     <div class="col-md-2">
       <select class="form-select" formControlName="tipo" >
-        <option value=null>Filtrar por tipo</option>
+        <option value="">Filtrar por tipo</option>
         <option *ngFor="let t of tipos" [value]="t.value">
           {{ t.label }}
         </option>
@@ -35,7 +35,7 @@
     <!-- filtro por Grupo -->
     <div class="col-md-2">
       <select class="form-select" formControlName="idGrupo">
-        <option value=null>Filtrar por grupo</option>
+        <option value="">Filtrar por grupo</option>
         <option *ngFor="let g of grupos" [value]="g.idGrupo">
           {{ g.nombre }}
         </option>
@@ -268,8 +268,8 @@
               <div class="invalid-feedback" style="font-size:0.6rem;">
                 Campo Obligatorio
               </div>
-               <div *ngIf="crearForm.hasError('fechaFinPasada')">
-                <small style="color:red; font-size: 0.6rem;">La fecha de final debe ser mayor a la fecha de inicio.</small>
+              <div *ngIf="crearForm.errors?.['fechaFinPasada'] && crearForm.get('fechaFin')?.touched"  class="text-danger" style="font-size:0.6rem;">
+                  La fecha fin no puede ser menor que la fecha inicio
               </div>
             </div>
           </div>
@@ -330,7 +330,7 @@
           (click) = "crear()" 
           >
           <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
-          Crear
+          Siguiente
         </button>
         <!--pASO 2. -->
         <div *ngIf="paso == 2" class="w-100 d-flex justify-content-between">
@@ -341,7 +341,7 @@
             Omitir
           </button>
           <button class="btn btn-success" (click)="asignarGrupo()">
-            Guardar Grupo
+            Guardar
           </button>
 
         </div>
@@ -350,10 +350,10 @@
 
 <!--modal de confirmacion-->
 <ng-template #confirmarModal let-modal>
-  <div class="modal-header bg-warning-subtle">
-    <h5 class="modal-title text-maroon">Confirmar acción</h5>
+  <div class="modal-header bg-warning-subtle flex-column">
+    <h5 class="modal-title text-maroon text-center">Confirmar acción</h5>
     <button type="button"
-      class="btn-close"
+      class="btn-close position-absolute end-0 top-0 m-3"
       (click)="modal.dismiss()">
     </button>
   </div>
@@ -375,14 +375,17 @@
 
 <!--Detalles modal-->
 <ng-template #detallesModal let-modal>
-  <div class="modal-header bg-light">
-    <h5 class="modal-title fw-bold text-maroon">
-      Detalles de Inscripción
+  <div class="modal-header  flex-column bg-smoke">
+    <h5 class="modal-title fw-bold text-maroon text-center">
+      Información Inscripción
     </h5>
-    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    <button type="button" 
+            class="btn-close position-absolute end-0 top-0 m-3" 
+            (click)="modal.dismiss()">
+    </button>
   </div>
 
-  <div class="modal-body">
+  <div class="modal-body modal-body-step">
 
     <div class="row mb-2">
       <div class="col-5"><strong>ID Inscripción:</strong></div>

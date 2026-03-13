@@ -14,6 +14,8 @@ import { GrupoComponent } from './pages/grupo/grupo.component';
 import { InscripcionComponent } from './pages/inscripcion/inscripcion.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { CursoComponent } from './pages/curso/curso.component';
+import { CampoFormativoComponent } from './pages/campo-formativo/campo-formativo.component';
+import { ActividadBaseComponent } from './pages/actividad-base/actividad-base.component';
 import { DocumentoComponent } from './pages/documento/documento.component';
 import { ExpedienteComponent } from './pages/expediente/expediente.component';
 import { ConsultaRevisonComponent } from './pages/consulta-revision/consulta-revision.component';
@@ -33,6 +35,9 @@ export const routes: Routes = [
             {path:'inscripcion', component: InscripcionComponent},
             {path: 'grupos', component:GrupoComponent},
             {path: 'cursos', component:CursoComponent},
+            {path: 'campos', component: CampoFormativoComponent},
+            {path: 'catalogo-actividades', component: ActividadBaseComponent},
+
             {path: 'documentos', component:DocumentoComponent},
             {path: 'consulta-revision',
                 children:[
