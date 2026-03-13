@@ -32,8 +32,8 @@
         </div>
         <div class="col-md-2 me-5 ms-5">
           <select class="form-select" formControlName="estado" >
-            <option value = null>Filtrar por estado</option>
-            <option Value = "true" >Habilitado</option>
+            <option value = "">Filtrar por estado</option>
+            <option value = "true" >Habilitado</option>
             <option value = "false" >Deshabilitado</option>
         </select>
     </div>
@@ -91,6 +91,15 @@
                 <i class="bi"
                  [ngClass]="u.activo ? 'bi-chevron-double-down' : 'bi-chevron-double-up'"></i>
               </button>
+               <!--descargar Reporte-->
+              <button class="btn btn-sm btn-outline-primary me-2"
+              *ngIf="tipo == 'alumnos' "
+              (click)="descargarReporte(u.idUsuario)"
+              title="Reporte" >
+                <i class="bi bi-file-arrow-down"></i>
+              </button>
+
+
             </td>
           </tr>
            <tr *ngIf="usuarios.length === 0">
@@ -144,10 +153,10 @@
 
 <!--modal de confirmacion-->
 <ng-template #confirmarModal let-modal>
-  <div class="modal-header bg-warning-subtle">
-    <h5 class="modal-title text-maroon">Confirmar acción</h5>
+  <div class="modal-header bg-warning-subtle flex-column" >
+    <h5 class="modal-title text-maroon text-center">Confirmar acción</h5>
     <button type="button"
-      class="btn-close"
+      class="btn-close position-absolute top-0 end-0 m-3"
       (click)="modal.dismiss()">
     </button>
   </div>
@@ -172,9 +181,8 @@
 <ng-template #detalleModal let-modal>
 
   <div class="modal-header  flex-column bg-smoke align-items-center">
-    <h5 class="modal-title text-maroon text-center ">
-      <i class="bi bi-person-circle me-2"></i>
-      Información del Usuario
+    <h5 class="modal-title fw-bold text-maroon text-center ">
+     {{tipo == 'docente' ? "Información Docente" :"Información Alumno" }} 
     </h5>
     <button type="button"
             class="btn-close position-absolute end-0 top-0 m-3"
@@ -381,9 +389,14 @@
               </div>
             </div>
           </div>
-        <div class="text-center mt-3">
+         <div class="modal-footer justify-content-center">
+          <button type="button"
+            class="btn btn-outline-primary align-items-center"
+            (click)="modal.dismiss()">
+            Cancelar
+          </button>
           <button class="btn btn-sm bg-maroon px-4" style="font-size:0.9rem;" type="submit" [disabled]="registroForm.invalid">
-            {{tipo=='alumnos' ?  'Crear Alumno' : 'Crear Docente'}}
+            Guardar
           </button>
         </div>
       </form>

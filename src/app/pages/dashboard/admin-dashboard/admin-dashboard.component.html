@@ -34,6 +34,15 @@
              <span *ngIf="!isCollapsed" class="ms-2">Grupos</span>
         </a>
       </li>
+      
+       <li class="nav-item">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink="usuarios/docentes"
+           routerLinkActive="active">
+           <i class="bi bi-person-workspace fs-4 "></i>
+            <span *ngIf="!isCollapsed" class="ms-2">Docentes</span>
+        </a>
+      </li>
 
       <li class="nav-item">
         <a class="nav-link text-maroon sidebar-link"
@@ -48,17 +57,24 @@
         <a class="nav-link text-maroon sidebar-link"
            routerLink="inscripcion"
            routerLinkActive="active">
-           <i class="bi bi-journal-text fs-4 "></i>
+           <i class="bi bi-person-vcard fs-4 "></i>
             <span *ngIf="!isCollapsed" class="ms-2">Inscripciones</span>
         </a>
       </li>
-
-      <li class="nav-item">
+        <li class="nav-item">
         <a class="nav-link text-maroon sidebar-link"
-           routerLink="usuarios/docentes"
+           routerLink="campos"
            routerLinkActive="active">
-           <i class="bi bi-person-workspace fs-4 "></i>
-            <span *ngIf="!isCollapsed" class="ms-2">Docentes</span>
+           <i class="bi bi-book fs-4 "></i>
+            <span *ngIf="!isCollapsed" class="ms-2">Campos Formativos</span>
+        </a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink="catalogo-actividades"
+           routerLinkActive="active">
+           <i class="bi bi-list-task fs-4 "></i>
+            <span *ngIf="!isCollapsed" class="ms-2">Actividades Base</span>
         </a>
       </li>
 

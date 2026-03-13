@@ -14,6 +14,8 @@ import { GrupoComponent } from './pages/grupo/grupo.component';
 import { InscripcionComponent } from './pages/inscripcion/inscripcion.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { CursoComponent } from './pages/curso/curso.component';
+import { CampoFormativoComponent } from './pages/campo-formativo/campo-formativo.component';
+import { ActividadBaseComponent } from './pages/actividad-base/actividad-base.component';
 
 
 export const routes: Routes = [
@@ -30,6 +32,9 @@ export const routes: Routes = [
             {path:'inscripcion', component: InscripcionComponent},
             {path: 'grupos', component:GrupoComponent},
             {path: 'cursos', component:CursoComponent},
+            {path: 'campos', component: CampoFormativoComponent},
+            {path: 'catalogo-actividades', component: ActividadBaseComponent},
+
         ]
     },
     {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard]},
