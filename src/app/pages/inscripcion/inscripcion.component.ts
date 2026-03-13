@@ -152,14 +152,10 @@ crear(){
   if (this.crearForm.value.fechaInicio) {
     const partes = this.crearForm.value.fechaInicio.split('-'); 
     this.crearForm.value.fechaInicio = partes[2] + '/' + partes[1] + '/' + partes[0];
-    console.log(partes);
-    console.log(this.crearForm.value.fechaInicio)
   }
   if (this.crearForm.value.fechaFin) {
     const partes = this.crearForm.value.fechaFin.split('-'); 
     this.crearForm.value.fechaFin = partes[2] + '/' + partes[1] + '/' + partes[0];
-     console.log(partes);
-     console.log(this.crearForm.value.fechaInicio)
   }
   
   this.crearInscripcion ={

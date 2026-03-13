@@ -15,7 +15,8 @@
 
     <ul class="nav nav-pills flex-column gap-2">
 
-      <li class="nav-item mt-2"
+      <li class="nav-item mt-2" 
+       [attr.title]="isCollapsed ? 'Cursos' : null"
        routerLinkActive="active"
        [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link text-maroon sidebar-link"
@@ -26,7 +27,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item" [attr.title]="isCollapsed ? 'Grupos' : null">
         <a class="nav-link text-maroon sidebar-link"
            routerLink="grupos"
            routerLinkActive="active">
@@ -35,7 +36,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item" [attr.title]="isCollapsed ? 'Alumnos' : null">
         <a class="nav-link text-maroon sidebar-link"
            routerLink="usuarios/alumnos"
            routerLinkActive="active">
@@ -44,7 +45,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item" [attr.title]="isCollapsed ? 'Inscripciones' : null">
         <a class="nav-link text-maroon sidebar-link"
            routerLink="inscripcion"
            routerLinkActive="active">
@@ -53,7 +54,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item" [attr.title]="isCollapsed ? 'Docentes' : null">
         <a class="nav-link text-maroon sidebar-link"
            routerLink="usuarios/docentes"
            routerLinkActive="active">
@@ -62,13 +63,29 @@
         </a>
       </li>
 
-       <li class="nav-item">
+       <li class="nav-item" [attr.title]="isCollapsed ? 'Docentes' : null">
+        <!--Bóton principal-->
         <a class="nav-link text-maroon sidebar-link"
-           routerLink="expediente"
-           routerLinkActive="active">
+           (click)="toggleExpedicnete()"
+           style="cursor: pointer;">
            <i class="bi bi-folder-fill fs-4 "></i>
-            <span *ngIf="!isCollapsed" class="ms-2">Expedientes</span>
+            <span *ngIf="!isCollapsed" class="ms-2">Expedientes </span>
+          <!--Icono de flecha que rota-->
+          <i *ngIf="!isCollapsed" class="bi bi-chevron-down ms-auto transition" [class.rotate]="expedienteAbierto"></i>
         </a>
+        <!--Sub menú desplegable-->
+        <ul class="list-unstyled ms-4" *ngIf="expedienteAbierto && !isCollapsed">
+          <li class="nav-item">
+            <a class="nav-link text-maroon" routerLink="documentos" (click)="cerrarSubmenu()">
+              <i class="ni ni-plus-circle me-2"></i> Documentación
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-maroon" routerLink="consulta-revision" (click)="cerrarSubmenu()">
+              <i class="ni ni-plus-circle me-2"></i> Consulta
+            </a>
+          </li>
+        </ul>
       </li>
 
     </ul>
