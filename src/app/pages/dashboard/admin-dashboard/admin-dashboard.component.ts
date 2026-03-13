@@ -18,5 +18,20 @@ export class AdminDashboardComponent {
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
+    //se cierra el sub menu al disminuir la barra
+    if(this.isCollapsed){
+      this.expedienteAbierto=false;
+    }
+  }
+
+  //sub menu para el expediente
+  expedienteAbierto = false;
+
+  toggleExpedicnete(){
+    this.expedienteAbierto = !this.expedienteAbierto;
+  }
+
+  cerrarSubmenu(){
+    this.expedienteAbierto=false;
   }
 }

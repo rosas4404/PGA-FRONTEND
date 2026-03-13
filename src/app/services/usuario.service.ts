@@ -27,6 +27,11 @@ export class UsuarioService {
     return this.httpClient.get<usuarioDTOResponse[]>(`${this.apiUrl}/docentes-activos`);
   }
 
+  //consulta por id
+  obtenerUsuarioId(idUsuario: number): Observable<usuarioDTOResponse>{
+    return this.httpClient.get<usuarioDTOResponse>(`${this.apiUrl}/${idUsuario}`);
+  }
+
   //obtener alumnos
  obtenerAlumnos(page: number, size: number, filtros:any ) : Observable <PageResponse<usuarioDTOResponse>>{
     let params= new HttpParams()

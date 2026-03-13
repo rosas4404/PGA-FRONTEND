@@ -13,9 +13,9 @@
 <!--Fitlro dinamico-->
  <form [formGroup]="filtroFormulario" (ngSubmit)="buscar()">
   <div class="row g-3 mb-4 ">
-   
+    
      <!-- filtro por nombre -->
-    <div class="col-md-2">
+    <div class="col-md-4 me-5">
       <input type="text"
             class="form-control"
             placeholder="Buscar por nombre del curso"
@@ -23,7 +23,7 @@
     </div>
 
     <!-- filtro por activo -->
-    <div class="col-md-2">
+    <div class="col-md-2 me-5 ms-5">
       <select class="form-select" formControlName="activo">
         <option value="">Filtrar por estado</option>
         <option value="true">Habilitado</option>
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Botón -->
-    <div class="col-md-2">
+    <div class="col-md-2 ms-5">
       <button type="submit" class="btn btn-outline-primary w-100">
         Buscar
       </button>
@@ -79,7 +79,7 @@
 
         <thead class="table-light text-center text-maroon">
           <tr>
-            <th>No.Curso</th>
+            <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
             <th>Estado</th>
@@ -104,7 +104,7 @@
                 <i class="bi bi-eye"></i>
               </button>
 
-              <button class="btn btn-sm"
+              <button class="btn btn-sm me-2"
               [ngClass]="c.activo == true ? 'btn-outline-danger':'btn-outline-success'"
                           (click)="abrirconfirmacion(c, confirmModal)"
                           [title]="c.activo === true ? 'Deshabilitar grupo ' + c.nombre : 'Habilitar grupo ' + c.nombre">
@@ -112,11 +112,18 @@
                  [ngClass]="c.activo == true ? 'bi-chevron-double-down' : 'bi-chevron-double-up'"></i>
               </button>
 
-              <button class="btn btn-sm btn-outline-warning me-2"
+              <button class="btn btn-sm btn-sm btn-outline-primary me-2" *ngIf="c.activo!==false"
                       (click)="editarModoDirecto(c.idCurso, cursoModal)"
-                      title="Editar">
+                      title="Editar datos">
                        <!-- Ícono lápiz -->
                 <i class="bi bi-pencil"></i>
+              </button>
+
+              <button class="btn btn-sm btn-sm btn-outline-primary me-2" *ngIf="c.activo!==false"
+                      (click)="editarActividades(c.idCurso, cursoModal)"
+                      title="Editar actividades">
+                       <!-- Ícono lista -->
+                <i class="bi bi-list-check"></i>
               </button>
             </td>
 
@@ -134,10 +141,10 @@
 
       <!-- Desactivar -->
              <ng-template #confirmModal let-modal>
-                <div class="modal-header bg-warning-subtle">
-                  <h5 class="modal-title text-maroon">Confirmar acción</h5>
+                <div class="modal-header bg-warning-subtle flex-column">
+                  <h5 class="modal-title text-maroon text-center">Confirmar acción</h5>
                   <button type="button"
-                          class="btn-close"
+                          class="btn-close position-absolute end-0 top-0 m-3"
                           (click)="modal.dismiss()">
                   </button>
                 </div>
@@ -196,122 +203,159 @@
 <!-- MODAL FORMULARIO -->
 <ng-template #cursoModal let-modal>
 
-  <form [formGroup]="cursoForm"
-        (ngSubmit)="guardar(modal)">
+  <form [formGroup]="cursoForm" (ngSubmit)="guardar(modal)">
 
-    <div class="modal-header bg-smoke flex-column align-items-start">
+    <div class="modal-header bg-smoke flex-column align-items-center">
       <h5 class="modal-title fw-bold text-maroon">
-         {{ 
-          modo === 'crear' ? 'Crear Curso' :
-          modo === 'editarCurso' ? 'Actualizar Curso' :
-          'Datos del Curso'
-        }}
+         {{modo === 'crear' ? 'Registro Curso': modo === 'editarCurso' && paso === 1 ? 'Actualizar' : modo === 'editarCurso' && paso === 2 ? 'Actualizar Actividades' : 'Información Curso'}}
       </h5>
-      <button type="button"
-              class="btn-close"
-              (click)="modal.dismiss()">
-      </button>
+      <div class="advertencia-actividades" *ngIf="modo === 'editarCurso' && paso === 2">
+        <small>
+          <strong>Advertencia:</strong> La modificación de actividades solo se verá reflejada en nuevos grupos.
+        </small>
+      </div>
+         <!-- Barra de progreso -->
+        <div class="w-100 mt-2" *ngIf="modo==='crear'">
+          <div class="progress" style="height: 5px;">
+            <div class="progress-bar bg-maroon" [style.width.%]="paso == 1 ? 50 : 100">
+            </div>
+          </div>
+          <div class="d-flex justify-content-between small mt-1">
+            <span [ngClass]="paso==1 ? 'fw-bold text-maroon' : 'text-muted'">Registro</span>
+            <span [ngClass]="paso==2 ? 'fw-bold text-maroon' : 'text-muted'">Actividades</span>
+          </div>
+        </div>
+      <button type="button" class="btn-close position-absolute end-0 top-0 m-3" (click)="cerrarModal(modal)"> </button>
     </div>
 
     <div class="modal-body">
+    <!--         PASO 1: DATOS           -->
+      <div *ngIf="paso === 1">
 
-      <div class="row g-3">
+        <!--         vista           -->
+      <div class="row mb-2" *ngIf="modo !== 'crear'">
+        <div class="col-md-2"><strong>ID Curso:</strong></div>
+        <div class="col-md-2">{{ cursoSeleccionado.idCurso }}</div> 
 
-        <div class="col-md-2" *ngIf="modo !== 'crear'">
-          <div class="input-group">
-            <span class="input-group-text" style="font-size:0.9rem;">ID</span>
-            <input type="text" class="form-control"
-                  [value]="cursoSeleccionado.idCurso"
-                  readonly>
-          </div>
+        <div class="col-md-2"><strong>Nombre:</strong></div>
+        <div class="col-md-4">{{ cursoSeleccionado.nombre}}</div>
+
+        <div class="col-md-2">
+        <span 
+          class="badge"
+          [ngClass]="cursoSeleccionado.activo ? 'bg-success' : 'bg-danger'">
+          {{ cursoSeleccionado.activo ? 'Habilitado':'Deshabilitado' }}
+        </span>
         </div>
+      </div>
 
-        <div class="col-md-10">
+        <!--         crear editar           -->
+      <div class="row d-grid gap-3" *ngIf="modo !== 'ver'">
           <div class="input-group">
             <span class="input-group-text" style="font-size:0.9rem;">Nombre</span>
-            <input type="text"
-                  class="form-control"
-                  formControlName="nombre">
+            <input type="text" class="form-control"
+              formControlName="nombre"
+              [ngClass]="{
+              'is-invalid': cursoForm.get('nombre')?.invalid && cursoForm.get('nombre')?.touched}">
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
           </div>
-        </div>
 
-        <div class="mb-6">
           <div class="input-group">
           <span class="input-group-text" style="font-size:0.9rem;">Descripción</span>
-          <input type="text"
-                 class="form-control"
-                 formControlName="descripcion">
-          </div>
+          <input type="text" class="form-control"
+              formControlName="descripcion"
+              [ngClass]="{
+              'is-invalid': cursoForm.get('descripcion')?.invalid && cursoForm.get('descripcion')?.touched}">
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
         </div>
+      </div>
+       
+      <!--         vista           -->
+      <div class="row mb-2" *ngIf="modo === 'ver'">
+        <div class="col-md-3"><strong>Descripción:</strong></div>
+        <div class="col-md-9">{{ cursoSeleccionado.descripcion}}</div>
+      </div>
 
-        <div class="col-md-4" *ngIf="modo !== 'crear'" >
-          <div class="input-group">
-            <span class="input-group-text" style="font-size:0.9rem;">Estado</span>
-            <input type="text"
-                  class="form-control"
-                  [value]="cursoSeleccionado.activo ? 'Habilitado':'Deshabilitado'"
-                  readonly>
-          </div>
-        </div>
-        <div class="col-md-4" *ngIf="modo !== 'crear'">
-          <div class="input-group">
-            <span class="input-group-text" style="font-size:0.9rem;">Fecha Alta</span>
-            <input type="text"
-                  class="form-control"
-                  [value]="cursoSeleccionado.fechaAlta"
-                  readonly>
-          </div>
-        </div>
-        <div class="col-md-4" *ngIf="modo !== 'crear'">
-          <div class="input-group">
-            <span class="input-group-text" style="font-size:0.9rem;">Fecha Baja</span>
-            <input type="text"
-                  class="form-control"
-                  [value]="cursoSeleccionado.fechaBaja"
-                  readonly>
-          </div>
-        </div>
+      <div class="row mb-2" *ngIf="modo !== 'crear'">
+      
+        <div class="col-md-2"><strong>Creado:</strong></div>
+        <div class="col-md-2">{{ cursoSeleccionado.created_At }}</div> 
 
-        <div class="mb-6">
-          <div class="input-group">
-            <span class="input-group-text" style="font-size:0.9rem;">Actividades</span>
-            <div class="form-control bg-light grid-checkbox">
-              <div *ngFor="let act of actividades" class="checkbox-item">
-                <input type="checkbox"
-                  [value]="act.idActividad"
-                  [checked]="modo !== 'crear' && estaActividadAsignada(act.idActividad)"
-                  [disabled]="modo === 'ver'"
-                  (change)="onCheckboxChange($event)">
-                {{ act.titulo }}
+        <div class="col-md-2"><strong>Alta:</strong></div>
+        <div class="col-md-2">{{ cursoSeleccionado.fechaAlta }}</div> 
+
+        <div class="col-md-2"><strong>Baja:</strong></div>
+        <div class="col-md-2">{{ cursoSeleccionado.fechaBaja }}</div> 
+
+      </div>
+    </div>
+
+    <!--         PASO 2 ASIGNAR ACTIVIDADES         -->
+      <div *ngIf="paso === 2 || modo==='ver'">
+        <hr *ngIf="modo==='ver'">
+        <h6 class="fw-bold text-maroon mb-3" *ngIf="modo==='ver'">Actividades del curso</h6>
+          <div class="row mb-2">
+            <div class="input-group">
+              <div class="form-control bg-light grid-checkbox">
+
+                <div *ngFor="let act of actividades" class="checkbox-item">
+
+                  <input type="checkbox"
+                        [value]="act.idActividad"
+                        [checked]="cursoForm.value.idActividadesBase?.includes(act.idActividad)"
+                        [disabled]="modo === 'ver'"
+                        (change)="onCheckboxChange($event)"> {{ act.titulo }}
+                </div>
               </div>
             </div>
           </div>
         </div>
-        
-      </div>
-
     </div>
 
     <div class="modal-footer justify-content-center">
-      <button type="button"
-              class="btn btn-outline-primary align-items-center"
-              (click)="modal.dismiss()">
-        Cancelar
-      </button>
+      <!-- Botones para el Paso 1 -->
+        <ng-container *ngIf="paso === 1">
+          <button *ngIf="modo === 'crear'"
+                  type="submit"
+                  class="btn btn-success"
+                  [disabled]="cursoForm.invalid">
+            Siguiente
+          </button>
 
-      <button type="submit"
-              class="btn btn-success"
-              [disabled]="cursoForm.invalid"
-              *ngIf="modo === 'crear'">
-        Guardar
-      </button>
+          <button *ngIf="modo === 'editarCurso'"
+                  type="submit"
+                  class="btn btn-success"
+                  [disabled]="cursoForm.invalid">
+            Actualizar
+          </button>
 
-      <button type="submit"
-              class="btn btn-success"
-              [disabled]="cursoForm.invalid"
-              *ngIf="modo === 'editarCurso'">
-        Actualizar
-      </button>
+          <button *ngIf="modo === 'ver'"
+                  type="button"
+                  class="btn btn-secondary"
+                  (click)="modal.close(); paso = 1">
+            Cerrar
+          </button>
+        </ng-container>
+      <!-- Botones para el Paso 2  CREAR-->
+        <ng-container *ngIf="paso === 2 && modo==='crear'">
+          <button type="button" class="btn btn-secondary" (click)="omitir(modal)">
+            Omitir
+          </button>
+
+          <button type="button" class="btn btn-success" (click)="guardar(modal)">
+            Guardar
+          </button>
+        </ng-container>
+        <!-- Botones para el Paso 2  Actualizar actividades-->
+        <ng-container *ngIf="paso === 2 && modo==='editarCurso'">
+          <button type="button" class="btn btn-secondary" (click)="cerrarModal(modal)">
+            Cerrar
+          </button>
+        </ng-container>
     </div>
 
   </form>

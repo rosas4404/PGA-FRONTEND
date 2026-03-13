@@ -16,6 +16,9 @@ import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { CursoComponent } from './pages/curso/curso.component';
 import { CampoFormativoComponent } from './pages/campo-formativo/campo-formativo.component';
 import { ActividadBaseComponent } from './pages/actividad-base/actividad-base.component';
+import { DocumentoComponent } from './pages/documento/documento.component';
+import { ExpedienteComponent } from './pages/expediente/expediente.component';
+import { ConsultaRevisonComponent } from './pages/consulta-revision/consulta-revision.component';
 
 
 export const routes: Routes = [
@@ -35,6 +38,14 @@ export const routes: Routes = [
             {path: 'campos', component: CampoFormativoComponent},
             {path: 'catalogo-actividades', component: ActividadBaseComponent},
 
+            {path: 'documentos', component:DocumentoComponent},
+            {path: 'consulta-revision',
+                children:[
+                    { path: '', component: ConsultaRevisonComponent },
+                    { path: ':idUsuario', component: ConsultaRevisonComponent },
+                    { path: ':idUsuario/expedientes', component: ExpedienteComponent }
+                ]
+            }
         ]
     },
     {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard]},

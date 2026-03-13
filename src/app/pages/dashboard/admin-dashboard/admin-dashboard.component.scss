@@ -1,0 +1,8 @@
+.transition {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.rotate {
+    transform: rotate(180deg);
+}
