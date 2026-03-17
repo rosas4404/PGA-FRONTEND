@@ -1,1 +1,116 @@
-<p>docente-dashboard works!</p>
+<div class="d-flex">
+  <div class="sidebar bg-arena text-maroon p-3 vh-100" [class.collapsed]="isCollapsed">
+
+      <div class="d-flex align-items-center">
+        <button class="btn btn-sm btn-toggle fs-4 ms-2" (click)="toggleSidebar()">
+          <i class="bi bi-list" > </i>
+        </button>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-person-fill-gear text-maroon fs-4 ms-3"></i>
+        <h5 class="fw-bold text-maroon m-0" *ngIf="!isCollapsed">ADMINISTRADOR</h5>
+      </div>
+
+
+    <ul class="nav nav-pills flex-column gap-2">
+
+      <li class="nav-item mt-2" 
+       [attr.title]="isCollapsed ? 'Cursos' : null"
+       routerLinkActive="active"
+       [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink=""
+           routerLinkActive="active">
+           <i class="bi bi-mortarboard-fill fs-4 "></i>
+           <span *ngIf="!isCollapsed" class="ms-2">Cursos </span>
+        </a>
+      </li>
+
+      <li class="nav-item" [attr.title]="isCollapsed ? 'Grupos' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink=""
+           routerLinkActive="active">
+           <i class="bi bi-people-fill fs-4 "></i>
+             <span *ngIf="!isCollapsed" class="ms-2">Grupos</span>
+        </a>
+      </li>
+      
+       <li class="nav-item" [attr.title]="isCollapsed ? 'Docentes' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink=""
+           routerLinkActive="active">
+           <i class="bi bi-person-workspace fs-4 "></i>
+            <span *ngIf="!isCollapsed" class="ms-2">Docentes</span>
+        </a>
+      </li>
+
+      <li class="nav-item" [attr.title]="isCollapsed ? 'Alumnos' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink=""
+           routerLinkActive="active">
+           <i class="bi bi-backpack2-fill fs-4 "></i>
+            <span *ngIf="!isCollapsed" class="ms-2">Alumnos</span>
+        </a>
+      </li>
+
+      <li class="nav-item" [attr.title]="isCollapsed ? 'Inscripciones' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink=""
+           routerLinkActive="active">
+           <i class="bi bi-person-vcard fs-4 "></i>
+            <span *ngIf="!isCollapsed" class="ms-2">Inscripciones</span>
+        </a>
+      </li>
+        <li class="nav-item" [attr.title]="isCollapsed ? 'Campos Formativos' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink=""
+           routerLinkActive="active">
+           <i class="bi bi-book fs-4 "></i>
+            <span *ngIf="!isCollapsed" class="ms-2">Campos Formativos</span>
+        </a>
+      </li>
+        <li class="nav-item" [attr.title]="isCollapsed ? 'Actividades Base' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink=""
+           routerLinkActive="active">
+           <i class="bi bi-list-task fs-4 "></i>
+            <span *ngIf="!isCollapsed" class="ms-2">Actividades Base</span>
+        </a>
+      </li>
+
+       <li class="nav-item" [attr.title]="isCollapsed ? 'Expedientes' : null">
+        <!--Bóton principal-->
+        <a class="nav-link text-maroon sidebar-link"
+           (click)="toggleExpedicnete()"
+           style="cursor: pointer;">
+           <i class="bi bi-folder-fill fs-4 "></i>
+            <span *ngIf="!isCollapsed" class="ms-2">Expedientes </span>
+          <!--Icono de flecha que rota-->
+          <i *ngIf="!isCollapsed" class="bi bi-chevron-down ms-auto transition" [class.rotate]="expedienteAbierto"></i>
+        </a>
+        <!--Sub menú desplegable-->
+        <ul class="list-unstyled ms-4" *ngIf="expedienteAbierto && !isCollapsed">
+          <li class="nav-item">
+            <a class="nav-link text-maroon" routerLink="" (click)="cerrarSubmenu()">
+              <i class="ni ni-plus-circle me-2"></i> Documentación
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-maroon" routerLink="" (click)="cerrarSubmenu()">
+              <i class="ni ni-plus-circle me-2"></i> Consulta
+            </a>
+          </li>
+        </ul>
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="flex-grow-1 p-4 bg-light">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

@@ -36,7 +36,7 @@
         </a>
       </li>
       
-       <li class="nav-item">
+       <li class="nav-item" [attr.title]="isCollapsed ? 'Docentes' : null">
         <a class="nav-link text-maroon sidebar-link"
            routerLink="usuarios/docentes"
            routerLinkActive="active">
@@ -62,7 +62,7 @@
             <span *ngIf="!isCollapsed" class="ms-2">Inscripciones</span>
         </a>
       </li>
-        <li class="nav-item">
+        <li class="nav-item" [attr.title]="isCollapsed ? 'Campos Formativos' : null">
         <a class="nav-link text-maroon sidebar-link"
            routerLink="campos"
            routerLinkActive="active">
@@ -70,7 +70,7 @@
             <span *ngIf="!isCollapsed" class="ms-2">Campos Formativos</span>
         </a>
       </li>
-        <li class="nav-item">
+        <li class="nav-item" [attr.title]="isCollapsed ? 'Actividades Base' : null">
         <a class="nav-link text-maroon sidebar-link"
            routerLink="catalogo-actividades"
            routerLinkActive="active">
@@ -79,7 +79,7 @@
         </a>
       </li>
 
-       <li class="nav-item" [attr.title]="isCollapsed ? 'Docentes' : null">
+       <li class="nav-item" [attr.title]="isCollapsed ? 'Expedientes' : null">
         <!--Bóton principal-->
         <a class="nav-link text-maroon sidebar-link"
            (click)="toggleExpedicnete()"

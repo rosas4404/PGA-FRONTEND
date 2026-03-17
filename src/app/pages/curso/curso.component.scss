@@ -12,7 +12,9 @@ th:nth-child(5) { width: 20%; }
 .modal-body {
   min-height: 100px; 
 }
-
+.modal-body-step {
+  min-height: 350px;
+}
 .grid-checkbox {
   display: grid;
   /* Crea 10 columnas del mismo tamaño */

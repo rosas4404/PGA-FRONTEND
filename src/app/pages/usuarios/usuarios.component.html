@@ -226,10 +226,10 @@
       </div>
 
       <!-- Fecha Alta -->
-      <div class="col-md-4">
+      <div class="col-md-4" *ngIf="detalleSeleccionado.fechaAlta">
         <label class="fw-bold">Fecha Alta</label>
         <p class="mb-0">
-          {{ detalleSeleccionado.fechaAlta | date:'dd/MM/yyyy' }}
+          {{ detalleSeleccionado.fechaAlta }}
         </p>
       </div>
 
@@ -237,7 +237,7 @@
       <div class="col-md-4" *ngIf="detalleSeleccionado.fechaBaja">
         <label class="fw-bold">Fecha Baja</label>
         <p class="mb-0">
-          {{ detalleSeleccionado.fechaBaja | date:'dd/MM/yyyy' }}
+          {{ detalleSeleccionado.fechaBaja }}
         </p>
       </div>
 
@@ -245,7 +245,7 @@
       <div class="col-md-4">
         <label class="fw-bold">Fecha creación</label>
         <p class="mb-0">
-          {{ detalleSeleccionado.created_At | date:'dd/MM/yyyy' }}
+          {{ detalleSeleccionado.created_At}}
         </p>
       </div>
 

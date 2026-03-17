@@ -202,18 +202,21 @@
 
 <!-- MODAL FORMULARIO -->
 <ng-template #grupoModal let-modal>
-  <div class="modal-header bg-smoke flex-column align-items-center">
-    <h5 class="modal-title fw-bold text-maroon">
-      {{ modo === 'crear' ? 'Registrar Grupo' : modo === 'editarDocente' ? 'Actualizar Docente' : 'Información Grupo'}}
-    </h5>
-    <button type="button"
-      class="btn-close position-absolute end-0 top-0 m-3"
-      (click)="modal.dismiss()">
-    </button>
-  </div>
+  <form [formGroup]="grupoForm" 
+        (ngSubmit)="guardar(modal)">
 
-  <div class="modal-body">
-    <form [formGroup]="grupoForm" (ngSubmit)="guardar(modal)">
+    <div class="modal-header bg-smoke flex-column align-items-center">
+      <h5 class="modal-title fw-bold text-maroon">
+        {{ modo === 'crear' ? 'Registro Grupo' : modo === 'editarDocente' ? 'Actualizar Docente' : 'Información Grupo'}}
+      </h5>
+      <button type="button"
+        class="btn-close position-absolute end-0 top-0 m-3"
+        (click)="modal.dismiss()">
+      </button>
+    </div>
+
+    <div class="modal-body">
+   
       <div class="row g-3">
         <div class="col-md-12">
           <div class="input-group">
@@ -259,14 +262,8 @@
 
         <div class="col-md-12">
           <div class="input-group">
-          <span class="input-group-text" style="font-size:0.9rem;">Docente
-                  <!-- Ícono lápiz -->
-            <i class="bi bi-pencil-square text-primary"
-              style="cursor:pointer"
-              *ngIf="modo==='ver'" title="Cambiar Docente"
-              (click)="activarEdicionDocente()">
-            </i>
-          </span>
+            <span class="input-group-text" style="font-size:0.9rem;">Docente</span>
+            <!-- Ícono lápiz -->
 
           <!-- Modo vista -->
           <input type="text"
@@ -288,10 +285,17 @@
           <div class="invalid-feedback" style="font-size:0.6rem;">
               Campo obligatorio.
           </div>
+           <button class="btn btn-outline-primary btn-sm" *ngIf="modo !='editarDocente'">
+              <i class="bi bi-pencil-square text-primary"
+                style="cursor:pointer"
+                *ngIf="modo==='ver'" title="Cambiar Docente"
+                (click)="activarEdicionDocente()">
+              </i>
+            </button>
         </div>
         </div>
         </div>
-      </form>
+     
     </div>
 
     
@@ -324,5 +328,5 @@
         Actualizar
       </button>
     </div>
-
+ </form>
 </ng-template>
