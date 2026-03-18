@@ -80,21 +80,21 @@ export class ExpedienteComponent implements OnInit {
     const maxSize = 2 * 1024 * 1024; // 2MB (2 * 1024 KB * 1024 B)
     const tiposPermitidos = ['application/pdf', 'image/jpeg', 'image/png'];
     //validacion de que no exceda el peso 
-    if (archivo) {
-      if (archivo.size > maxSize || !tiposPermitidos.includes(archivo.type)) {
-        if(archivo.size > maxSize){
-          this.toastr.error('El archivo es demasiado grande. Máximo 2MB.');
-          event.target.value = '';
-        }else{
-          this.toastr.error('Error: Solo se permiten archivos PDF, JPG o PNG.');
-          event.target.value = '';
-          return;
-        }
-        
-      } else {
-        console.log('Archivo listo para subir:', archivo.name);
-      }
+    if (!archivo) return; //si no hay archivo sale
+    // Validar Tipo (Formato)
+    if (!tiposPermitidos.includes(archivo.type)) {
+      this.toastr.error('Error: Solo se permiten archivos PDF, JPG o PNG.');
+      event.target.value = '';
+      return; 
     }
+
+    // Validar Tamaño
+    if (archivo.size > maxSize) {
+      this.toastr.error('El archivo es demasiado grande. Máximo 2MB.');
+      event.target.value = '';
+      return; 
+    }
+      
     if (archivo) {
       // Si seleccionó un archivo, procedemos a subirlo
       this.subir(tipoDocumento, archivo);
