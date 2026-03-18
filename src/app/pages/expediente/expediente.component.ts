@@ -120,12 +120,21 @@ export class ExpedienteComponent implements OnInit {
     });
   }
 
-  visualizar(idDocumento:number, modal:any){
+  visualizar(idDocumento:number, modal:any, rutaDocumento:string){
     this.documentoExpedienteForm.reset();
     this.paso=1;
+    const extension =   rutaDocumento.split('.').pop()?.toLowerCase();
+  
+    const mapeoTipos: { [key: string]: string } = {
+            'pdf': 'application/pdf',
+            'jpg': 'image/jpeg',
+            'png': 'image/png'
+    };
+
     this.documentoExpedienteService.visualizarDocumento(idDocumento).subscribe({
       next:(blob) => {//recibe el archivo como blob
-            const file = new Blob([blob], { type: 'application/pdf' }); //crea un nuevo blob especifiando que es un pdf
+            const tipoReal = mapeoTipos[extension!]||'appliction/octet-stream';
+            const file = new Blob([blob], { type: tipoReal }); //crea un nuevo blob especifiando que es un pdf
             const url = window.URL.createObjectURL(file);//crea una url temporal del archivo
             
             this.urlDocumento=this.sanitizar.bypassSecurityTrustResourceUrl(url);
