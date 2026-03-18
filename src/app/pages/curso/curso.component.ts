@@ -76,10 +76,11 @@ export class CursoComponent implements OnInit{
   }
 
   abrirModal(content: any) {
-    this.modalService.open(content, {
+   this.modalRef  = this.modalService.open(content, {
+      size:'lg',
       backdrop: 'static',
-    keyboard: false,
-    centered: true
+      keyboard: false,
+      centered: true
   });
   this.modalRef.result.finally(() => {
     this.cerrarModal(content);
