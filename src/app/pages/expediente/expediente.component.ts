@@ -123,6 +123,10 @@ export class ExpedienteComponent implements OnInit {
   visualizar(idDocumento:number, modal:any, rutaDocumento:string){
     this.documentoExpedienteForm.reset();
     this.paso=1;
+    if (!rutaDocumento) {
+      this.toastr.error('No se ha subido un archivo');
+      return;
+    }
     const extension =   rutaDocumento.split('.').pop()?.toLowerCase();
   
     const mapeoTipos: { [key: string]: string } = {
@@ -150,9 +154,13 @@ export class ExpedienteComponent implements OnInit {
             error: async (err) => {
               if (err.error instanceof Blob) {//si el back devuelve un error como blob
                 // Convertir el Blob del error a texto legible
-                const text = await err.error.text();
-                const errorObj = JSON.parse(text);//onvierte el texto a json
-                this.toastr.error(errorObj.message || 'Error al visualizar');
+              try {
+                  const text = await err.error.text();
+                  const errorObj = JSON.parse(text);
+                  this.toastr.error(errorObj.message || 'Error al visualizar');
+                } catch {
+                  this.toastr.error('Error al procesar el archivo');
+                }
               } else {
                 this.toastr.error(err.error?.message || 'Error de conexión');
               }
