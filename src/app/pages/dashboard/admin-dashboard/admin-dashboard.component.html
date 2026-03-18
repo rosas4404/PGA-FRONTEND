@@ -79,31 +79,44 @@
         </a>
       </li>
 
-       <li class="nav-item" [attr.title]="isCollapsed ? 'Expedientes' : null">
-        <!--Bóton principal-->
+      <li class="nav-item position-relative" 
+        (mouseenter)="mouseEntra()" 
+        (mouseleave)="mouseSale()">
+        
+        <!-- Botón Principal -->
         <a class="nav-link text-maroon sidebar-link"
-           (click)="toggleExpedicnete()"
-           style="cursor: pointer;">
-           <i class="bi bi-folder-fill fs-4 "></i>
-            <span *ngIf="!isCollapsed" class="ms-2">Expedientes </span>
-          <!--Icono de flecha que rota-->
+          (click)="!isCollapsed ? toggleExpedicnete() : null">
+          <i class="bi bi-folder-fill fs-4"></i>
+          <span *ngIf="!isCollapsed" class="ms-2">Expedientes </span>
           <i *ngIf="!isCollapsed" class="bi bi-chevron-down ms-auto transition" [class.rotate]="expedienteAbierto"></i>
         </a>
-        <!--Sub menú desplegable-->
-        <ul class="list-unstyled ms-4" *ngIf="expedienteAbierto && !isCollapsed">
-          <li class="nav-item">
-            <a class="nav-link text-maroon" routerLink="documentos" (click)="cerrarSubmenu()">
-              <i class="ni ni-plus-circle me-2"></i> Documentación
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-maroon" routerLink="consulta-revision" (click)="cerrarSubmenu()">
-              <i class="ni ni-plus-circle me-2"></i> Consulta
-            </a>
-          </li>
+
+        <!-- SUBMENÚ: Solo se muestra si:
+            1. Está expandido Y el acordeón está abierto
+            2. Está colapsado Y tenemos el mouse encima (hover) -->
+        <ul class="list-unstyled" 
+            [ngClass]="isCollapsed ? 'dropdown-flotante' : 'ms-4'"
+            *ngIf="(!isCollapsed && expedienteAbierto) || (isCollapsed && hoverMenu)">
+            
+            <li class="nav-item">
+                <a class="nav-link text-maroon p-2" 
+                  routerLink="documentos" 
+                  (click)="cerrarSubmenu()">
+                    <i class="bi bi-file-earmark-text me-2"></i>
+                    <!-- El texto siempre visible si el UL ya pasó el filtro del ngIf de arriba -->
+                    <span>Documentación</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-maroon p-2" 
+                  routerLink="consulta-revision" 
+                  (click)="cerrarSubmenu()">
+                    <i class="bi bi-search me-2"></i>
+                    <span>Consulta</span>
+                </a>
+            </li>
         </ul>
       </li>
-
     </ul>
 
   </div>

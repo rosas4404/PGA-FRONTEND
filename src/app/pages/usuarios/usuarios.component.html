@@ -182,7 +182,7 @@
 
   <div class="modal-header  flex-column bg-smoke align-items-center">
     <h5 class="modal-title fw-bold text-maroon text-center ">
-     {{tipo == 'docente' ? "Información Docente" :"Información Alumno" }} 
+     {{tipo == 'docentes' ? "Información Docente" :"Información Alumno" }} 
     </h5>
     <button type="button"
             class="btn-close position-absolute end-0 top-0 m-3"
@@ -192,7 +192,14 @@
 
   <div class="modal-body" *ngIf="detalleSeleccionado">
 
-    <div class="row g-3 align-items-center">
+    <div class="row g-2 align-items-center">
+          <!-- ID -->
+      <div class="col-md-1 ms-1">
+        <label class="fw-bold">ID</label><br>
+        <p class="mb-0">
+          {{ detalleSeleccionado.idUsuario}}
+        </p>
+      </div>
 
       <!-- Nombre -->
       <div class="col-md-8 text-rigt">
@@ -205,13 +212,14 @@
       </div>
 
       <!-- Estado -->
-      <div class="col-md-4 ">
+      <div class="col-md-2 ">
         <label class="fw-bold">Estado</label><br>
         <span class="badge"
               [ngClass]="detalleSeleccionado.activo ? 'bg-success' : 'bg-danger'">
           {{ detalleSeleccionado.activo ? 'Habilitado' : 'Deshabilitado' }}
         </span>
       </div>
+    
 
       <!-- Teléfono -->
       <div class="col-md-4 text-rigt">

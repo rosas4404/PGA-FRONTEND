@@ -15,6 +15,7 @@ import { UsuariosComponent } from '../../usuarios/usuarios.component';
 export class AdminDashboardComponent {
 
   isCollapsed = false;
+  hoverMenu = false;
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
@@ -33,5 +34,16 @@ export class AdminDashboardComponent {
 
   cerrarSubmenu(){
     this.expedienteAbierto=false;
+    this.hoverMenu=false;
+  }
+  
+  mouseEntra() {
+    if (this.isCollapsed) {
+      this.hoverMenu = true;
+    }
+  }
+
+  mouseSale() {
+    this.hoverMenu = false;
   }
 }
