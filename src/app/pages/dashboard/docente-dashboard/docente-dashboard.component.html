@@ -1,5 +1,5 @@
 <div class="d-flex">
-  <div class="sidebar bg-arena text-maroon p-3" [class.collapsed]="isCollapsed">
+  <div class="sidebar bg-arena text-maroon p-3 vh-100" [class.collapsed]="isCollapsed">
 
       <div class="d-flex align-items-center">
         <button class="btn btn-sm btn-toggle fs-4 ms-2" (click)="toggleSidebar()">
@@ -17,7 +17,7 @@
 
       <li class="nav-item" [attr.title]="isCollapsed ? 'Mis grupos' : null">
         <a class="nav-link text-maroon sidebar-link"
-           routerLink=" "
+           routerLink="inicio"
            routerLinkActive="active">
            <i class="bi bi-people-fill fs-4 "></i>
              <span *ngIf="!isCollapsed" class="ms-2">Mis grupos..</span>

@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ExpedienteService } from '../../services/expediente.service';
-import { DocumentoExpedienteService } from '../../services/documento-expediente.service';
+import { ExpedienteService } from '../../../services/expediente.service';
+import { DocumentoExpedienteService } from '../../../services/documento-expediente.service'; 
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
-import { usuarioDTOResponse } from '../../models/dto/ResponseDto/usuarioDTOResponse';
-import { estadoExpediente } from '../../models/enum/estadoExpediente';
-import { expedienteDTOResponse } from '../../models/dto/ResponseDto/expedienteDTOResponse';
-import { estadoDocumento } from '../../models/enum/estadoDocumento';
+import { usuarioDTOResponse } from '../../../models/dto/ResponseDto/usuarioDTOResponse'; 
+import { estadoExpediente } from '../../../models/enum/estadoExpediente'; 
+import { expedienteDTOResponse } from '../../../models/dto/ResponseDto/expedienteDTOResponse'; 
+import { estadoDocumento } from '../../../models/enum/estadoDocumento';
 import { CommonModule } from '@angular/common';
-import { UsuarioService } from '../../services/usuario.service';
+import { UsuarioService } from '../../../services/usuario.service'; 
 
 @Component({
   selector: 'app-expdiente-alumno',

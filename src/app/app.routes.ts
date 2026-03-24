@@ -21,7 +21,7 @@ import { DocumentoComponent } from './pages/Administrador/documento/documento.co
 import { ConsultaRevisonComponent } from './pages/Administrador/consulta-revision/consulta-revision.component';
 import { ExpedienteComponent } from './pages/Administrador/expediente/expediente.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
-import { ExpdienteAlumnoComponent } from './pages/expdiente-alumno/expdiente-alumno.component';
+import { ExpdienteAlumnoComponent } from './pages/Alumno/expdiente-alumno/expdiente-alumno.component';
 
 
 
@@ -55,7 +55,9 @@ export const routes: Routes = [
     },
     {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard],
         children:[
+            { path: '', redirectTo: 'inicio', pathMatch: 'full' },
             {path:'perfil', component: PerfilComponent},
+            {path: 'inicio', component : InicioComponent}
         ]
     },
     {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard],
@@ -64,13 +66,6 @@ export const routes: Routes = [
             {path:'expediente-alumno', component: ExpdienteAlumnoComponent},
         ]
     },
-    {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard],
-        children:[
-            { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-            {path: 'inicio', component : InicioComponent}
-        ]
-    },
-    {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard]},
     {path: 'login', component:LoginComponent},
     {path: 'password', component:PasswordComponent, canActivate:[authGuard]},
     {path: '**', redirectTo:''}//por si la ruta no existe 
