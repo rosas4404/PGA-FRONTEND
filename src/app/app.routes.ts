@@ -11,7 +11,6 @@ import { authGuard } from './services/guard/auth.guard';
 import { DocenteDashboardComponent } from './pages/dashboard/docente-dashboard/docente-dashboard.component';
 import { AlumnoDashboardComponent } from './pages/dashboard/alumno-dashboard/alumno-dashboard.component';
 import { GrupoComponent } from './pages/Administrador/grupo/grupo.component';
-
 import { InicioComponent } from './pages/Docente/inicio/inicio.component';
 import { UsuariosComponent } from './pages/Administrador/usuarios/usuarios.component';
 import { InscripcionComponent } from './pages/Administrador/inscripcion/inscripcion.component';
@@ -21,6 +20,9 @@ import { ActividadBaseComponent } from './pages/Administrador/actividad-base/act
 import { DocumentoComponent } from './pages/Administrador/documento/documento.component';
 import { ConsultaRevisonComponent } from './pages/Administrador/consulta-revision/consulta-revision.component';
 import { ExpedienteComponent } from './pages/Administrador/expediente/expediente.component';
+import { PerfilComponent } from './pages/perfil/perfil.component';
+import { ExpdienteAlumnoComponent } from './pages/expdiente-alumno/expdiente-alumno.component';
+
 
 
 export const routes: Routes = [
@@ -47,7 +49,19 @@ export const routes: Routes = [
                     { path: ':idUsuario', component: ConsultaRevisonComponent },
                     { path: ':idUsuario/expedientes', component: ExpedienteComponent }
                 ]
-            }
+            },
+            {path:'perfil', component: PerfilComponent},
+        ]
+    },
+    {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard],
+        children:[
+            {path:'perfil', component: PerfilComponent},
+        ]
+    },
+    {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard],
+        children:[
+            {path:'perfil', component: PerfilComponent},
+            {path:'expediente-alumno', component: ExpdienteAlumnoComponent},
         ]
     },
     {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard],

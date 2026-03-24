@@ -41,9 +41,7 @@ export class PasswordComponent {
         this.router.navigate(["/login"]);
       },
       error:(err:any)=>{
-        this. toastr.error('Ocurrió un error al actualizar contraseña '+' ' + err.message, 'Error')
-        this.loginService.logout();
-        this.router.navigate(["/login"]);
+        this. toastr.error('Ocurrió un error al actualizar contraseña <br>' + err.error.message, 'Error',  { enableHtml: true })
       },
     
     })

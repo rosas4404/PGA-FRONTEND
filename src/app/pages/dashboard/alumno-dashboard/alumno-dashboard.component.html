@@ -1,1 +1,54 @@
-<p>alumno-dashboard works!</p>
+<div class="d-flex">
+  <div class="sidebar bg-arena text-maroon p-3" [class.collapsed]="isCollapsed">
+
+      <div class="d-flex align-items-center">
+        <button class="btn btn-sm btn-toggle fs-4 ms-2" (click)="toggleSidebar()">
+          <i class="bi bi-list" > </i>
+        </button>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-backpack2-fill text-maroon fs-4 ms-3"></i>
+        <h5 class="fw-bold text-maroon m-0" *ngIf="!isCollapsed">ALUMNO</h5>
+      </div>
+
+
+    <ul class="nav nav-pills flex-column gap-2 flex-grow-1">
+
+      <li class="nav-item" [attr.title]="isCollapsed ? 'Actividades' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink=" "
+           routerLinkActive="active">
+           <i class="bi bi-bookmark-check fs-4"></i>
+             <span *ngIf="!isCollapsed" class="ms-2">Actividades</span>
+        </a>
+      </li>
+
+      <li class="nav-item" [attr.title]="isCollapsed ? 'Actividades' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink="expediente-alumno"
+           routerLinkActive="active">
+           <i class="bi bi-folder2-open fs-4"></i>
+             <span *ngIf="!isCollapsed" class="ms-2">Expediente</span>
+        </a>
+      </li>
+
+      <li class="nav-item mt-auto" [attr.title]="isCollapsed ? 'Perfil' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink="perfil"
+           routerLinkActive="active">
+           <i class="bi bi-person-fill fs-4"></i>
+             <span *ngIf="!isCollapsed" class="ms-2">Perfil</span>
+        </a>
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="flex-grow-1 p-4 bg-light">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

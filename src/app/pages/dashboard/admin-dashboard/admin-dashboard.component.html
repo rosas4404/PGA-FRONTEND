@@ -117,6 +117,15 @@
             </li>
         </ul>
       </li>
+    
+      <li class="nav-item mt-auto" [attr.title]="isCollapsed ? 'Perfil' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink="perfil"
+           routerLinkActive="active">
+           <i class="bi bi-person-fill fs-4"></i>
+             <span *ngIf="!isCollapsed" class="ms-2">Perfil</span>
+        </a>
+    </li>
     </ul>
 
   </div>

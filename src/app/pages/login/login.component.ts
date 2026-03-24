@@ -56,6 +56,8 @@ export class LoginComponent {
           (user: any) => {
 
             this.loginService.setUser(user);
+            //guardamos el user
+            localStorage.setItem('user', JSON.stringify(user));
 
             const role = user.authorities[0].authority;
 
