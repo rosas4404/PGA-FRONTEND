@@ -1,17 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ExpedienteService } from '../../services/expediente.service';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
-import { expedienteDTOResponse } from '../../models/dto/ResponseDto/expedienteDTOResponse';
-import { DocumentoExpedienteService } from '../../services/documento-expediente.service';
+
 import { DomSanitizer } from '@angular/platform-browser';
-import { docuemntoRevisionDTORequest } from '../../models/dto/RequestDto/documentoRevisonDTORequest';
-import { TitleStrategy } from '@angular/router';
-import { observacionesExpedienteDTORequest } from '../../models/dto/RequestDto/observacionesExpedienteDTORequest';
-import { estadoExpediente } from '../../models/enum/estadoExpediente';
-import { estadoDocumento } from '../../models/enum/estadoDocumento';
+import { expedienteDTOResponse } from '../../../models/dto/ResponseDto/expedienteDTOResponse';
+import { estadoExpediente } from '../../../models/enum/estadoExpediente';
+import { ExpedienteService } from '../../../services/expediente.service';
+import { DocumentoExpedienteService } from '../../../services/documento-expediente.service';
+import { docuemntoRevisionDTORequest } from '../../../models/dto/RequestDto/documentoRevisonDTORequest';
+import { observacionesExpedienteDTORequest } from '../../../models/dto/RequestDto/observacionesExpedienteDTORequest';
+import { estadoDocumento } from '../../../models/enum/estadoDocumento';
+
 
 type estado = 'APROBADO' |'NO_APROBADO';
 @Component({

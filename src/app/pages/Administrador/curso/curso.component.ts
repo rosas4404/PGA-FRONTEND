@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { cursoDTOResponse } from '../../models/dto/ResponseDto/cursoDTOResponse';
-import { CursoService } from '../../services/curso.service';
+
 import { ToastrService } from 'ngx-toastr';
-import { actividadBaseDTOResponse } from '../../models/dto/ResponseDto/actividadBaseDTOResponse';
-import { ActividadBaseService } from '../../services/actividad-base.service';
-import { TitleStrategy } from '@angular/router';
-import { cursoDTORequest } from '../../models/dto/RequestDto/cursoDTORequest';
+import { cursoDTOResponse } from '../../../models/dto/ResponseDto/cursoDTOResponse';
+import { actividadBaseDTOResponse } from '../../../models/dto/ResponseDto/actividadBaseDTOResponse';
+import { CursoService } from '../../../services/curso.service';
+import { ActividadBaseService } from '../../../services/actividad-base.service';
+import { cursoDTORequest } from '../../../models/dto/RequestDto/cursoDTORequest';
+
 
 @Component({
   selector: 'app-curso',
