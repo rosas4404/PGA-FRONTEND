@@ -1,0 +1,80 @@
+.profile-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #eee;
+}
+
+.info-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+/* HEADER */
+.profile-header {
+  border-bottom: 1px solid #f1f1f1;
+  padding-bottom: 15px;
+}
+
+/* AVATAR */
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#BC955C,#a1783b);
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+/* BODY */
+.profile-body {
+  padding-top: 20px;
+}
+
+/* TARJETAS INTERNAS */
+.info-card {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 15px;
+  height: 100%;
+}
+
+/* TITULOS */
+.section-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #443a39;
+  margin-bottom: 15px;
+}
+
+/* ITEMS */
+.info-item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  margin-bottom: 10px;
+}
+
+.info-item span {
+  font-size: 13px;
+  color:#471305;
+}
+
+.info-item strong {
+  font-size: 15px;
+  color: #212529;
+}
+
+/* BOTONES */
+.profile-actions button {
+  border-radius: 8px;
+}
+
+.advertencia{
+  color:#a94442;
+  font-weight:600;
+}

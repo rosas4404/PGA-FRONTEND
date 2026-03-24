@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { usuarioDTOResponse } from '../models/dto/ResponseDto/usuarioDTOResponse';
 import { PageResponse } from '../models/pageResponse';
 import baseUrl from './helper';
+import { usuarioDTORequest } from '../models/dto/RequestDto/usuarioDTORequest';
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +72,11 @@ export class UsuarioService {
 
   desactivarActivarUsuario(idUsuario: number): Observable<usuarioDTOResponse[]>{
     return this.httpClient.put<usuarioDTOResponse[]>(`${this.apiUrl}/desactivar/${idUsuario}`,"");
+  }
+
+  //actualizar datos del usuaio 
+  actualizarDatos(id: number, usuarioDTORequest:usuarioDTORequest):Observable<usuarioDTOResponse>{
+    return this.httpClient.put<usuarioDTOResponse>(`${this.apiUrl}/${id}`, usuarioDTORequest);
   }
 
 
