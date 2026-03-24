@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { campoDTOResponse } from '../../models/dto/ResponseDto/campoDTOResponse';
+
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CampoFormativoService } from '../../services/campo-formativo.service';
+
 import { CommonModule } from '@angular/common';
-import { campoDTORequest } from '../../models/dto/RequestDto/campoDTORequest';
+import { campoDTOResponse } from '../../../models/dto/ResponseDto/campoDTOResponse';
+import { campoDTORequest } from '../../../models/dto/RequestDto/campoDTORequest';
+import { CampoFormativoService } from '../../../services/campo-formativo.service';
+
 
 @Component({
   selector: 'app-campo-formativo',
