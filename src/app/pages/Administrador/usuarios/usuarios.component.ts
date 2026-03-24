@@ -3,13 +3,16 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLinkActive, TitleStrategy } from '@angular/router';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
-import { UserService } from '../../services/user.service';
+
 import { ToastrService } from 'ngx-toastr';
-import { usuarioDTOResponse } from '../../models/dto/ResponseDto/usuarioDTOResponse';
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UsuarioService } from '../../services/usuario.service';
-import { ReporteService } from '../../services/reporte.service';
-import baseUrl from '../../services/helper';
+import { usuarioDTOResponse } from '../../../models/dto/ResponseDto/usuarioDTOResponse';
+import { UserService } from '../../../services/user.service';
+import { UsuarioService } from '../../../services/usuario.service';
+import { ReporteService } from '../../../services/reporte.service';
+import baseUrl from '../../../services/helper';
+
 
 @Component({
   selector: 'app-usuarios',

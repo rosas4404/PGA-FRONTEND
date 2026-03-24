@@ -10,15 +10,17 @@ import { docenteAlumnoGuard } from './services/guard/docente-alumno.guard';
 import { authGuard } from './services/guard/auth.guard';
 import { DocenteDashboardComponent } from './pages/dashboard/docente-dashboard/docente-dashboard.component';
 import { AlumnoDashboardComponent } from './pages/dashboard/alumno-dashboard/alumno-dashboard.component';
-import { GrupoComponent } from './pages/grupo/grupo.component';
-import { InscripcionComponent } from './pages/inscripcion/inscripcion.component';
-import { UsuariosComponent } from './pages/usuarios/usuarios.component';
-import { CursoComponent } from './pages/curso/curso.component';
-import { CampoFormativoComponent } from './pages/campo-formativo/campo-formativo.component';
-import { ActividadBaseComponent } from './pages/actividad-base/actividad-base.component';
-import { DocumentoComponent } from './pages/documento/documento.component';
-import { ExpedienteComponent } from './pages/expediente/expediente.component';
-import { ConsultaRevisonComponent } from './pages/consulta-revision/consulta-revision.component';
+import { GrupoComponent } from './pages/Administrador/grupo/grupo.component';
+
+import { InicioComponent } from './pages/Docente/inicio/inicio.component';
+import { UsuariosComponent } from './pages/Administrador/usuarios/usuarios.component';
+import { InscripcionComponent } from './pages/Administrador/inscripcion/inscripcion.component';
+import { CursoComponent } from './pages/Administrador/curso/curso.component';
+import { CampoFormativoComponent } from './pages/Administrador/campo-formativo/campo-formativo.component';
+import { ActividadBaseComponent } from './pages/Administrador/actividad-base/actividad-base.component';
+import { DocumentoComponent } from './pages/Administrador/documento/documento.component';
+import { ConsultaRevisonComponent } from './pages/Administrador/consulta-revision/consulta-revision.component';
+import { ExpedienteComponent } from './pages/Administrador/expediente/expediente.component';
 
 
 export const routes: Routes = [
@@ -48,7 +50,12 @@ export const routes: Routes = [
             }
         ]
     },
-    {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard]},
+    {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard],
+        children:[
+            { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+            {path: 'inicio', component : InicioComponent}
+        ]
+    },
     {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard]},
     {path: 'login', component:LoginComponent},
     {path: 'password', component:PasswordComponent, canActivate:[authGuard]},

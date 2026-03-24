@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { grupoDTOResponse } from '../../models/dto/ResponseDto/grupoDTOResponse';
-import { GrupoService } from '../../services/grupo.service';
+
 import { ToastrService } from 'ngx-toastr';
-import { grupoDTORequest } from '../../models/dto/RequestDto/grupoDTORequest';
+
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CursoService } from '../../services/curso.service';
-import { UsuarioService } from '../../services/usuario.service';
+import { grupoDTOResponse } from '../../../models/dto/ResponseDto/grupoDTOResponse';
+import { GrupoService } from '../../../services/grupo.service';
+import { CursoService } from '../../../services/curso.service';
+import { UsuarioService } from '../../../services/usuario.service';
+import { grupoDTORequest } from '../../../models/dto/RequestDto/grupoDTORequest';
 
 
 @Component({

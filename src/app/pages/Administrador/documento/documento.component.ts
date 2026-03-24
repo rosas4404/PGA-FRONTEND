@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { documentoDTOResponse } from '../../models/dto/ResponseDto/documentoDTOResponse';
-import { DocumentoService } from '../../services/documento.service';
+import { documentoDTOResponse } from '../../../models/dto/ResponseDto/documentoDTOResponse'; 
+import { DocumentoService } from '../../../services/documento.service'; 
 import { ToastrService } from 'ngx-toastr';
-import { documentoDTORequest } from '../../models/dto/RequestDto/documentoDTORequest';
-import { Tipo } from '../../models/enum/tipo';
+import { documentoDTORequest } from '../../../models/dto/RequestDto/documentoDTORequest'; 
+import { Tipo } from '../../../models/enum/tipo';
 
 @Component({
   selector: 'app-documento',

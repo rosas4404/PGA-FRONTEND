@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { grupoDTOResponse } from '../models/dto/ResponseDto/grupoDTOResponse';
 import { grupoDTORequest } from '../models/dto/RequestDto/grupoDTORequest';
 import { PageResponse } from '../models/pageResponse';
+import { grupoDTODashboardResponse } from '../models/dto/ResponseDto/grupoDTODashboardResponse';
 
 
 @Injectable({
@@ -47,8 +48,8 @@ export class GrupoService {
   }
 
   //obtener grupos por docente
-  getPorDocente(id:number): Observable<grupoDTOResponse[]>{
-    return this.http.get<grupoDTOResponse[]>(`${this.apiUrl}/porDocente/${id}`);
+  getPorDocente(id:number): Observable<grupoDTODashboardResponse[]>{
+    return this.http.get<grupoDTODashboardResponse[]>(`${this.apiUrl}/porDocente/${id}`);
   }
 
   //consulta de cursos activos

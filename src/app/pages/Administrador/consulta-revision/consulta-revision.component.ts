@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { usuarioDTOResponse } from '../../models/dto/ResponseDto/usuarioDTOResponse';
-import { UsuarioService } from '../../services/usuario.service';
+
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router} from "@angular/router";
 import { ExpedienteComponent } from "../expediente/expediente.component";
+import { usuarioDTOResponse } from '../../../models/dto/ResponseDto/usuarioDTOResponse';
+import { UsuarioService } from '../../../services/usuario.service';
 
 @Component({
   selector: 'app-consulta-revision',

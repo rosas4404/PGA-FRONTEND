@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { InscripcionResponseDTO } from '../../models/dto/ResponseDto/inscripcionResponseDTO';
-import { Tipo } from '../../models/enum/tipo';
-import { InscripcionService } from '../../services/inscripcion.service';
+
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule, NgForOf } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, MinValidator, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InscripcionFiltro } from '../../models/filtros/inscripcionFiltro';
-import { crearInscripcionDTO } from '../../models/dto/RequestDto/crearInscripcionDTO';
-import { asignarGrupoDTO } from '../../models/asignarGrupoDTO';
+
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { GrupoService } from '../../services/grupo.service';
-import { grupoDTOResponse } from '../../models/dto/ResponseDto/grupoDTOResponse';
+import { asignarGrupoDTO } from '../../../models/asignarGrupoDTO';
+import { InscripcionResponseDTO } from '../../../models/dto/ResponseDto/inscripcionResponseDTO';
+import { crearInscripcionDTO } from '../../../models/dto/RequestDto/crearInscripcionDTO';
+import { grupoDTOResponse } from '../../../models/dto/ResponseDto/grupoDTOResponse';
+import { InscripcionFiltro } from '../../../models/filtros/inscripcionFiltro';
+import { InscripcionService } from '../../../services/inscripcion.service';
+import { GrupoService } from '../../../services/grupo.service';
 
 @Component({
   selector: 'app-inscripcion',

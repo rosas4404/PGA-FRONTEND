@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActividadBaseService } from '../../services/actividad-base.service';
+import { ActividadBaseService } from '../../../services/actividad-base.service'; 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { campoDTOResponse } from '../../models/dto/ResponseDto/campoDTOResponse';
-import { actividadBaseDTOResponse } from '../../models/dto/ResponseDto/actividadBaseDTOResponse';
+import { campoDTOResponse } from '../../../models/dto/ResponseDto/campoDTOResponse'; 
+import { actividadBaseDTOResponse } from '../../../models/dto/ResponseDto/actividadBaseDTOResponse'; 
 import { CommonModule } from '@angular/common';
-import { CampoFormativoService } from '../../services/campo-formativo.service';
+import { CampoFormativoService } from '../../../services/campo-formativo.service';
 
 @Component({
   selector: 'app-actividad-base',
