@@ -158,8 +158,10 @@ $snow: #FAFAFA;
 
 //menu desplegable
 .sidebar {
+  display: flex;
+  flex-direction: column;
   width: 250px;
-   transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 /* Color base */
@@ -223,4 +225,9 @@ select.form-select:focus {
   background-color: $white-smoke; /* Fondo gris claro */
   color: $dark-slate-900;         /* Texto oscuro */
   padding: 10px;
+}
+.main-content {
+  min-height: 0;
+  overflow-y: auto;     
+  height: 100vh;
 }
