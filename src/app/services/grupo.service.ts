@@ -52,6 +52,11 @@ export class GrupoService {
     return this.http.get<grupoDTODashboardResponse[]>(`${this.apiUrl}/porDocente/${id}`);
   }
 
+  //grupos activos por docente
+  ActivosPorDocente(id:number): Observable<grupoDTODashboardResponse[]>{
+    return this.http.get<grupoDTODashboardResponse[]>(`${this.apiUrl}/Activos/porDocente/${id}`);
+  }
+
   //consulta de cursos activos
     getgruposActivos(){
       return this.http.get<grupoDTOResponse[]>(`${this.apiUrl}/activos`);

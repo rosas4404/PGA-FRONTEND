@@ -1,4 +1,4 @@
-<div class="d-flex">
+<div class="d-flex" style="height: calc(100vh - 90px);">
   <div class="sidebar bg-arena text-maroon p-3" [class.collapsed]="isCollapsed">
 
       <div class="d-flex align-items-center">
@@ -47,7 +47,7 @@
   </div>
 
   <!-- CONTENIDO -->
-  <div class="flex-grow-1 p-4 bg-light">
+  <div class="flex-grow-1 p-4 bg-light overflow-auto">
     <router-outlet></router-outlet>
   </div>
 
