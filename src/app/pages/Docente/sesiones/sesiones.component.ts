@@ -194,7 +194,7 @@ export class SesionesComponent implements OnInit{
 
     if(this.modo === 'crear'|| this.modo === 'editarSesion'){
       if (new Date(formValue.fecha) <= new Date()) {
-        this.toastr.warning('La fecha debe ser posterior a la actual');
+        this.toastr.warning('La fecha y hora deben ser posterior a la actual');
         return;
       }
 
