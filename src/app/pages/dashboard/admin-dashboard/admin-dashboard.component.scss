@@ -1,0 +1,26 @@
+.transition {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.rotate {
+    transform: rotate(180deg);
+}
+
+.dropdown-flotante {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: #f5f5dc; 
+    min-width: 180px;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
+    z-index: 9999;
+    border-radius: 0 5px 5px 0;
+    display: block !important; /* El *ngIf controla la existencia, el CSS el estilo */
+}
+
+/* Evita que el texto se rompa */
+.dropdown-flotante span {
+    white-space: nowrap;
+    display: inline-block;
+}

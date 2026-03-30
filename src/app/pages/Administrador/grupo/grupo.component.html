@@ -1,0 +1,332 @@
+<div class="card shadow-sm border-0">
+
+  <!-- cabecera -->
+  <div class="card-header bg-smoke d-flex justify-content-between align-items-center">
+    <h5 class="m-0 fw-bold text-maroon">Gestión de Grupos</h5>
+
+    <button class="btn btn-outline-primary" (click)="nuevoGrupo(); abrirModal(grupoModal)">
+      <i class="bi bi-plus-circle me-1"></i> Nuevo Grupo
+    </button>
+ </div>
+
+ <div class="card-body">
+<!--Fitlro dinamico-->
+ <form [formGroup]="filtroFormulario" (ngSubmit)="buscar()">
+  <div class="row g-3 mb-4 ">
+
+    <!-- Busqueda por curso -->
+    <div class="col-md-4">
+      <select class="form-select" formControlName="curso">
+        <option value="">Filtrar por curso</option>
+        <option *ngFor="let c of cursos" [value]="c.nombre">
+          {{ c.nombre }}
+        </option>
+      </select>
+    </div>
+   
+     <!-- filtro por docente -->
+    <div class="col-md-2">
+      <input type="text"
+            class="form-control"
+            placeholder="Buscar por docente"
+            formControlName="docente">
+    </div>
+
+    <!-- filtro por estado -->
+    <div class="col-md-2">
+      <select class="form-select" formControlName="estado">
+        <option value="">Filtrar por estado</option>
+        <option value="HABILITADO">Habilitado</option>
+        <option value="DESHABILITADO">Deshabilitado</option>
+      </select>
+    </div>
+
+    <!-- Botón -->
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-outline-primary w-100">
+        Buscar
+      </button>
+    </div>
+      <div class="col-md-2">
+      <button type="button"
+        class="btn btn-outline-primary w-100"
+        (click)="limpiarFiltros()">
+        Limpiar
+      </button>
+   </div>
+
+  </div>
+</form>
+
+  <div class="row mb-4">
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 text-center p-3">
+        <h6 class="text-muted">Total de Grupos</h6>
+        <h3 class="fw-bold">{{ totalGrupos }}</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 text-center p-3">
+        <h6 class="text-muted">Grupos Activos</h6>
+        <h3 class="fw-bold text-success">{{ gruposActivos }}</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 text-center p-3">
+        <h6 class="text-muted">Grupos Inactivos</h6>
+        <h3 class="fw-bold text-danger">{{ gruposInactivos }}</h3>
+      </div>
+    </div>
+
+  </div>
+ 
+  <!-- TABLA -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped w-100">
+
+        <thead class="table-light text-center text-maroon">
+          <tr>
+            <th>Nombre</th>
+            <th>Periodo</th>
+            <th>Curso</th>
+            <th>Docente</th>
+            <th>Estado</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let g of grupos; let i = index">
+
+            <td class = "text-center">{{ g.nombre }}</td>
+            <td class = "text-center">{{ g.periodo }}</td>
+            <td class = "text-center">{{ g.nombreCurso }}</td>
+            <td class = "text-center">{{ g.docente }}</td>
+            <td class = "text-center"><span [ngClass]="g.estado == 'HABILITADO' ? 'badge bg-success' : 'badge bg-danger' ">
+              {{ g.estado }}</span></td>
+
+            <td class="text-center">
+
+              <!-- Editar -->
+              <button class="btn btn-sm btn-outline-primary me-2" 
+                      (click)="editar(g, grupoModal)"
+                       title="Detalles">
+                <i class="bi bi-eye"></i>
+              </button>
+
+              <button class="btn btn-sm"
+              [ngClass]="g.estado == 'HABILITADO' ? 'btn-outline-danger':'btn-outline-success'"
+                          (click)="abrirconfirmacion(g, confirmModal)"
+                          [title]="g.estado === 'HABILITADO' ? 'Deshabilitar grupo ' + g.nombre : 'Habilitar grupo ' + g.nombre">
+                   <i class="bi"
+                 [ngClass]="g.estado == 'HABILITADO' ? 'bi-chevron-double-down' : 'bi-chevron-double-up'"></i>
+              </button>
+
+            </td>
+
+          </tr>
+
+          <tr *ngIf="grupos.length === 0">
+            <td colspan="6" class="text-center text-muted py-4">
+              No hay grupos registrados
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <!-- Desactivar -->
+             <ng-template #confirmModal let-modal>
+                <div class="modal-header bg-warning-subtle flex-column">
+                  <h5 class="modal-title text-maroon text-center">Confirmar Acción</h5>
+                  <button type="button"
+                          class="btn-close position-absolute end-0 top-0 m-3"
+                          (click)="modal.dismiss()">
+                  </button>
+                </div>
+
+                <div class="modal-body text-center">
+                  ¿Desea {{accionTexto}} ?
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                  <button class="btn btn-outline-secondary"
+                          (click)="modal.dismiss()">
+                    Cancelar
+                  </button>
+                  <button class="btn btn-danger"
+                          (click)="confirmarDesactivacion(modal)">
+                    Confirmar
+                  </button>
+                </div>
+              </ng-template>
+    </div>
+    <!-- Componente del paginador -->
+    <nav *ngIf="totalPages > 0" class="mt-4">
+      <ul class="pagination justify-content-center">
+
+        <li class="page-item" [class.disabled]="page === 0">
+          <button class="page-link"
+                  (click)="cambiarPagina(page - 1)"
+                  [disabled]="page === 0">
+            «
+          </button>
+        </li>
+
+        <li class="page-item"
+            *ngFor="let p of paginas"
+            [class.active]="p === page">
+          <button class="page-link"
+                  (click)="cambiarPagina(p)">
+            {{ p + 1 }}
+          </button>
+        </li>
+
+        <li class="page-item"
+            [class.disabled]="page + 1 >= totalPages">
+          <button class="page-link"
+                  (click)="cambiarPagina(page + 1)"
+                  [disabled]="page + 1 >= totalPages">
+            »
+          </button>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<!-- MODAL FORMULARIO -->
+<ng-template #grupoModal let-modal>
+  <form [formGroup]="grupoForm" 
+        (ngSubmit)="guardar(modal)">
+
+    <div class="modal-header bg-smoke flex-column align-items-center">
+      <h5 class="modal-title fw-bold text-maroon">
+        {{ modo === 'crear' ? 'Registro Grupo' : modo === 'editarDocente' ? 'Actualizar Docente' : 'Información Grupo'}}
+      </h5>
+      <button type="button"
+        class="btn-close position-absolute end-0 top-0 m-3"
+        (click)="modal.dismiss()">
+      </button>
+    </div>
+
+    <div class="modal-body">
+   
+      <div class="row g-3">
+        <div class="col-md-12">
+          <div class="input-group">
+            <span class="input-group-text" style="font-size:0.9rem;">Nombre</span>
+            <input type="text" class="form-control"
+              formControlName="nombre"
+              [ngClass]="{'is-invalid': grupoForm.get('nombre')?.invalid && grupoForm.get('nombre')?.touched}">
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="input-group">
+          <span class="input-group-text" style="font-size:0.9rem;">Periodo</span>
+          <input type="text" class="form-control"
+              formControlName="periodo"
+              [ngClass]="{
+              'is-invalid': grupoForm.get('periodo')?.invalid && grupoForm.get('periodo')?.touched}">
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="input-group">
+          <span class="input-group-text" style="font-size:0.9rem;">Curso</span>
+          <select class="form-select"
+                  formControlName="idCurso"
+                  [ngClass]="{'is-invalid': grupoForm.get('idCurso')?.invalid && grupoForm.get('idCurso')?.touched}">
+            <option *ngFor="let c of cursos"
+                    [value]="c.idCurso">
+              {{ c.nombre }}
+            </option>
+          </select>
+          <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="input-group">
+            <span class="input-group-text" style="font-size:0.9rem;">Docente</span>
+            <!-- Ícono lápiz -->
+
+          <!-- Modo vista -->
+          <input type="text"
+                class="form-control bg-light"
+                [value]="docenteSeleccionadoNombre"
+                readonly
+                *ngIf="modo === 'ver'">
+
+          <!-- Select -->
+          <select class="form-select"
+                  formControlName="idDocente"
+                  [ngClass]="{'is-invalid': grupoForm.get('idDocente')?.invalid && grupoForm.get('idDocente')?.touched}"
+                  *ngIf="modo === 'crear' || modo === 'editarDocente'">
+            <option *ngFor="let d of docentes"
+                    [value]="d.idUsuario">
+              {{ d.nombre }} {{ d.apellidoPaterno }} {{ d.apellidoMaterno }}
+            </option>
+          </select>
+          <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+          </div>
+           <button class="btn btn-outline-primary btn-sm" *ngIf="modo ==='ver'">
+              <i class="bi bi-pencil-square text-primary"
+                style="cursor:pointer"
+                *ngIf="modo==='ver'" title="Cambiar Docente"
+                (click)="activarEdicionDocente()">
+              </i>
+            </button>
+        </div>
+        </div>
+        </div>
+     
+    </div>
+
+    
+
+    <div class="modal-footer justify-content-center">
+      <button *ngIf="modo === 'ver'"
+                  type="button"
+                  class="btn btn-secondary"
+                  (click)="modal.close()">
+        Cerrar
+      </button>
+      <button type="button"
+              class="btn btn-outline-primary align-items-center"
+              *ngIf="modo!== 'ver'"
+              (click)="modal.dismiss()">
+        Cancelar
+      </button>
+
+      <button type="submit"
+              class="btn btn-success"
+              [disabled]="grupoForm.invalid"
+              *ngIf="modo === 'crear'">
+        Guardar
+      </button>
+
+      <button type="submit"
+              class="btn btn-success"
+              [disabled]="grupoForm.invalid"
+              *ngIf="modo === 'editarDocente'">
+        Actualizar
+      </button>
+    </div>
+ </form>
+</ng-template>

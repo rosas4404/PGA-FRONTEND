@@ -1,1 +1,233 @@
-/* You can add global styles to this file, and also import other style files */
+$primary: #641134;
+$secondary: #BC955C;
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+/* PALETA DE COLORES */
+$dark-slate-900: #212529;
+$dark-slate-700: #495057;
+
+$maroon: #641134;
+
+$gray: #808080;
+
+$peru: #BC955C;
+
+$gainsboro: #DCDCDC;
+$burlywood: #DDC9A3;
+
+$white-smoke: #ECEEEF;
+$ghost-white: #F9F9F9;
+$snow: #FAFAFA;
+
+/*    VARIABLES   */
+.text-ghost-write{
+  color:#DCDCDC
+}
+
+.text-snow{
+  color:#FAFAFA
+}
+
+.text-dark-slate {
+  color: $dark-slate-900;
+}
+
+.text-maroon {
+  color: $maroon;
+}
+
+.bg-maroon {
+  background-color: $maroon;
+  color: $snow;
+}
+
+.bg-peru {
+  background-color: $peru;
+  color: $dark-slate-900;
+}
+
+.bg-write{
+  background-color: #ECEEEF;
+  color: #FFFFFF;
+}
+.bg-arena{
+  background-color:  #e5dbbb;
+  color: #FFFFFF;
+}
+.bg-smoke{
+  background-color:$white-smoke;
+  color: #FFFFFF;
+}
+
+
+//botones
+.btn {
+  &:focus,
+  &:active,
+  &:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+//botones
+
+.btn-outline-primary {
+  color: $maroon;
+  border-color: $maroon;
+  &:hover{
+  background-color: $maroon !important;
+  border-color: $maroon !important;
+  color: $snow !important;
+  }
+  //al hacer click
+  &:active{
+    background-color: darken($maroon, 10%) !important;
+    color: $snow !important;
+  }
+  //quital el color persistente despues de soltar el clic
+  &:focus,
+  &:focus-visible {
+    background-color: transparent !important; // O vuelve al color original
+    color: $maroon !important;
+    box-shadow: none !important;
+    outline: none !important;
+  };
+}
+
+
+//notificaciones
+/* Base */
+.toast {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Success */
+.toast-success {
+  background: linear-gradient(135deg, #198754, #20c997) !important;
+  color: white !important;
+}
+
+/* Error */
+.toast-error {
+  background: linear-gradient(135deg, #dc3545, #ff6b6b) !important;
+  color: white !important;
+}
+
+/* Título */
+.toast-title {
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Mensaje */
+.toast-message {
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Contenedor centrado completamente */
+#toast-container.toast-center-center {
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translate(-50%, -50%) !important;
+  position: fixed !important;
+}
+
+/* Opcional: ancho más elegante */
+#toast-container {
+  width: auto !important;
+  max-width: 400px;
+}
+
+/* Estética más limpia */
+.toast {
+  border-radius: 14px !important;
+  text-align: left !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+}
+.toast:before {
+  font-size: 20px !important;
+}
+
+
+
+//menu desplegable
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  transition: all 0.3s ease;
+}
+
+/* Color base */
+.sidebar-link {
+  color: $maroon !important;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover */
+.sidebar-link:hover {
+  background-color: rgba(128, 0, 0, 0.1); 
+  color:$maroon !important;
+  padding-left: 12px;
+}
+
+/* Activo */
+.sidebar-link.active {
+  background-color: rgba(128, 0, 0, 0.2) !important;
+  color:$maroon !important;
+  font-weight: 600;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.btn-toggle {
+  background: transparent;
+  border: none;
+  color: maroon;
+}
+
+//conytorno inputs
+input:focus {
+  outline: none !important;
+  border-color: #8b5e3c !important;
+  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.25) !important;
+}
+//contorno select 
+select:focus {
+  outline: none !important;
+  border-color: #8b5e3c !important;
+  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.25) !important;
+}
+
+.table-light{
+  thead, th{
+    color: maroon !important;
+    font-weight: bold;
+  }
+}
+
+select.form-select:focus {
+  border-color: $maroon !important;
+  /* Un resplandor sutil en color peru/dorado */
+  box-shadow: 0 0 0 0.25rem rgba(188, 149, 92, 0.25) !important; 
+}
+
+.form-select option {
+  background-color: $white-smoke; /* Fondo gris claro */
+  color: $dark-slate-900;         /* Texto oscuro */
+  padding: 10px;
+}
+.main-content {
+  min-height: 0;
+  overflow-y: auto;     
+  height: 100vh;
+}

@@ -1,0 +1,43 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <div class="card shadow">
+        <div class="card-header bg-maroon text-white text-center">
+          <h4>Iniciar sesión </h4>
+        </div>
+
+        <div class="card-body">
+          <form  (ngSubmit)="login()" autocomplete="off">
+            <!------------ EMAIL ------------------>
+            <div class="mb-3">
+              <label class="form-label" style="font-size:0.9rem;"> Email </label>
+              <input type="text" class="form-control input:focus" 
+                [(ngModel)]="loginData.username" name="username" required #u="ngModel"
+                [ngClass]="{ 'is-invalid': u.invalid && u.touched}">
+                <div class="invalid-feedback" style="font-size:0.6rem;">
+                    Campo obligatorio.
+                </div>
+            </div>
+            <!------------ PASSWORD ------------------>
+            <div class="mb-3">
+              <label class="form-label" style="font-size:0.9rem;"> Password </label>
+              <input type="password" class="form-control" 
+                [(ngModel)]="loginData.password" name="password" required #p="ngModel"
+                [ngClass]="{ 'is-invalid': p.invalid && p.touched}">
+                <div class="invalid-feedback" style="font-size:0.6rem;">
+                    Campo obligatorio.
+                </div>
+            </div>
+
+            <!-- Botón -->
+            <div class="text-center mt-3">
+              <button type="submit" class = "btn btn-sm btn-outline-primary px-4"  >
+                <i class="bi bi-box-arrow-in-right fs-5 me-3"></i> Ingresar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

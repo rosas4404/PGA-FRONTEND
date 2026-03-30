@@ -1,0 +1,412 @@
+
+<div class="card shadow-sm border-0">
+
+  <!-- Titulo -->
+  <div class="card-header bg-smoke d-flex justify-content-between align-items-center">
+    <h5 class="m-0 fw-bold text-maroon" *ngIf="tipo == 'alumnos' ">Gestión de Alumnos</h5>
+    <h5 class="m-0 fw-bold text-maroon" *ngIf="tipo == 'docentes' ">Gestión de Docentes</h5>
+    <button class="btn btn-outline-primary"  (click)="abrirModal(crearModal)">
+      <i class="bi bi-plus-circle me-1"></i> Nuevo registro
+    </button>
+  </div>
+
+  <div class="card-body">
+    <!-- Buscador de filtros-->
+    <form [formGroup]="filtroForm" (ngSubmit)="buscar()">
+      <div class="row g-3 mb-4 ">
+        <!-- Busqueda por Alumno / Docente -->
+        <div class="col-md-4 me-5">
+          <input 
+          *ngIf="tipo=='alumnos'"
+          type="text" 
+          class="form-control" 
+          placeholder="Buscar alumno..."
+          formControlName="nombre">
+
+          <input 
+          *ngIf="tipo=='docentes'"
+          type="text" 
+          class="form-control" 
+          placeholder="Buscar alumno..."
+          formControlName="nombre">
+        </div>
+        <div class="col-md-2 me-5 ms-5">
+          <select class="form-select" formControlName="estado" >
+            <option value = "">Filtrar por estado</option>
+            <option value = "true" >Habilitado</option>
+            <option value = "false" >Deshabilitado</option>
+        </select>
+    </div>
+        
+        <!-- Botón -->
+        <div class="col-md-2 ms-5 ">
+          <button type="submit" class="btn btn-outline-primary w-100">
+            Buscar
+          </button>
+        </div>
+        <div class="col-md-2 ">
+          <button type="button"
+            class="btn btn-outline-primary w-100"
+            (click)="limpiarFiltros()">
+            Limpiar
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- tabla de inscripciones -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped w-100">
+
+        <thead class="table-light text-center ">
+          <tr>
+            <th>Nombre</th>
+            <th>Telefono</th>
+            <th>Fecha creación</th>
+            <th>Estado</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let u of usuarios"  >
+            <td>{{u.nombre}} {{u.apellidoPaterno}} {{u.apellidoMaterno}}</td>
+            <td class = "text-center">{{u.telefono}}</td>
+            <td class = "text-center">{{u.created_At}}</td>
+            <td class = "text-center"><span [ngClass]="u.activo == true? 'badge bg-success' : 'badge bg-danger' "> 
+             {{ u.activo ? 'Habilitado' : 'Deshabilitado' }}</span></td>
+            
+            <td class="text-center">
+              <!--mas informacion-->
+              <button class="btn btn-sm btn-outline-primary me-2"
+              (click)="abrirDetalle(u,detalleModal)"
+              title="Detalles" >
+                <i class="bi bi-eye"></i>
+              </button>
+              <!--Alta / Baja -->
+              <button class="btn btn-sm me-2"
+              [ngClass]="u.activo ? 'btn-outline-danger':'btn-outline-success'"
+              (click)="AbrirConfirmacion(u,confirmarModal)" 
+                          [title]="u.activo=== true ? 'Deshabilitar inscripcion' : 'Habilitar inscripcion' ">
+                <i class="bi"
+                 [ngClass]="u.activo ? 'bi-chevron-double-down' : 'bi-chevron-double-up'"></i>
+              </button>
+               <!--descargar Reporte-->
+              <button class="btn btn-sm btn-outline-primary me-2"
+              *ngIf="tipo == 'alumnos' "
+              (click)="descargarReporte(u.idUsuario)"
+              title="Reporte" >
+                <i class="bi bi-file-arrow-down"></i>
+              </button>
+
+
+            </td>
+          </tr>
+           <tr *ngIf="usuarios.length === 0">
+            <td colspan="6" class="text-center text-muted py-4">
+              No hay usuarios registrados
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+    <!-- Ppaginación-->
+    <nav *ngIf="totalPages > 0" class="mt-4">
+      <ul class="pagination justify-content-center">
+
+    <!-- Anterior -->
+    <li class="page-item " [class.disabled]="page === 0">
+      <button class="page-link "
+              (click)="cambiarPagina(page - 1)"
+              [disabled]="page === 0">
+        «
+      </button>
+    </li>
+
+    <!-- Números -->
+    <li class="page-item"
+        *ngFor="let p of paginas"
+        [class.active]="p === page">
+      <button class="page-link "
+              (click)="cambiarPagina(p)">
+        {{ p + 1 }}
+      </button>
+    </li>
+
+    <!-- Siguiente -->
+    <li class="page-item"
+        [class.disabled]="page + 1 >= totalPages">
+      <button class="page-link"
+              (click)="cambiarPagina(page + 1)"
+              [disabled]="page + 1 >= totalPages">
+        »
+      </button>
+    </li>
+
+  </ul>
+</nav>
+
+  </div>
+</div>
+
+
+<!--modal de confirmacion-->
+<ng-template #confirmarModal let-modal>
+  <div class="modal-header bg-warning-subtle flex-column" >
+    <h5 class="modal-title text-maroon text-center">Confirmar acción</h5>
+    <button type="button"
+      class="btn-close position-absolute top-0 end-0 m-3"
+      (click)="modal.dismiss()">
+    </button>
+  </div>
+
+  <div class="modal-body text-center">
+    ¿Desea {{accionTexto}} ?
+  </div>
+  <div class="modal-footer justify-content-center">
+    <button class="btn btn-outline-secondary"
+    (click)="modal.dismiss()">
+    Cancelar
+    </button>
+    <button class="btn btn-danger"
+    (click)="activarDesactivar(modal)">
+    Confirmar
+    </button>
+    </div>
+</ng-template>
+
+
+<!--modal para visualizar detalles-->
+<ng-template #detalleModal let-modal>
+
+  <div class="modal-header  flex-column bg-smoke align-items-center">
+    <h5 class="modal-title fw-bold text-maroon text-center ">
+     {{tipo == 'docentes' ? "Información Docente" :"Información Alumno" }} 
+    </h5>
+    <button type="button"
+            class="btn-close position-absolute end-0 top-0 m-3"
+            (click)="modal.dismiss()">
+    </button>
+  </div>
+
+  <div class="modal-body" *ngIf="detalleSeleccionado">
+
+    <div class="row g-2 align-items-center">
+          <!-- ID -->
+      <div class="col-md-1 ms-1">
+        <label class="fw-bold">ID</label><br>
+        <p class="mb-0">
+          {{ detalleSeleccionado.idUsuario}}
+        </p>
+      </div>
+
+      <!-- Nombre -->
+      <div class="col-md-8 text-rigt">
+        <label class="fw-bold">Nombre completo</label>
+        <p class="mb-0">
+          {{ detalleSeleccionado.nombre }}
+          {{ detalleSeleccionado.apellidoPaterno }}
+          {{ detalleSeleccionado.apellidoMaterno }}
+        </p>
+      </div>
+
+      <!-- Estado -->
+      <div class="col-md-2 ">
+        <label class="fw-bold">Estado</label><br>
+        <span class="badge"
+              [ngClass]="detalleSeleccionado.activo ? 'bg-success' : 'bg-danger'">
+          {{ detalleSeleccionado.activo ? 'Habilitado' : 'Deshabilitado' }}
+        </span>
+      </div>
+    
+
+      <!-- Teléfono -->
+      <div class="col-md-4 text-rigt">
+        <label class="fw-bold  ">Teléfono</label>
+        <p class="mb-0">{{ detalleSeleccionado.telefono }}</p>
+      </div>
+
+      <!-- Dirección -->
+      <div class="col-md-8 ">
+        <label class="fw-bold">Dirección</label>
+        <p class="mb-0">{{ detalleSeleccionado.direccion }}</p>
+      </div>
+
+      <!-- Fecha Alta -->
+      <div class="col-md-4" *ngIf="detalleSeleccionado.fechaAlta">
+        <label class="fw-bold">Fecha Alta</label>
+        <p class="mb-0">
+          {{ detalleSeleccionado.fechaAlta }}
+        </p>
+      </div>
+
+      <!-- Fecha Baja -->
+      <div class="col-md-4" *ngIf="detalleSeleccionado.fechaBaja">
+        <label class="fw-bold">Fecha Baja</label>
+        <p class="mb-0">
+          {{ detalleSeleccionado.fechaBaja }}
+        </p>
+      </div>
+
+      <!-- Fecha creación -->
+      <div class="col-md-4">
+        <label class="fw-bold">Fecha creación</label>
+        <p class="mb-0">
+          {{ detalleSeleccionado.created_At}}
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="modal-footer justify-content-center">
+    <button class="btn btn-outline-secondary"
+            (click)="modal.close()">
+      Cerrar
+    </button>
+  </div>
+
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--Modal formulario para crear nuevos usuarios -->
+<ng-template #crearModal let-modal>
+    <!--header-->
+    <div class="modal-header bg-smoke flex-column align-items-center">
+      <!-- Títulos -->
+      <h5 class="modal-title fw-bold text-maroon" *ngIf= "tipo == 'alumnos' ">
+       Registro Alumno
+      </h5>
+      <h5 class="modal-title fw-bold text-maroon" *ngIf = "tipo == 'docentes' ">
+       Registro Docente
+      </h5>
+      <!-- Botón cerrar -->
+      <button type="button" 
+        class="btn-close position-absolute end-0 top-0 m-3"
+        (click) = "cerrarModal()">
+      </button>
+      </div>
+      <div class=" modal-body  modal-body-step ">
+        <form [formGroup]="registroForm" (ngSubmit)="submit()" autocomplete="off">
+          <!------------ DATOS DEL USUARIO ------------------>
+          <!-- Nombre -->
+          <div class="col-md-12 mt-3">
+            <div class="input-group">
+              <span class="input-group-text" style="font-size:0.9rem;"> Nombre </span>
+              <input type="text" class="form-control"
+              formControlName="nombre"
+              [ngClass]="{
+              'is-invalid': registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched
+            }">
+            <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+            </div>
+
+            </div>
+            
+          </div>
+          <!-- Apellido Paterno -->
+          <div class="col-md-12 mt-3">
+            <div class="input-group">
+              <span class="input-group-text" style="font-size:0.9rem;">Apellido Paterno</span>
+              <input type="text" class="form-control"
+              formControlName="apellidoPaterno"
+              [ngClass] = "{'is-invalid': registroForm.get('apellidoPaterno')?.invalid && registroForm.get('apellidoPaterno')?.touched}">
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
+              </div>
+            </div>
+          </div>
+          <!-- Apellido Materno -->
+          <div class="col-md-12 mt-3">
+            <div class="input-group">
+              <span class="input-group-text" style="font-size:0.9rem;">Apellido Materno</span>
+              <input type="text" class="form-control"
+              formControlName="apellidoMaterno"
+              [ngClass]="{'is-invalid': registroForm.get('apellidoMaterno')?.invalid && registroForm.get('apellidoMaterno')?.touched}">
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+                 Campo obligatorio.
+              </div>
+            </div>
+          </div>
+          <!-- Email -->
+          <div class="col-md-12 mt-3">
+            <div class="input-group">
+              <span class="input-group-text" style="font-size:0.9rem;">Email</span>
+              <input type="email" class="form-control" formControlName="email" placeholder="usuario@example.com" 
+                [ngClass]="{'is-invalid': registroForm.get('email')?.invalid && registroForm.get('email')?.touched}">
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+                <div *ngIf="registroForm.get('email')?.errors?.['required']">
+                  Campo obligatorio.
+                </div>
+                <div *ngIf="registroForm.get('email')?.errors?.['email'] || registroForm.get('email')?.errors?.['pattern']">
+                  Por favor, ingrese un formato de correo válido
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Teléfono -->
+          <div class="col-md-12 mt-3">
+            <div class="input-group">
+              <span class="input-group-text" style="font-size:0.9rem;">Teléfono</span>
+              <input type="text" class="form-control"
+                maxlength="10"
+                formControlName="telefono"
+                [ngClass]="{'is-invalid': registroForm.get('telefono')?.invalid && registroForm.get('telefono')?.touched}">
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+                <div *ngIf="registroForm.get('telefono')?.errors?.['required']">
+                  Campo obligatorio.
+                </div>
+                <div *ngIf="registroForm.get('telefono')?.errors?.['minlength']|| registroForm.get('telefono')?.errors?.['maxlength']">
+                  Deben ser exactamente 10 dígitos.
+                </div>
+                <div *ngIf="registroForm.get('telefono')?.errors?.['pattern']">
+                  Sólo se permiten números.
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Direccion -->
+          <div class="col-md-12 mt-3">
+            <div class="input-group">
+              <span class="input-group-text" style="font-size:0.9rem;">Dirección</span>
+              <input type="text" class="form-control"
+                formControlName="direccion"
+                [ngClass]="{'is-invalid': registroForm.get('direccion')?.invalid && registroForm.get('direccion')?.touched}">
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+                Campo obligatorio.
+              </div>
+            </div>
+          </div>
+         <div class="modal-footer justify-content-center">
+          <button type="button"
+            class="btn btn-outline-primary align-items-center"
+            (click)="modal.dismiss()">
+            Cancelar
+          </button>
+          <button class="btn btn-sm bg-maroon px-4" style="font-size:0.9rem;" type="submit" [disabled]="registroForm.invalid">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+</ng-template>

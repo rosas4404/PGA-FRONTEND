@@ -1,0 +1,93 @@
+<div class="card shadow-sm border-0">
+    <div>
+        <h4 class="fw-semibold text-maroon mb-1">
+            {{ saludo }}, {{ usuarioActual?.nombre }} {{usuarioActual?.apellidoPaterno}}
+        </h4>
+        <small class="text-muted mb-">
+            {{ fechaActual | date:'EEEE, d MMMM y':'':'es-MX' }}
+        </small>
+    </div>
+
+    <div *ngIf = "grupos.length === 0" class=" empty-state i text-center mt-4">
+        <i class="bi bi-people"></i>
+        <h5 class="mt-2">Sin grupos asignados</h5>
+        <p class="text-muted">
+            Cuando tengas grupos aparecerán aquí
+        </p>
+    </div>
+    <!-- Mis grupos -->
+    <div *ngIf = "grupos.length > 0">
+        <div class="row g-4 justify-content-center mt-2"  (mouseenter)="pausarAutoPlay()" (mouseleave)="reanudarAutoPlay()">
+            <div class= "col-md-4" *ngFor="let grupo of paginas [paginaActual]">
+                <div class = "grupo-card">
+                    <div class="grupo-header">
+                        <h6 class="fw-bold mb-1">{{ grupo.nombre }}</h6>
+                        <small class="text-muted">{{ grupo.nombreCurso }}</small>
+                    </div>
+                    <div class="grupo-body">
+                        <span class="alumnos">
+                            {{ grupo.alumnos }} alumnos
+                        </span>
+                    </div>
+                    <button class="btn btn-primary w-100 mt-3" (click)="verGrupo(grupo)">
+                        Entrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dots">
+        <span 
+            *ngFor="let pagina of paginas; let i = index"
+            (click)="paginaActual = i"
+            [class.active]="i === paginaActual">
+        </span>
+  </div>
+
+
+
+    <div class="col-md-4 mt-4">
+        <div class="card p-3">
+            <h6 class="fw-bold mb-2 text-center">Calendario de Sesiones</h6>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <button class="btn btn-sm btn-outline-secondary" (click)="mesAnterior()"><i class="bi bi-caret-left-fill"></i></button>
+                <strong>{{ getNombreMes() }} {{ anioActual }}</strong>
+                <button class="btn btn-sm btn-outline-secondary" (click)="mesSiguiente()"><i class="bi bi-caret-right-fill"></i></button>
+            </div>
+            <div class="calendar-header">
+                <div *ngFor="let d of diasSemana">
+                    {{ d }}
+                </div>
+            </div>
+            <div class="calendar mt-4">
+                <div class="day"
+                    *ngFor="let dia of diasMes"
+                    [class.vacio]="!dia"
+                    [class.tiene-sesion]="dia && tieneSesion(dia)"
+                    (mouseenter)="hoverDia = dia"
+                    (mouseleave)="hoverDia = null">
+                    <ng-container *ngIf="dia">
+                        {{ dia.getDate() }}
+                    </ng-container>
+
+
+
+                    <!--tooltip-->
+                    <!--solo aparece cuando el dia no es un espacio vacio, y tiene sesion ese día y está el masuse sobre ese día-->
+                    <div class="tooltip-sesion" *ngIf="dia && hoverDia === dia && obtenerSesionesDia(dia).length > 0">
+                        <!--obtener las sesiones del dia y solo muestra las primeras tres-->
+                        <div *ngFor="let s of obtenerSesionesDia(dia) | slice:0:3">
+                            <!--contendio-->
+                            <strong>{{ s.nombreGrupo }}: {{ s.tema}}</strong><br>
+                            <small>{{ formatearHora(s.fecha) }}</small>
+                        </div>
+                        <!--solo aparece cuando hay mas de tres ssiones en un dia-->
+                        <small *ngIf="obtenerSesionesDia(dia).length > 3"> + {{ obtenerSesionesDia(dia).length - 3 }} más...
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+

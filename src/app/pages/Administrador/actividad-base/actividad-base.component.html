@@ -1,0 +1,312 @@
+<div class="card shadow-sm border-0">
+
+  <!-- Titulo -->
+  <div class="card-header bg-smoke d-flex justify-content-between align-items-center">
+    <h5 class="m-0 fw-bold text-maroon">Gestión de Actividades Base</h5>
+    <button class="btn btn-outline-primary" (click)="abrirModal(crearModal)">
+      <i class="bi bi-plus-circle me-1" ></i> Nueva Actividad
+    </button>
+  </div>
+
+  <div class="card-body">
+
+    <!-- Buscador de filtros-->
+ <form [formGroup]="filtroForm" (ngSubmit)="buscar()">
+  <div class="row g-3 mb-4 ">
+
+    <!-- Busqueda por Nombre -->
+    <div class="col-md-3">
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Buscar titulo..."
+        formControlName="nombre">
+    </div>
+   
+     <!-- filtro por Campo Formativo -->
+    <div class="col-md-3">
+      <select class="form-select" formControlName="idCampo" >
+        <option value="">Filtrar por Campo formativo</option>
+        <option *ngFor="let c of campos" [value]="c.idCampo">
+          {{ c.nombre }}
+        </option>
+      </select>
+    </div>
+    <!-- filtro por Grupo -->
+    <div class="col-md-2">
+      <select class="form-select" formControlName="activo">
+        <option value = ''>Filtrar por estado</option>
+        <option value = "true" >Habilitado</option>
+        <option value = "false" >Deshabilitado</option>
+      </select>
+    </div>
+
+    <!-- Botón -->
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-outline-primary w-100">
+        Buscar
+      </button>
+    </div>
+      <div class="col-md-2">
+      <button type="button"
+        class="btn btn-outline-primary w-100"
+        (click)="limpiarFiltros()">
+        Limpiar
+      </button>
+   </div>
+
+  </div>
+</form>
+
+    <!-- tabla de inscripciones -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped w-100">
+
+        <thead class="table-light text-center ">
+          <tr>
+            <th>ID</th>
+            <th>Titulo</th>
+            <th>Campo Formativo</th>
+            <th>Estado</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let a of actividades"  >
+            <td>{{a.idActividad}}</td>
+            <td class = "text-center">{{a.titulo}}</td>
+            <td class = "text-center">{{a.campoFormativo.nombre}}</td>
+            <td class = "text-center"><span [ngClass]="a.activo == true? 'badge bg-success' : 'badge bg-danger' "> 
+             {{ a.activo ? 'Habilitado' : 'Deshabilitado' }}</span></td>
+            
+            <td class="text-center">
+            
+              <!--mas informacion-->
+              <button class="btn btn-sm btn-outline-primary me-2"
+              (click)="abrirDetalleActividad(a,detallesModal)"
+              title="Detalles" >
+                <i class="bi bi-eye"></i>
+              </button>
+
+              <!--Alta / Baja -->
+              <button class="btn btn-sm me-2"
+              [ngClass]="a.activo ? 'btn-outline-danger':'btn-outline-success'"
+              (click)="abrirConfirmacion(a,confirmarModal)" 
+                          [title]="a.activo === true ? 'Deshabilitar actividad' : 'Habilitar actividad' ">
+                <i class="bi"
+                 [ngClass]="a.activo ? 'bi-chevron-double-down' : 'bi-chevron-double-up'"></i>
+              </button>
+               <button class="btn btn-sm btn-outline-primary me-2"
+                *ngIf=" a.activo"
+                (click)="abrirEditar(a,crearModal)" 
+                title="Editar adtividad">
+                <i class="bi bi-pencil"></i>
+              </button>
+            </td>
+          </tr>
+           <tr *ngIf="actividades.length === 0">
+            <td colspan="6" class="text-center text-muted py-4">
+              No hay inscripciones registradas
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+    <!-- Paginación-->
+    <nav *ngIf="totalPages > 0" class="mt-4">
+      <ul class="pagination justify-content-center">
+
+    <!-- Anterior -->
+    <li class="page-item " [class.disabled]="page === 0">
+      <button class="page-link "
+              (click)="cambiarPagina(page - 1)"
+              [disabled]="page === 0">
+        «
+      </button>
+    </li>
+
+    <!-- Números -->
+    <li class="page-item"
+        *ngFor="let p of paginas"
+        [class.active]="p === page">
+      <button class="page-link "
+              (click)="cambiarPagina(p)">
+        {{ p + 1 }}
+      </button>
+    </li>
+
+    <!-- Siguiente -->
+    <li class="page-item"
+        [class.disabled]="page + 1 >= totalPages">
+      <button class="page-link"
+              (click)="cambiarPagina(page + 1)"
+              [disabled]="page + 1 >= totalPages">
+        »
+      </button>
+    </li>
+
+  </ul>
+</nav>
+
+  </div>
+</div>
+
+
+
+<!--Detalles modal-->
+<ng-template #detallesModal let-modal>
+
+  <div class="modal-header flex-column bg-smoke ">
+    <h5 class="modal-title fw-bold text-maroon text-center">Información Actividad Base</h5>
+    <button type="button" 
+            class="btn-close position-absolute end-0 top-0 m-3" 
+            (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="row mb-2">
+      <div class="col-4"><strong>Título:</strong></div>
+      <div class="col-8">{{ actividadSeleccionada.titulo }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-4"><strong>Descripción:</strong></div>
+      <div class="col-8">{{ actividadSeleccionada.descripcion }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-4"><strong>Estado:</strong></div>
+      <div class="col-8">
+        <span class="badge"
+        [ngClass]="actividadSeleccionada.activo ? 'bg-success' : 'bg-danger'">
+          {{ actividadSeleccionada.activo ? 'Habilitado' : 'Deshabilitado' }}
+        </span>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row mb-2">
+      <div class="col-4"><strong>Campo Formativo:</strong></div>
+      <div class="col-8">{{ actividadSeleccionada.campoFormativo?.nombre }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-4"><strong>Descripción:</strong></div>
+      <div class="col-8">{{ actividadSeleccionada.campoFormativo?.descripcion }}</div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer justify-content-center">
+    <button class="btn btn-outline-secondary" (click)="modal.close()">Cerrar</button>
+  </div>
+
+</ng-template>
+
+<!--modal de confirmacion-->
+<ng-template #confirmarModal let-modal>
+  <div class="modal-header bg-warning-subtle justify-content-center">
+    <h5 class="modal-title text-maroon text-center">Confirmar acción</h5>
+    <button type="button"
+      class="btn-close position-absolute end-0 me-3"
+      (click)="modal.dismiss()">
+    </button>
+  </div>
+
+  <div class="modal-body text-center">
+    <p>
+        ¿ Desea {{ tituloAccion.toLowerCase() }}:
+        <strong>{{ tituloActividad }}</strong>
+        ?
+    </p>
+    <p style="white-space: pre-line;"> {{ accionTexto }}</p>
+  </div>
+  <div class="modal-footer justify-content-center">
+    <button class="btn btn-outline-secondary"
+    (click)="modal.dismiss()">
+    Cancelar
+    </button>
+    <button class="btn btn-danger"
+    (click)="activarDesactivar(modal)">
+    Confirmar
+    </button>
+    </div>
+</ng-template>
+
+<!--modal crear / editar -->
+<ng-template #crearModal let-modal>
+  <!--header-->
+  <div class="modal-header bg-smoke flex-column align-items-center">
+    <h5 class="modal-title fw-bold text-maroon">
+     {{ modoEdicion ? 'Actualizar Descripción' : 'Registro Actividad Base' }} 
+    </h5>
+    <!-- Botón cerrar -->
+    <button type="button" 
+      class="btn-close position-absolute end-0 top-0 m-3"
+      (click) = "cerrarModal()">
+    </button>
+  </div>
+  <div class=" modal-body  modal-body-step ">
+    <form [formGroup]="crearForm" (ngSubmit)="submit()" autocomplete="off">
+      <!-- Nombre -->
+      <div class="col-md-12 mt-3">
+        <div class="input-group" *ngIf="!modoEdicion">
+          <span class="input-group-text" style="font-size:0.9rem;"> Titulo </span>
+          <input type="text" class="form-control"
+            formControlName="titulo"
+            [ngClass]="{
+            'is-invalid': crearForm.get('titulo')?.invalid && crearForm.get('titulo')?.touched
+          }">
+          <div class="invalid-feedback" style="font-size:0.6rem;">
+            Campo obligatorio.
+          </div>
+        </div>
+        <div class="row mb-2" *ngIf="modoEdicion">
+          <div class="col-4"><strong>Titulo :</strong></div>
+          <div class="col-8">{{ crearForm.get('titulo')?.value }}</div>
+          </div>
+      </div>
+      <div class="col-md-12 mt-3">
+        <div class="input-group">
+          <span class="input-group-text" style="font-size:0.9rem;">Descripción</span>
+          <input type="text" class="form-control"
+            formControlName="descripcion"
+            [ngClass] = "{'is-invalid': crearForm.get('descripcion')?.invalid && crearForm.get('descripcion')?.touched}">
+          <div class="invalid-feedback" style="font-size:0.6rem;">
+            Campo obligatorio.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 mt-3 mb-4" *ngIf="!modoEdicion">
+        <div class="input-group">
+          <span class="input-group-text" style="font-size:0.9rem;">Campo Formativo</span>
+          <select class="form-select"
+            formControlName="idCampoFormativo">
+          <option value="">Seleccione campo formativo</option>
+          <option *ngFor="let c of campos"
+            [value]="c.idCampo">
+            {{ c.nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button"
+          class="btn btn-outline-primary align-items-center"
+          (click)="modal.dismiss()">
+          Cancelar
+        </button>
+        <button type="submit"
+              class="btn btn-success"
+              [disabled]="crearForm.invalid">
+              Guardar
+        </button>
+
+      </div>
+
+    </form>
+  </div>
