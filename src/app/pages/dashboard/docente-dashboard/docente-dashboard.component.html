@@ -25,6 +25,14 @@
         </a>
       </li>
 
+       <li class="nav-item" [attr.title]="isCollapsed ? 'Sesiones' : null">
+        <a class="nav-link text-maroon sidebar-link"
+           routerLink="sesiones"
+           routerLinkActive="active">
+           <i class="bi bi-people-fill fs-4 "></i>
+             <span *ngIf="!isCollapsed" class="ms-2">Sesión</span>
+        </a>
+      </li>
 
       <li class="nav-item mt-auto" [attr.title]="isCollapsed ? 'Perfil' : null">
         <a class="nav-link text-maroon sidebar-link"

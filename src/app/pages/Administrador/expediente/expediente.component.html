@@ -48,16 +48,6 @@
               title="Ver" >
                 <i class="bi bi-eye"></i>
               </button>
-              <!--subir-->
-              <!-- Input oculto que se activa al pulsar el botón, el fileInput crea una referencia al elemento (cuando se selecciona el archivo)-->
-            <input type="file" #fileInput style="display: none"  accept=".pdf, .jpg, .jpeg, .png"
-                (change)="onFileSelected($event, d.tipoDocumento)">
-            <!--cuando el usuario da click, angular simula un cick en el input oculto y entonces se abre el selector de archivos-->
-            <button class="btn btn-sm btn-outline-primary me-2"
-                    (click)="fileInput.click()" 
-                    title="Subir archivo (Máx. 2MB)">
-            <i class="bi bi-upload"></i>
-            </button>
             </td>
           </tr>
            <tr *ngIf="expedienteSeleccionado?.documentos?.length === 0">

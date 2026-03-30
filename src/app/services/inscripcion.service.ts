@@ -7,6 +7,7 @@ import { PageResponse } from '../models/pageable/PageResponseDTO';
 import { crearInscripcionDTO } from '../models/dto/RequestDto/crearInscripcionDTO';
 import { asignarGrupoDTO } from '../models/asignarGrupoDTO';
 import { Observable } from 'rxjs';
+import { alumnoGrupoDTOResponse } from '../models/dto/ResponseDto/alumnoGrupoDTOResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -53,5 +54,10 @@ export class InscripcionService {
 
   habilitarDeshabilitar(idInscripcion : number) : Observable <InscripcionResponseDTO> {
     return this.httpClient.put <InscripcionResponseDTO> (`${this.baseUrl}/desactivar/${idInscripcion}`,{})
+  }
+
+  //alumnos por grupo
+  obtenerAlumnosPorGrupo(idGrupo: number): Observable<alumnoGrupoDTOResponse[]>{
+    return this.httpClient.get<alumnoGrupoDTOResponse[]>(`${this.baseUrl}/grupo/${idGrupo}/alumnos`);
   }
 }

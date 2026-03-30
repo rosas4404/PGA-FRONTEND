@@ -75,53 +75,6 @@ export class ExpedienteComponent implements OnInit {
       });
   }
 
-
-  //permite ver el contenido o enviarlo 
-  onFileSelected(event:any, tipoDocumento:string){//se ejecuta cuando el usuario seleccioa un archivo en el input file
-    const archivo: File = event.target.files[0]; // Obtenemos el primer archivo seleccionado
-    const maxSize = 2 * 1024 * 1024; // 2MB (2 * 1024 KB * 1024 B)
-    const tiposPermitidos = ['application/pdf', 'image/jpeg', 'image/png'];
-    //validacion de que no exceda el peso 
-    if (!archivo) return; //si no hay archivo sale
-    // Validar Tipo (Formato)
-    if (!tiposPermitidos.includes(archivo.type)) {
-      this.toastr.error('Error: Solo se permiten archivos PDF, JPG o PNG.');
-      event.target.value = '';
-      return; 
-    }
-
-    // Validar Tamaño
-    if (archivo.size > maxSize) {
-      this.toastr.error('El archivo es demasiado grande. Máximo 2MB.');
-      event.target.value = '';
-      return; 
-    }
-      
-    if (archivo) {
-      // Si seleccionó un archivo, procedemos a subirlo
-      this.subir(tipoDocumento, archivo);
-    } else {
-      // Si canceló la selección sin elegir nada
-      this.toastr.warning('No se seleccionó ningún archivo');
-    }
-
-    // Limpiar el input para permitir re-seleccionar el mismo archivo si es necesario
-    event.target.value = '';//si no se limpia, el navegador no dispara el evento change otra vez
-  }
-
-  subir(tipoDocumento:string, archivo:File){
-      // Usamos this.idAlumno (del @Input), el tipo del documento y el archivo
-    this.documentoExpedienteService.subirDocumento(this.idAlumno, tipoDocumento, archivo).subscribe({
-      next: (data) => {//si responde bien el back
-        this.toastr.success('Documento subido correctamente');
-        this.cargarExpediente();
-      },
-      error: (err) => {
-        this.toastr.error(err.error?.message || 'Error al subir el archivo');
-      }
-    });
-  }
-
   visualizar(idDocumento:number, modal:any, rutaDocumento:string){
     this.documentoExpedienteForm.reset();
     this.paso=1;

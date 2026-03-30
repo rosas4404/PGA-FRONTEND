@@ -1,0 +1,244 @@
+<div class="card shadow-sm border-0">
+  <!-- cabecera -->
+  <div class="card-header bg-smoke d-flex justify-content-between align-items-center">
+    <h5 class="m-0 fw-bold text-maroon">Gestión de Sesiones</h5>
+    <button class="btn btn-outline-primary" (click)="nuevaSesion(); abrirModal(sesionModal)">
+      <i class="bi bi-plus-circle me-1"></i> Nueva Sesion
+    </button>
+  </div>
+
+ <div class="card-body">
+ <!--Fitlro dinamico-->
+  <form [formGroup]="filtroFormulario" (ngSubmit)="buscar()">
+    <div class="row g-3 mb-4 ">
+      
+      <!-- filtro por fecha -->
+      <div class="col-md-4 me-5">
+        <select class="form-select" formControlName="momentoSesion">
+          <option [ngValue]="null">Cualquier momento</option>
+          <option [ngValue]="'POR_INICIAR'">Próximas sesiones</option>
+          <option [ngValue]="'FINALIZADAS'">Sesiones pasadas</option>
+        </select>
+      </div>
+
+      <!-- filtro por alcance -->
+      <div class="col-md-2 me-5 ms-5">
+        <select class="form-select" formControlName="alcance">
+          <option [ngValue]="null">Todos los alcances</option>
+          <option [ngValue]="'GRUPAL'">Grupal</option>
+          <option [ngValue]="'INDIVIDUAL'">Individual</option>
+        </select>
+      </div>
+
+      <!-- Botón -->
+      <div class="col-md-2 ms-5">
+        <button type="submit" class="btn btn-outline-primary w-100">
+          Buscar
+        </button>
+      </div>
+        <div class="col-md-2">
+        <button type="button"
+          class="btn btn-outline-primary w-100"
+          (click)="limpiarFiltros()">
+          Limpiar
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- TABLA -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped w-100">
+
+        <thead class="table-light text-center text-maroon">
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Tema</th>
+            <th>Plataforma</th>
+            <th>Grupo</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let s of sesionDocente; let i = index">
+            <td class = "text-center">{{ s.idSesion }}</td>
+            <td class = "text-center">{{ s.fecha }}</td>
+            <td class = "text-center">{{ s.tema }}</td>
+            <td class = "text-center">{{ s.plataforma }}</td>
+            <td class = "text-center">{{ s.nombreGrupo }}</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-info me-2" 
+                      (click)="cargarSesion(s.idSesion, 'ver', sesionModal)" title="Ver">
+                <i class="bi bi-eye"></i>
+              </button>
+
+              <button class="btn btn-sm btn-outline-primary me-2"
+                      (click)="cargarSesion(s.idSesion, 'editarSesion', sesionModal)" title="Editar Datos">
+                <i class="bi bi-pencil"></i>
+              </button>
+
+              <button class="btn btn-sm btn-outline-success"
+                      (click)="cargarSesion(s.idSesion, 'editarAlumnos', sesionModal)" title="Alumnos">
+                <i class="bi bi-people"></i>
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="sesionDocente.length === 0">
+            <td colspan="6" class="text-center text-muted py-4">
+              No existen clases programadas próximamente.
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <!-- Componente del paginador -->
+    <nav *ngIf="totalPages > 0" class="mt-4">
+      <ul class="pagination justify-content-center">
+
+        <li class="page-item" [class.disabled]="page === 0">
+          <button class="page-link"
+                  (click)="cambiarPagina(page - 1)"
+                  [disabled]="page === 0">
+            «
+          </button>
+        </li>
+
+        <li class="page-item"
+            *ngFor="let p of paginas"
+            [class.active]="p === page">
+          <button class="page-link"
+                  (click)="cambiarPagina(p)">
+            {{ p + 1 }}
+          </button>
+        </li>
+
+        <li class="page-item"
+            [class.disabled]="page + 1 >= totalPages">
+          <button class="page-link"
+                  (click)="cambiarPagina(page + 1)"
+                  [disabled]="page + 1 >= totalPages">
+            »
+          </button>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+</div>
+<!--      MODAL FORMULARIO   -->
+<ng-template #sesionModal let-modal>
+  <form [formGroup]="sesionForm" (ngSubmit)="guardar(modal)">
+    <div class="modal-header bg-smoke flex-column align-items-center">
+      <h5 class="modal-title fw-bold text-maroon">
+        {{ modo === 'crear' ? 'Registro Sesión' : 
+           modo === 'editarSesion' ? 'Actualizar Detalles' : 
+           modo === 'editarAlumnos' ? 'Gestionar Alumnos' : 'Detalle Sesión' }}
+      </h5>
+      <button type="button" class="btn-close position-absolute end-0 top-0 m-3" (click)="cerrarModal(modal)"></button>
+    </div>
+
+    <div class="modal-body">
+      <div *ngIf="modo !== 'editarAlumnos'">
+        <div class="row g-3">
+          <ng-container *ngIf="modo === 'ver'; else camposEdicion">
+            <div class="col-md-12">
+              <p><strong>Tema:</strong> {{ sesionDetalle.tema }}</p>
+              <p><strong>Fecha:</strong> {{ sesionDetalle.fecha }}</p>
+              <p><strong>Plataforma:</strong> {{ sesionDetalle.plataforma }}</p>
+              <p><strong>URL:</strong> <a [href]="sesionDetalle.url" target="_blank"> {{ sesionDetalle.url }}</a></p>
+            </div>
+          </ng-container>
+
+          <ng-template #camposEdicion>
+            <div class="col-md-6">
+              <label class="form-label">Fecha</label>
+              <input type="datetime-local" class="form-control" formControlName="fecha" [min]="minFecha" [ngClass]="{'is-invalid': sesionForm.get('fecha')?.invalid && sesionForm.get('fecha')?.touched}">
+                <div class="invalid-feedback" style="font-size:0.6rem;">
+                  Campo obligatorio.
+                </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Grupo</label>
+              <select class="form-select" formControlName="idGrupo" [ngClass]="{'is-invalid': sesionForm.get('idGrupo')?.invalid && sesionForm.get('idGrupo')?.touched}">
+                <option *ngFor="let g of grupos" [value]="g.idGrupo">{{ g.nombre }}</option>
+              </select>
+                <div class="invalid-feedback" style="font-size:0.6rem;">
+                  Campo obligatorio.
+                </div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Tema</label>
+              <input type="text" class="form-control" formControlName="tema" [ngClass]="{'is-invalid': sesionForm.get('tema')?.invalid && sesionForm.get('tema')?.touched}">
+                <div class="invalid-feedback" style="font-size:0.6rem;">
+                  Campo obligatorio.
+                </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Plataforma</label>
+              <input type="text" class="form-control" placeholder="Zoom, Meet..." formControlName="plataforma" [ngClass]="{'is-invalid': sesionForm.get('plataforma')?.invalid && sesionForm.get('plataforma')?.touched}">
+                <div class="invalid-feedback" style="font-size:0.6rem;">
+                  Campo obligatorio.
+                </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Alcance</label>
+              <select class="form-select" formControlName="alcance" [ngClass]="{'is-invalid': sesionForm.get('alcance')?.invalid && sesionForm.get('alcance')?.touched}" (change)="onChangeAlcance()">
+                <option value="GRUPAL">Grupal</option>
+                <option value="INDIVIDUAL">Individual</option>
+              </select>
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+                Campo obligatorio.
+              </div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">URL de la sesión</label>
+              <input type="text" class="form-control" formControlName="urlSesion" [ngClass]="{'is-invalid': sesionForm.get('urlSesion')?.invalid && sesionForm.get('urlSesion')?.touched}">
+                <div class="invalid-feedback" style="font-size:0.6rem;"> Campo obligatorio.</div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="mt-4" *ngIf="esIndividual || modo === 'ver' || modo === 'editarAlumnos'">
+        <hr *ngIf=" modo === 'ver'">
+        <h6 class="fw-bold text-maroon mb-3">Alumnos Participantes</h6>
+        
+        <div *ngIf="modo === 'ver'" class="grid-checkbox border p-2 bg-light rounded" style="max-height: 200px; overflow-y: auto;">
+          <div *ngFor="let alumno of alumnosDetalle" class="small p-2 border-bottom">
+            <i class="bi bi-person-check-fill text-success me-2"></i>
+            {{ alumno.nombreAlumno }} {{ alumno.apellidoPaterno }}
+          </div>
+          <div *ngIf="alumnosDetalle.length === 0" class="text-muted small p-2">
+            No hay alumnos asignados individualmente (Alcance Grupal).
+          </div>
+        </div>
+
+        <div *ngIf="modo !== 'ver'" class="border rounded p-3 bg-white" style="max-height: 250px; overflow-y: auto;">
+          <div *ngFor="let alumno of alumnos" class="form-check mb-2">
+            <input class="form-check-input" type="checkbox"
+                  [id]="'alum-' + alumno.idInscripcion"
+                  [value]="alumno.idInscripcion"
+                  [checked]="idsSeleccionados.includes(alumno.idInscripcion)"
+                  (change)="onAlumnoSeleccionado($event)">
+            <label class="form-check-label" [for]="'alum-' + alumno.idInscripcion">
+              {{ alumno.nombre }} {{ alumno.apellidoPaterno }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer justify-content-center">
+      <button *ngIf="modo !== 'ver'" type="submit" class="btn btn-success px-4">
+        {{ modo === 'crear' ? 'Guardar Sesión' : 'Actualizar' }}
+      </button>
+      <button type="button" class="btn btn-secondary px-4" (click)="modal.close()">
+        {{ modo === 'ver' ? 'Cerrar' : 'Cancelar' }}
+      </button>
+    </div>
+  </form>
+</ng-template>
