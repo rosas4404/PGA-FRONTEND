@@ -62,7 +62,7 @@ export const routes: Routes = [
             { path: '', redirectTo: 'inicio', pathMatch: 'full' },
             {path:'perfil', component: PerfilComponent},
             {path: 'inicio', component : InicioComponent},
-            {path: 'sesiones', component : SesionesComponent}
+            {path: 'sesiones', component : SesionesComponent},
             {path:'grupo/:idGrupo' , component:PanelGrupoComponent,
                 children:[
                     { path: '', component: InicioGrupoComponent },
