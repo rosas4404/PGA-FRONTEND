@@ -1,0 +1,37 @@
+<div class="grupo-card">
+
+  <div class="row">
+
+    <!-- IZQUIERDA: INFO -->
+    <div class="col-md-8 grupo-info">
+      <span class="grupo-label">INFORMACIÓN GENERAL</span>
+
+      <h4 class="grupo-nombre">{{ grupo.nombre }}</h4>
+
+      <div class="grupo-detalles">
+        <div><strong>Curso: </strong>  {{ grupo.nombreCurso }}</div>
+        <div><strong>Estado: </strong> 
+          <span class="badge bg-success"> {{ grupo.estado }}</span>
+        </div>
+        <div><strong>Periodo: </strong>  {{ grupo.periodo }}</div>
+        <div><strong>Docente: </strong>  {{ grupo.docente }}</div>
+        <div><strong>Creado: </strong>  {{ grupo.created_at | date:'dd/MM/yyyy' }}</div>
+      </div>
+    </div>
+
+    <!-- DERECHA: ACCIONES -->
+    <div class="col-md-4 grupo-acciones d-flex flex-column justify-content-center align-items-end">
+      
+      <button class="btn btn-outline-primary mb-2 w-100">
+        Reporte alumnos
+      </button>
+
+      <button class="btn btn-outline-primary mb-2  w-100">
+        Reporte general
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

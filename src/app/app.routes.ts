@@ -22,6 +22,9 @@ import { ConsultaRevisonComponent } from './pages/Administrador/consulta-revisio
 import { ExpedienteComponent } from './pages/Administrador/expediente/expediente.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { ExpdienteAlumnoComponent } from './pages/Alumno/expdiente-alumno/expdiente-alumno.component';
+import { InicioGrupoComponent } from './pages/Docente/inicio-grupo/inicio-grupo.component';
+import { PanelGrupoComponent } from './pages/Docente/panel-grupo/panel-grupo.component';
+import { ActividadesGrupoComponent } from './pages/Docente/actividades-grupo/actividades-grupo.component';
 
 
 
@@ -54,10 +57,16 @@ export const routes: Routes = [
         ]
     },
     {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard],
-        children:[
+        children : [
             { path: '', redirectTo: 'inicio', pathMatch: 'full' },
             {path:'perfil', component: PerfilComponent},
-            {path: 'inicio', component : InicioComponent}
+            {path: 'inicio', component : InicioComponent},
+            {path:'grupo/:idGrupo' , component:PanelGrupoComponent,
+                children:[
+                    { path: '', component: InicioGrupoComponent },
+                    { path: 'actividades', component:ActividadesGrupoComponent}
+                ]
+            }
         ]
     },
     {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard],

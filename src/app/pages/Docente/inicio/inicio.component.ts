@@ -9,6 +9,7 @@ import { grupoDTOResponse } from '../../../models/dto/ResponseDto/grupoDTORespon
 import { grupoDTODashboardResponse } from '../../../models/dto/ResponseDto/grupoDTODashboardResponse';
 import { SesionesService } from '../../../services/sesiones.service';
 import { sesionDocenteDTOResponse } from '../../../models/dto/ResponseDto/sesionDocenteDTOResponse';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -44,7 +45,8 @@ export class InicioComponent implements OnInit {
     private usuarioService : UsuarioService, 
     private loginService : LoginService,
     private grupoService : GrupoService,
-    private sesionService : SesionesService 
+    private sesionService : SesionesService,
+    private router : Router
     
   ){}
 
@@ -240,4 +242,14 @@ formatearHora(fechaStr: string): string {
     minute: '2-digit'
   });
 }
+
+verGrupo(grupo: grupoDTODashboardResponse){
+    
+    this.router.navigate(['/docente-dashboard/grupo/', grupo.idGrupo])
+      .then(() => {
+      console.log(grupo);
+      console.log(grupo.idGrupo);
+        console.log("Nueva URL:", this.router.url);
+      });
+  }
 }

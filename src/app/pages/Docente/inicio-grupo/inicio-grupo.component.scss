@@ -1,0 +1,36 @@
+.grupo-card {
+  width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+ 
+}
+
+/* IZQUIERDA */
+.grupo-label {
+  font-size: 15px;
+  color: #8a8989;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.grupo-nombre {
+  margin: 10px 0 15px;
+  font-weight: 450;
+  color: maroon;
+  font-size: 25px;
+}
+
+.grupo-detalles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 20px;
+  font-size: 15px;
+}
+
+/* DERECHA */
+.grupo-acciones button {
+  min-width: 180px;
+}
