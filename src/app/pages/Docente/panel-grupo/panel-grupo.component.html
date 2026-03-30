@@ -1,0 +1,21 @@
+<div class="grupo-tabs">
+  <button routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    Inicio
+  </button>
+
+  <button [routerLink]="['actividades']" routerLinkActive="active">
+    Actividades
+  </button>
+
+  <button [routerLink]="['sesiones']" routerLinkActive="active">
+    Sesiones
+  </button>
+
+  <button [routerLink]="['participantes']" routerLinkActive="active">
+    Participantes
+  </button>
+</div>
+
+<div class="grupo-contenido">
+  <router-outlet></router-outlet>
+</div>
