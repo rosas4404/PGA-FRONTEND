@@ -4,14 +4,13 @@
 
     <!-- IZQUIERDA: INFO -->
     <div class="col-md-8 grupo-info">
-      <span class="grupo-label">INFORMACIÓN GENERAL</span>
-
+      
       <h4 class="grupo-nombre">{{ grupo.nombre }}</h4>
 
       <div class="grupo-detalles">
         <div><strong>Curso: </strong>  {{ grupo.nombreCurso }}</div>
         <div><strong>Estado: </strong> 
-          <span class="badge bg-success"> {{ grupo.estado }}</span>
+          <span [ngClass]="grupo.estado =='HABILITADO'? 'badge bg-success': 'badge bg-danger'"> {{ grupo.estado }}</span>
         </div>
         <div><strong>Periodo: </strong>  {{ grupo.periodo }}</div>
         <div><strong>Docente: </strong>  {{ grupo.docente }}</div>

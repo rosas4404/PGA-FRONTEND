@@ -26,6 +26,7 @@ import { SesionesComponent } from './pages/Docente/sesiones/sesiones.component';
 import { InicioGrupoComponent } from './pages/Docente/inicio-grupo/inicio-grupo.component';
 import { PanelGrupoComponent } from './pages/Docente/panel-grupo/panel-grupo.component';
 import { ActividadesGrupoComponent } from './pages/Docente/actividades-grupo/actividades-grupo.component';
+import { ActividadComponent } from './pages/Docente/actividad/actividad.component';
 
 
 
@@ -66,7 +67,8 @@ export const routes: Routes = [
             {path:'grupo/:idGrupo' , component:PanelGrupoComponent,
                 children:[
                     { path: '', component: InicioGrupoComponent },
-                    { path: 'actividades', component:ActividadesGrupoComponent}
+                    { path: 'actividades', component:ActividadesGrupoComponent},
+                    { path: 'actividad/:idActividad', component: ActividadComponent }
                 ]
             }
         ]

@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { actividadGrupoDTOResponse } from '../models/dto/ResponseDto/actividadGrupoDTOResponse';
+import { actividadGrupoDashboardDTO } from '../models/dto/ResponseDto/actividadGrupoDashboardDTO';
+
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +16,11 @@ export class ActividadGrupoService {
 
   obtenerActividadesGrupales(idGrupo : number): Observable <actividadGrupoDTOResponse[]>{
      return this.httpClient.get<actividadGrupoDTOResponse[]>(`${this.apiUrl}/${idGrupo}/actividades`)
+  }
+
+
+  obtenerActividadPorId(idActividad : number) : Observable <actividadGrupoDashboardDTO>{
+    return this.httpClient.get<actividadGrupoDashboardDTO> (`${this.apiUrl}/actividad/${idActividad}`)
+
   }
 }

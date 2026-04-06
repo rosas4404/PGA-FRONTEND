@@ -24,10 +24,11 @@
             </select>
         </div>
     </div>-->
-    <div class="accordion">
+    <div class="card-body">
+    <div class="accordion mb-4 ms-4 me-4" >
         <div class="accordion-item" *ngFor = "let campo of gruposCamposFiltrados; let i = index">
             <h2 class="accordion-header">
-                <button class="accordion-button collapsed"
+                <button class="accordion-button collapsed text-maroon"
                         type="button"
                         data-bs-toggle="collapse"
                         [attr.data-bs-target]="'#panel' + i">
@@ -36,16 +37,26 @@
                 </button>
             </h2>
         
-            <div [id]="'panel' + i" class="accordion-collapse collapse">
-                <div class="accordion-body">
-                    <div *ngFor="let act of campo.actividades">
-                        <div class="card mb-2 p-2">
-                            <strong>{{ act.titulo }}</strong>
-                            <p class="mb-0 text-muted">{{ act.descripcion }}</p>
+            <div [id] = "'panel' + i" class="accordion-collapse collapse">
+                <div class = "accordion-body">
+                    <div *ngFor = "let act of campo.actividades">
+                        <div class="card mb-2 p-2 border-0 shadow-sm" >
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>{{ act.titulo }}</strong>
+                                    <p class="mb-0 text-muted">{{ act.descripcion }}</p>
+                                </div>
+                                <div class="me-2 mt-2">
+                                    <button class="btn btn-sm btn-outline-primary" (click)="verActividad(act)"> Ver</button>
+                                </div>
+
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
