@@ -1,0 +1,169 @@
+<div class="card shadow-sm border-0">
+  <div class="card-header bg-smoke d-flex justify-content-between align-items-center">
+    <h5 class="m-0 fw-bold text-maroon">Alumnos inscritos</h5>
+  </div>
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped w-100">
+        <thead class="table-light text-center ">
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let a of alumnos">
+            <tr *ngIf="a.estado">
+              <td class="text-center">{{a.nombre}}</td>
+              <td class="text-center">{{a.apellidoPaterno}}</td>
+              <td class="text-center">{{a.apellidoMaterno}}</td> 
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary me-2"
+                        (click)="verDatos(a.idInscripcion, datosModal)"
+                        title="Consulta">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="alumnosInscritos.length === 0">
+            <td colspan="4" class="text-center text-muted py-4">
+              No hay participantes registrados
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card-header bg-smoke d-flex justify-content-between align-items-center">
+    <h5 class="m-0 fw-bold text-maroon">Alumnos Desvinculados</h5>
+  </div>
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped w-100">
+        <thead class="table-light text-center ">
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let a of alumnos">
+            <tr *ngIf="!a.estado">
+              <td class="text-center">{{a.nombre}}</td>
+              <td class="text-center">{{a.apellidoPaterno}}</td>
+              <td class="text-center">{{a.apellidoMaterno}}</td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary me-2"
+                        (click)="verDatos(a.idInscripcion, datosModal)"
+                        title="Consulta">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="alumnosDesvinculados.length === 0">
+            <td colspan="4" class="text-center text-muted py-4">
+              No hay participantes desvinculados
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!--      MODAL   -->
+<ng-template #datosModal let-modal>
+    <div class="modal-header bg-smoke flex-column align-items-center">
+      <h5 class="modal-title fw-bold text-maroon">
+        Detalle Inscripción
+      </h5>
+      <button type="button" class="btn-close position-absolute end-0 top-0 m-3" (click)="cerrarModal(modal)"></button>
+    </div>
+
+    <div class="modal-body">
+      <div>
+        <div class="row g-3">
+          <ng-container>
+           <h6 class="text-maroon fw-bold mb-1">DATOS PERSONALES</h6>
+
+           <div class="col-md-6 text-center">
+              <label class="text-muted small d-block">Alumno</label>
+              <span class="fw-semibold">{{ inscripcion.alumno }}</span>
+            </div>
+            
+            <div class="col-md-3 text-center">
+              <label class="text-muted small d-block">Teléfono</label>
+              <span class="fw-semibold">{{ usuario.telefono }}</span>
+            </div>
+            
+            <div class="col-md-3 text-center">
+              <label class="text-muted small d-block">Correo</label>
+              <span class="text-break">{{ usuario.email }}</span> 
+            </div>
+
+            <div class="col-12"><hr class="my-3 text-muted"></div>
+
+            <h6 class="text-maroon fw-bold mb-1 mt-0">DATOS DE LA INSCRIPCIÓN</h6>
+            
+            <div class="col-md-4 text-center">
+              <label class="text-muted small d-block">Inscripción</label>
+              <span class="fw-semibold">{{ inscripcion.fechaInscripcion }}</span>
+            </div>
+
+            <div class="col-md-4 text-center">
+              <label class="text-muted small d-block">Inicio Capacitación</label>
+              <span class="fw-semibold">{{ inscripcion.fechaInicio }}</span>
+            </div>
+
+            <div class="col-md-4 text-center">
+              <label class="text-muted small d-block">Fin Capacitación</label>
+              <span class="fw-semibold">{{ inscripcion.fechaFin }}</span>
+            </div>
+
+            <div class="col-md-6 text-center">
+              <label class="text-muted small d-block">Tipo</label>
+              <span class="fw-semibold">{{ inscripcion.tipo }}</span>
+            </div>
+
+            <div class="col-md-6 text-center">
+              <label class="text-muted small d-block">Fecha de baja</label>
+              <span class="fw-semibold">{{ inscripcion.fechaBaja }}</span>
+            </div>
+
+            <div class="col-12"><hr class="my-3 text-muted"></div>
+
+            <h6 class="text-maroon fw-bold mb-1 mt-0">DATOS ACADÉMICOS</h6>
+            
+            <div class="col-md-4 text-center">
+              <label class="text-muted small d-block">Escuela</label>
+              <span class="fw-semibold">{{ inscripcion.escuela }}</span>
+            </div>
+
+            <div class="col-md-4 text-center">
+              <label class="text-muted small d-block">Carrera</label>
+              <span class="fw-semibold">{{ inscripcion.carrera }}</span>
+            </div>
+
+            <div class="col-md-4 text-center">
+              <label class="text-muted small d-block">Nivel de Estudio</label>
+              <span class="fw-semibold">{{ inscripcion.nivelEstudio }}</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button type="button" class="btn btn-secondary px-4" (click)="modal.close()">
+        Cerrar
+      </button>
+    </div>
+</ng-template>

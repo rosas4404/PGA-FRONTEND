@@ -3,4 +3,5 @@ export interface alumnoGrupoDTOResponse {
   nombre: string;
   apellidoPaterno: string;
   apellidoMaterno: string;
+  estado: boolean;
 }

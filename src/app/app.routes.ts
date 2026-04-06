@@ -26,6 +26,8 @@ import { SesionesComponent } from './pages/Docente/sesiones/sesiones.component';
 import { InicioGrupoComponent } from './pages/Docente/inicio-grupo/inicio-grupo.component';
 import { PanelGrupoComponent } from './pages/Docente/panel-grupo/panel-grupo.component';
 import { ActividadesGrupoComponent } from './pages/Docente/actividades-grupo/actividades-grupo.component';
+import { SesionGrupoComponent } from './pages/Docente/sesion-grupo/sesion-grupo.component';
+import { AlumnosGrupoComponent } from './pages/Docente/alumnos-grupo/alumnos-grupo.component';
 
 
 
@@ -66,7 +68,9 @@ export const routes: Routes = [
             {path:'grupo/:idGrupo' , component:PanelGrupoComponent,
                 children:[
                     { path: '', component: InicioGrupoComponent },
-                    { path: 'actividades', component:ActividadesGrupoComponent}
+                    { path: 'actividades', component:ActividadesGrupoComponent},
+                    { path: 'sesiones', component:SesionGrupoComponent},
+                    { path: 'participantes', component:AlumnosGrupoComponent}
                 ]
             }
         ]

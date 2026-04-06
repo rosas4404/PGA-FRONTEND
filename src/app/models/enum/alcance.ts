@@ -1,4 +1,4 @@
 export enum Alcance{
-    GRUPAL,
-    INDIVIDUAL
+    INDIVIDUAL = 'INDIVIDUAL',
+    GRUPAL = 'GRUPAL'
 }
