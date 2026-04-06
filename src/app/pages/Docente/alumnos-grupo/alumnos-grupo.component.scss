@@ -1,0 +1,18 @@
+//controlar ancjho de columna
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+th:nth-child(1) { width: 20%; }
+th:nth-child(2) { width: 20%; }
+th:nth-child(3) { width: 20%; }
+th:nth-child(4) { width: 20%; }
+
+
+.modal-body {
+  min-height: 100px; 
+}
+
+.modal-body-step {
+  min-height: 350px;
+}
