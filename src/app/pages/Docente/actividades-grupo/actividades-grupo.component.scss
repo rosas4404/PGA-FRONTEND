@@ -1,0 +1,17 @@
+
+.accordion-button {
+  border: none !important;
+  box-shadow: none !important;
+ 
+}
+.accordion-button:not(.collapsed) {
+  background-color: #ECEEEF;
+  color: #641134;          
+  box-shadow: none;
+}
+.accordion-item {
+  border: none !important;
+}
+.accordion-button:hover {
+  background-color: #ECEEEF;
+}

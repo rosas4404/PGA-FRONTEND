@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Route } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { ActividadGrupoService } from '../../../services/actividad-grupo.service';
 import { actividadGrupoDTOResponse } from '../../../models/dto/ResponseDto/actividadGrupoDTOResponse';
 import { CampoAgrupadoDTO } from '../../../models/dto/ResponseDto/campoAgrupadoDTO';
@@ -22,7 +22,8 @@ export class ActividadesGrupoComponent implements OnInit {
 
   constructor(
     private route : ActivatedRoute, 
-    private actividadesGrupoService : ActividadGrupoService
+    private actividadesGrupoService : ActividadGrupoService,
+    private router : Router
     
   ){}
   ngOnInit(): void {
@@ -57,6 +58,10 @@ export class ActividadesGrupoComponent implements OnInit {
   }));
 }
 
-
+verActividad(act: actividadGrupoDTOResponse) {
+  this.router.navigate(['../actividad', act.idActividadGrupo], {
+    relativeTo: this.route
+  });
+}
 
 }

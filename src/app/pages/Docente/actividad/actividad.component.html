@@ -1,0 +1,59 @@
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-smoke d-flex justify-content-center align-items-center mb-3">
+        <h5 class="m-0 fw-bold text-maroon">{{actividad.titulo}}</h5>
+    </div>
+    <div class = "card-body px-4">
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <p class="mb-2"><strong>Descripción:</strong><br> {{ actividad.descripcion }}</p>
+                <p class="mb-2"><strong>Campo:</strong> {{ actividad.campo }}</p>
+            </div>
+            <div class="col-md-6">
+                <p class="mb-2"><strong>Fecha:</strong> {{ actividad.fechaAsignacion }}</p>
+                <p class="mb-2"><strong>Alcance:</strong> {{ actividad.alcance }}</p>
+                <p class="mb-0"> <strong>Entrega:</strong>
+                    <span class="badge px-1 py-1 ms-2" 
+                        [ngClass]="actividad.reqEntrega ? 'bg-success' : 'bg-secondary'">
+                        {{ actividad.reqEntrega ? 'Requiere entrega' : 'Sin entrega' }}
+                    </span>
+                </p> 
+            </div>
+        </div>
+        <hr>
+        <div div class="row justify-content-center g-3">
+            <div class="col-6 col-md-2">
+                <div class="bg-light rounded p-3 h-100">
+                    <small class="text-muted">Asignadas</small>
+                    <h4 class="fw-bold mb-0">{{ actividad.asignadas }}</h4>
+                </div>
+            </div>
+            <div class="col-6 col-md-2">
+                <div class="bg-light rounded p-3 h-100">
+                    <small class="text-muted">Entregadas</small>
+                    <h4 class="fw-bold text-success mb-0">{{ actividad.entregadas }}</h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-2">
+                <div class="bg-light rounded p-3 h-100">
+                    <small class="text-muted">Exenciones</small>
+                    <h4 class="fw-bold text-warning mb-0">{{ actividad.excentadas }}</h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-2">
+                <div class="bg-light rounded p-3 h-100">
+                    <small class="text-muted">Aprobadas</small>
+                    <h4 class="fw-bold text-primary mb-0">{{ actividad.aprobadas }}</h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-2">
+                <div class="bg-light rounded p-3 h-100">
+                    <small class="text-muted">Incompletas</small>
+                    <h4 class="fw-bold text-danger mb-0">{{ actividad.incompletas }}</h4>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
