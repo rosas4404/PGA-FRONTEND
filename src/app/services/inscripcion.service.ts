@@ -60,4 +60,14 @@ export class InscripcionService {
   obtenerAlumnosPorGrupo(idGrupo: number): Observable<alumnoGrupoDTOResponse[]>{
     return this.httpClient.get<alumnoGrupoDTOResponse[]>(`${this.baseUrl}/grupo/${idGrupo}/alumnos`);
   }
+
+  //alumnos por grupo general
+  obtenerAlumnosPorGrupoGeneral(idGrupo: number): Observable<alumnoGrupoDTOResponse[]>{
+    return this.httpClient.get<alumnoGrupoDTOResponse[]>(`${this.baseUrl}/grupo/${idGrupo}/alumnos/general`);
+  }
+
+  //consulta por id
+  consultaPorId(idInscripcion: number): Observable<InscripcionResponseDTO>{
+    return this.httpClient.get<InscripcionResponseDTO>(`${this.baseUrl}/${idInscripcion}`);
+  }
 }

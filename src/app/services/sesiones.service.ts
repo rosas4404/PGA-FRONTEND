@@ -19,6 +19,10 @@ export class SesionesService {
 
   //crear sesion
   crearSesion(idGrupo: number, sesionDTORequest:sesionDTORequest):Observable<sesionDTO>{
+    const id = Number(idGrupo); 
+    if (isNaN(id)) {
+      console.error("Error: idGrupo no es un número válido", idGrupo);
+    }
     return this.httpClient.post<sesionDTO>(`${this.apiUrl}/grupo/${idGrupo}`, sesionDTORequest);
   } 
 
@@ -65,6 +69,9 @@ export class SesionesService {
     if (filtros) {
       if (filtros.idDocente) {
         params = params.set('idDocente', filtros.idDocente);
+      }
+      if (filtros.idGrupo) {
+        params = params.set('idGrupo', filtros.idGrupo);
       }
       if (filtros.momentoSesion) {
         params = params.set('momentoSesion', filtros.momentoSesion);

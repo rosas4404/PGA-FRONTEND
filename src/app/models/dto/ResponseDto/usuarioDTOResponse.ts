@@ -3,6 +3,7 @@ export interface usuarioDTOResponse{
     nombre : string;
     apellidoPaterno : string;
     apellidoMaterno : string;
+    email: string;
     created_At : string;
     telefono : string;
     direccion : string;
