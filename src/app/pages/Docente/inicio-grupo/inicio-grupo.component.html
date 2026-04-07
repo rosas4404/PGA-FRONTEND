@@ -5,16 +5,16 @@
     <!-- IZQUIERDA: INFO -->
     <div class="col-md-8 grupo-info">
       
-      <h4 class="grupo-nombre">{{ grupo.nombre }}</h4>
+      <h4 class="grupo-nombre">{{ grupo?.nombre }}</h4>
 
       <div class="grupo-detalles">
-        <div><strong>Curso: </strong>  {{ grupo.nombreCurso }}</div>
+        <div><strong>Curso: </strong>  {{ grupo?.nombreCurso }}</div>
         <div><strong>Estado: </strong> 
-          <span [ngClass]="grupo.estado =='HABILITADO'? 'badge bg-success': 'badge bg-danger'"> {{ grupo.estado }}</span>
+          <span [ngClass]="grupo?.estado =='HABILITADO'? 'badge bg-success': 'badge bg-danger'"> {{ grupo?.estado }}</span>
         </div>
-        <div><strong>Periodo: </strong>  {{ grupo.periodo }}</div>
-        <div><strong>Docente: </strong>  {{ grupo.docente }}</div>
-        <div><strong>Creado: </strong>  {{ grupo.created_at | date:'dd/MM/yyyy' }}</div>
+        <div><strong>Periodo: </strong>  {{ grupo?.periodo }}</div>
+        <div><strong>Docente: </strong>  {{ grupo?.docente }}</div>
+        <div><strong>Creado: </strong>  {{ grupo?.created_at | date:'dd/MM/yyyy' }}</div>
       </div>
     </div>
 

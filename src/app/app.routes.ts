@@ -70,7 +70,7 @@ export const routes: Routes = [
                 children:[
                     { path: '', component: InicioGrupoComponent },
                     { path: 'actividades', component:ActividadesGrupoComponent},
-                    { path: 'actividad/:idActividad', component: ActividadComponent }
+                    { path: 'actividad/:idActividad', component: ActividadComponent },
                     { path: 'sesiones', component:SesionGrupoComponent},
                     { path: 'participantes', component:AlumnosGrupoComponent}
                 ]
