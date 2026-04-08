@@ -3,12 +3,14 @@
         <h5 class="m-0 fw-bold text-maroon">{{actividad?.titulo}}</h5>
     </div>
     <div class = "card-body px-4">
-        <div class="row g-3 mb-3">
-            <div class="col-md-6">
-                <p class="mb-2"><strong>Descripción:</strong><br> {{ actividad?.descripcion }}</p>
+        <div class="row g-3 mb-3 ms-3">
+            <div class="col-md-8">
+                <p class="mb-2"><strong>Descripción:</strong> {{ actividad?.descripcion }}</p>
                 <p class="mb-2"><strong>Campo:</strong> {{ actividad?.campo }}</p>
+                <p class="mb-2"><strong>Origen:</strong> {{ actividad?.origen }}</p>
+
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4 border-start">
                 <p class="mb-2"><strong>Fecha:</strong> {{ actividad?.fechaAsignacion }}</p>
                 <p class="mb-2"><strong>Alcance:</strong> {{ actividad?.alcance }}</p>
                 <p class="mb-0"> <strong>Entrega:</strong>
@@ -21,67 +23,139 @@
         </div>
         <hr>
         <div div class="row justify-content-center g-3">
-            <div class="col-6 col-md-2">
+            <div class="col-6 col-md-2 text-center">
                 <div class="bg-light rounded p-3 h-100">
                     <small class="text-muted">Asignadas</small>
-                    <h4 class="fw-bold mb-0">{{ actividad?.asignadas }}</h4>
+                    <h4 class="fw-bold text-secondary mb-0">{{ actividad?.asignadas }}</h4>
                 </div>
             </div>
-            <div class="col-6 col-md-2">
+            <div class="col-6 col-md-2 text-center">
                 <div class="bg-light rounded p-3 h-100">
                     <small class="text-muted">Entregadas</small>
-                    <h4 class="fw-bold text-success mb-0">{{ actividad?.entregadas }}</h4>
+                    <h4 class="fw-bold text-primary mb-0">{{ actividad?.entregadas }}</h4>
                 </div>
             </div>
 
-            <div class="col-6 col-md-2">
+            <div class="col-6 col-md-2 text-center">
                 <div class="bg-light rounded p-3 h-100">
                     <small class="text-muted">Exenciones</small>
                     <h4 class="fw-bold text-warning mb-0">{{ actividad?.excentadas }}</h4>
                 </div>
             </div>
 
-            <div class="col-6 col-md-2">
+            <div class="col-6 col-md-2 text-center">
                 <div class="bg-light rounded p-3 h-100">
                     <small class="text-muted">Aprobadas</small>
-                    <h4 class="fw-bold text-primary mb-0">{{ actividad?.aprobadas }}</h4>
+                    <h4 class="fw-bold text-success mb-0">{{ actividad?.aprobadas }}</h4>
                 </div>
             </div>
 
-            <div class="col-6 col-md-2">
+            <div class="col-6 col-md-2 text-center">
                 <div class="bg-light rounded p-3 h-100">
                     <small class="text-muted">Incompletas</small>
                     <h4 class="fw-bold text-danger mb-0">{{ actividad?.incompletas }}</h4>
                 </div>
             </div>
-        </div>        
+        </div>   
+        
+        <div class="table-responsive mt-5">
+            <table class="table  align-middle table-hover table-striped w-100">
+                <thead class="table-light text-center ">
+                    <tr>
+                        <th>Alumno</th>
+                        <th>Estado</th>
+                        <th>Fecha de Entrega</th>
+                        <th>Exento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr *ngFor="let a of asignaciones"  >
+                        <td class="text-start ">{{a.nombre}}</td>
+                        <td>{{a.estadoTarea.replace( "_", " ")}}</td>
+                        <td>{{a.fechaEntrega   || "--"}}</td>
+                        <td>{{a.excento ? 'Exento' : 'No Excento'}}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-2"
+                                    title = "Detalles">
+                                    <i class="bi bi-info-circle"></i>   
+                            </button>  
+                            <button class="btn btn-sm btn-outline-primary me-2"
+                                    title="Descargar Entrega" >
+                                    <i class="bi bi-download"></i>
+                            </button>
+                               
+                            <button class="btn btn-sm btn-outline-primary me-2"
+                                    title="Calificar" >
+                                    <i class="bi bi-check2-circle"></i>
+                            </button>
+                                
+                            <button class="btn btn-sm btn-outline-danger me-2"
+                                    title = "Exentar"
+                                    *ngIf="!a.excento"
+                                    (click)="AbrirConfirmacion(a,ExencionModal)">
+                                    <i class="bi bi-person-x"></i>
+                                   
+                            </button>    
+                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> 
+</div>   
+
+
+
+<!--modal de confirmacion Exentar-->
+<ng-template #ExencionModal let-modal>
+  <div class="modal-header bg-warning-subtle justify-content-center">
+    <h5 class="modal-title text-maroon text-center">Confirmar Exención</h5>
+    <button type="button"
+      class="btn-close position-absolute end-0 me-3"
+      (click)="modal.dismiss()">
+    </button>
+  </div>
+
+  <div class="modal-body text-center">
+    <p class="mb-2">
+        Está a punto de Exentar al alumno:  
+    </p>
+    <div class="fw-bold text-center mb-2">
+        {{nombreAlumno}}
     </div>
-     <!-- tabla de documentos -->
-    <div class="table-responsive mt-3">
-      <table class="table table-hover table-striped w-100">
+    <p class="text-center mb-3">
+        de realizar la actividad :
+    </p>
+    <strong>{{ nombreActividad}}</strong>
+    <p style="white-space: pre-line;"> {{ accionTexto }}</p>
 
-        <thead class="table-light text-center ">
-          <tr>
-            <th>Alumno</th>
-            <th>Estado</th>
-            <th>Comentarios</th>
-            <th>Fecha de Entrega</th>
-            <th>Observaciones</th>
-            <th class="text-center">Acciones</th>
-          </tr>
-        </thead>
+    <form [formGroup]="formExentar">
+        <div class="mb-3">
+            <label class="fw-bold">Motivo de exención</label>
 
-        <tbody class="text-center">
-          <tr *ngFor="let a of asignaciones"  >
-            <td>{{a.nombre}}</td>
-            <td>{{a.estadoTarea}}</td>
-            <td>{{a.comentarios}}</td>
-            <td>{{a.fechaEntrega}}</td>
-            <td>{{a.observaciones}}</td>
+            <textarea class="form-control mt-1"
+                formControlName="motivoExencion"
+                rows="3"
+                placeholder="Ingrese el motivo..."
+                [ngClass] = "{'is-invalid': formExentar.get('motivoExencion')?.invalid && formExentar.get('motivoExencion')?.touched}">
+            </textarea>
+              <div class="invalid-feedback" style="font-size:0.6rem;">
+              Campo obligatorio.
             
-           
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            </div>
+        </div>
+    </form>
 </div>
+  <div class="modal-footer justify-content-center">
+    <button class="btn btn-outline-secondary"
+    (click)="modal.dismiss()">
+    Cancelar
+    </button>
+    <button class="btn btn-danger"
+    (click)="exentar(modal)">
+    Confirmar
+    </button>
+    </div>
+</ng-template>

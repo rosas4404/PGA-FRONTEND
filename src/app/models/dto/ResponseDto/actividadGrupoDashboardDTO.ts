@@ -8,6 +8,7 @@ export interface actividadGrupoDashboardDTO {
     idGrupo: number,
     nombreGrupo: string,
     campo: string,
+    origen : string,
     asignadas: number,
     entregadas: number,
     aprobadas: number,
