@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { actividadAlumnoDTOResponse } from '../models/dto/ResponseDto/actividadAlumnoDTOResponse';
+import { cambiarEstadoTareaDTO } from '../models/dto/RequestDto/cambiarEstadoTareaDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +16,9 @@ export class ActividadAlumnoService {
 
   obtenerAsignaciones(idActividadGrupo :  number) : Observable <actividadAlumnoDTOResponse[]>{
     return this.httpClient.get<actividadAlumnoDTOResponse[]>(`${this.apiUrl}/actividad/${idActividadGrupo}`)
+  }
+
+  exentarActividad(idActividad : number, dto : cambiarEstadoTareaDTO) {
+    return this.httpClient.put(`${this.apiUrl}/${idActividad}/exentar`, dto)
   }
 }
