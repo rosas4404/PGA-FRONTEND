@@ -1,11 +1,12 @@
 .grupo-card {
   width: 100%;
+  max-width: 100%;
   background: #fff;
   border-radius: 16px;
   padding: 20px 25px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
   margin-bottom: 20px;
- 
+  transition: all 0.2s ease;
 }
 
 /* IZQUIERDA */
@@ -32,5 +33,6 @@
 
 /* DERECHA */
 .grupo-acciones button {
-  min-width: 180px;
+  width: 100%;
+  max-width: 220px;
 }

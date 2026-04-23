@@ -1,29 +1,11 @@
 <div class="card shadow-sm border-0">
   <div class="card-header bg-smoke d-flex justify-content-between align-items-center mb-3">
     <h5 class="m-0 fw-bold text-maroon">Gestión de Actividades</h5>
-    <button class="btn btn-outline-primary">
+    <button class="btn btn-outline-primary"
+        (click)="abrirModalCrear(crearModal)">
       <i class="bi bi-plus-circle me-1" ></i> Nueva Actividad
     </button>
     </div>
-    <!--<div class="row mb-3">
-
-        <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="Buscar actividad...">
-        </div>
-        <div class="col-md-4">
-            <select class="form-select">
-                <option>Todos los campos</option>
-            </select>
-        </div>
-
-        <div class="col-md-4">
-            <select class="form-select">
-                <option>Todos los estados</option>
-                <option>Activas</option>
-                <option>Finalizadas</option>
-            </select>
-        </div>
-    </div>-->
     <div class="card-body">
     <div class="accordion mb-4 ms-4 me-4" >
         <div class="accordion-item" *ngFor = "let campo of gruposCamposFiltrados; let i = index">
@@ -60,3 +42,285 @@
     </div>
     </div>
 </div>
+
+
+<!-- MODAL FORMULARIO -->
+
+<ng-template #crearModal let-modal>
+  <div class="modal-content modal-unificado">
+    <!-- Header --> 
+    <div class = "modal-header bg-smoke flex-column align-items-center" >
+        <!-- Títulos -->
+        <h5 class = "modal-title fw-bold text-maroon" >
+            Nueva Actividad Grupal
+        </h5>
+        <!-- Barra de progreso -->
+        <div class = "w-100 mt-2" >
+            <div class = " progress" style="height: 5px;" >
+                <div class = " progress-bar bg-maroon" [style.width.%] = "paso == 1 ? 33 : paso == 2 ? 66: 100">
+                </div>
+            </div>
+            <div class="d-flex justify-content-between small mt-1">
+                <span [ngClass] = "paso == 1 ? 'fw-bold text-maroon' : 'text-muted'">Registro</span>
+                <span [ngClass] = "paso == 2 ? 'fw-bold text-maroon' : 'text-muted'">Instrucciones</span>
+                <span [ngClass] = "paso == 3 ? 'fw-bold text-maroon' : 'text-muted'">Alcance</span>
+            </div>
+        </div>
+        <!-- Botón cerrar -->
+        <button type="button" 
+            class="btn-close position-absolute end-0 top-0 m-3"
+            (click) = "modal.dismiss()">
+        </button>
+    </div>
+    <!--body-->
+    <div class="modal-body modal-body-step">
+
+      <!--Paso 1-Seleccionar tipo de Actividad-->
+      <div *ngIf = "paso==1" class="w-100 d-flex flex-column h-100">
+        <div class="tabs-actividad">
+          <button 
+            [class.active]="modo === 'catalogo'" 
+            (click)="cambiarModo('catalogo')">
+            Desde catálogo
+          </button>
+          <button 
+            [class.active]="modo === 'extra'" 
+            (click)="cambiarModo('extra')">
+            Actividad extra
+          </button>
+        </div>
+        <div class="flex-grow-1 d-flex" [ngClass]="{'align-items-center': modo === 'extra'}">
+          <!--form extra-->
+          <form [formGroup] = "registroExtraForm" *ngIf= "modo === 'extra'"  class="w-100">
+            <div class = "mb-3">
+              <div class="input-group">
+                <span class="input-group-text" style="font-size:0.9rem;">Titulo</span>
+                <input 
+                  type="text"
+                  formControlName="titulo"
+                  class="form-control"
+                  [ngClass]="{'is-invalid': registroExtraForm.get('titulo')?.invalid && registroExtraForm.get('titulo')?.touched}">
+                
+              </div>
+              <div class="invalid-feedback" style="font-size:0.6rem;"
+              *ngIf="registroExtraForm.get('titulo')?.invalid && registroExtraForm.get('titulo')?.touched">
+                  Campo Obligatorio
+                </div>
+            </div> 
+            <div class = "mb-3">
+              <div class="input-group">
+                <span class="input-group-text" style="font-size:0.9rem;">Descripción</span>
+                <input 
+                  type="text"
+                  formControlName="descripcion"
+                  class="form-control"
+                  [ngClass]="{'is-invalid': registroExtraForm.get('descripcion')?.invalid && registroExtraForm.get('descripcion')?.touched}">
+                
+              </div>
+              <div class="invalid-feedback" style="font-size:0.6rem;"
+              *ngIf = "registroExtraForm.get('descripcion')?.invalid && registroExtraForm.get('descripcion')?.touched">
+                  Campo Obligatorio
+                </div>
+            </div>
+          </form>
+          <div *ngIf= "modo === 'catalogo'" class="w-100">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text " style="font-size:0.9rem;">Actividad</span>
+              <div class="dropdown-actividades">
+                <button (click)="toggleDropdown()" class="btn-dropdown d-flex justify-content-between">
+                  Seleccionar actividad
+                   <i class="bi bi-chevron-down ms-2 "></i>
+                </button>
+                <div *ngIf="dropdownAbierto" class="dropdown-lista">
+                  <div 
+                    *ngFor="let actividad of disponibles" 
+                    class="item"
+                    (click)="seleccionarActividad(actividad)">
+                    {{ actividad.titulo }}
+                  </div>
+                  </div> 
+                </div>
+              </div> 
+              <div class="input-group mt-2">
+                <span class="input-group-text" style="font-size:0.9rem;">Titulo</span>
+                <input 
+                  type="text"
+                  value={{actividadBaseSeleccionada?.titulo}}
+                  class="form-control"
+                  disabled>
+              </div>
+              <div class="input-group mt-2">
+                <span class="input-group-text" style="font-size:0.9rem;">Descripción</span>
+                <textarea    
+                  [value] = "actividadBaseSeleccionada?.descripcion"
+                  rows = "2"
+                  class="form-control"
+                  disabled>
+                </textarea>
+              </div>
+              <div class="input-group mt-2">
+                <span class="input-group-text" style="font-size:0.9rem;">Campo formativo</span>
+                <input 
+                  type="text"
+                  value={{actividadBaseSeleccionada?.campoFormativo?.nombre}}
+                  class="form-control"
+                  disabled>
+              </div>
+            </div>
+          </div>
+      </div>
+      <!--Paso 2-Seleccionar instrucciones-->
+      <div *ngIf = "paso == 2" class="step-container">
+        
+        <div *ngIf="modo === 'catalogo'" class="w-100">
+          <div class = "bloque">
+            <p>
+              Instrucciones para la actividad <strong>{{ actividadBaseSeleccionada?.titulo }}</strong>:
+              <a class="link-box" [href]="'http://localhost:8080/api/actividadBase/'+actividadBaseSeleccionada?.idActividad+ '/instrucciones'"target="_blank">
+                {{actividadBaseSeleccionada?.urlInstrucciones?.split('/')?.pop()}}
+              </a>
+            </p>
+          </div>
+          <div class=" bloque">
+            <div class="switch-box">
+              <label class="form-check form-switch">
+                <input 
+                class="form-check-input" 
+                type="checkbox" 
+                [checked]="setInstrucciones"
+                (change)="setInstrucciones = !setInstrucciones">
+              <span>Reemplazar instrucciones</span>
+              </label>
+            </div>
+          </div>
+          <div *ngIf=" setInstrucciones === true" class=" bloque bloque-archivo">
+            <input type="file" #fileInput hidden accept = ".pdf"  class="form-control"
+              (change)="onFileSelected($event)">
+              <button type="button" class="btn btn-sm btn-outline-primary"
+                  (click)="fileInput.click()" 
+                  title="Subir archivo (Máx. 2MB)">
+                  <i class="bi bi-upload"></i>
+                  {{archivoSeleccionado ? 'Cambiar archivo' : 'Subir archivo'}}
+              </button>
+              <span class="file-name" >
+                {{ archivoSeleccionado?.name || 'Seleccione un archivo' }}
+              </span>
+          </div>
+          <div class="bloque">
+            <div class="switch-box">
+              <label class="form-check form-switch">
+                <input 
+                class="form-check-input" 
+                type="checkbox" 
+                [checked]="setEntrega"
+                (change)="setEntrega = !setEntrega">
+                <span>Requiere entrega</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div *ngIf=  "modo === 'extra'" class="w-100">
+            <div *ngIf=" setInstrucciones === true" class=" bloque bloque-archivo">
+            <input type="file" #fileInput hidden accept = ".pdf"  class="form-control"
+              (change)="onFileSelected($event)">
+              <button type="button" class="btn btn-sm btn-outline-primary"
+                  (click)="fileInput.click()" 
+                  title="Subir archivo (Máx. 2MB)">
+                  <i class="bi bi-upload"></i>
+                  {{archivoSeleccionado ? 'Cambiar archivo' : 'Subir archivo'}}
+              </button>
+              <span class="file-name" >
+                {{ archivoSeleccionado?.name || 'Seleccione un archivo' }}
+              </span>
+          </div>
+          <div class="bloque">
+            <div class="switch-box">
+              <label class="form-check form-switch">
+                <input 
+                class="form-check-input" 
+                type="checkbox" 
+                [checked]="setEntrega"
+                (change)="setEntrega = !setEntrega">
+                <span>Requiere entrega</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div *ngIf = "paso == 3" class="step-container">
+      <div class="w-100">
+        <div class="bloque">
+          <p *ngIf="!esIndividual" class="">
+            La actividad será asignada a todo el grupo
+          </p>
+        </div>
+        <div class="bloque">
+         <div class="switch-box">
+              <label class="form-check form-switch">
+                <input 
+                class="form-check-input" 
+                type="checkbox" 
+                [checked]="esIndividual"
+                (change)= " esIndividual= !esIndividual">
+                <span>Alcance individual</span>
+              </label>
+            </div>
+        </div>
+        <div class="bloque lista-alumnos" *ngIf="esIndividual === true">
+          <p> Selecciona los alumnos </p>
+          <div class="alumnos-scroll">
+            <div *ngFor = "let alumno of alumnos" class="alumno-item">
+              <input class="form-check-input " 
+              type="checkbox"
+              [id]="'alum-' + alumno.idInscripcion"
+              [value]="alumno.idInscripcion"
+              (change)="seleccionAlumno(alumno.idInscripcion, $event)">
+              <label class="form-check-label "
+              style="font-size: 0.9rem;" 
+              [for]="'alum-' + alumno.idInscripcion">
+              {{alumno.nombre}} {{alumno.apellidoPaterno}}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    </div>
+    <!-- Footer -->
+    <div class="modal-footer">
+      <!--Paso 1-->
+      <button class="btn btn-outline-primary align-items-center " *ngIf = "paso == 1" 
+        [disabled]= " (modo === 'catalogo' && actividadBaseSeleccionada == null)  || 
+                        (modo === 'extra' && !registroExtraForm.valid )" 
+        (click) = "paso = 2">        
+        Siguiente
+      </button>
+      <!--Paso 2 -->
+      <div *ngIf="paso == 2" class="w-100 d-flex justify-content-between">
+        <button class="btn btn-outline-secondary"
+        (click) = "regresar()" >
+          Regresar
+        </button>
+        <button class="btn btn-outline-primary" (click)="paso = 3" 
+        [disabled]=" (modo === 'catalogo' && setInstrucciones && archivoSeleccionado == null) ||
+                      (modo === 'extra' && archivoSeleccionado == null)">
+          Siguiente
+        </button>
+        </div>
+        <!--Paso 3 -->
+        <div *ngIf="paso == 3" class="w-100 d-flex justify-content-between">
+          <button class="btn btn-outline-secondary"
+          (click) = "regresar()" >
+            Regresar
+          </button>
+
+          <button class="btn btn-outline-success align-items-center" *ngIf = "paso == 3"
+          [disabled]=" esIndividual && idInscripciones.length <= 0"
+          (click) = "guardar(modal)">
+            Guardar
+          </button>
+        </div>
+      </div>
+    </div>
+</ng-template>

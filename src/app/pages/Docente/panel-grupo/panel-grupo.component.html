@@ -1,4 +1,5 @@
-<div class="grupo-tabs">
+<div class="grupo-layout">
+  <div class="grupo-tabs">
   <button routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
     Inicio
   </button>
@@ -14,8 +15,13 @@
   <button [routerLink]="['participantes']" routerLinkActive="active">
     Participantes
   </button>
+
+  <div class="nombre-grupo">
+      <h6 class="mb-0">{{ nombreGrupo }}</h6>
+    </div>
 </div>
 
 <div class="grupo-contenido">
   <router-outlet></router-outlet>
+</div>
 </div>

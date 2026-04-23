@@ -1,47 +1,53 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid bg-maroon">
-    <a class="navbar-brand text-ghost-write" href="#">
-        <img src= "assets/dorado.png" style="mix-blend-mode: screen; height: 50px; width: auto;" alt="dorado">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto align-items-center">
-        <li class="nav-item">
-            <a href="https://www.gob.mx/" target="_blank" rel="noopener noreferrer" class="nav-link text-snow fs-6 fw-bold"> Trámites </a>
-        </li>
-        <li class="nav-item">
-            <a href="https://www.gob.mx/gobierno" target="_blank" rel="noopener noreferrer" class="nav-link text-snow fs-6 fw-bold"> Gobierno </a>
-        </li>
-        <li class="nav-item">
-            <a href="https://www.gob.mx/" target="_blank" rel="noopener noreferrer" class="nav-link text-snow"> 
+<div class = "home-layout">
+  <div class="home-header">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid bg-maroon">
+        <a class="navbar-brand text-ghost-write" href="#">
+          <img src= "assets/dorado.png" style="mix-blend-mode: screen; height: 50px; width: auto;" alt="dorado">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-center">
+            <li class="nav-item">
+              <a href="https://www.gob.mx/" target="_blank" rel="noopener noreferrer" class="nav-link text-snow fs-6 fw-bold"> Trámites </a>
+            </li>
+            <li class="nav-item">
+              <a href="https://www.gob.mx/gobierno" target="_blank" rel="noopener noreferrer" class="nav-link text-snow fs-6 fw-bold"> Gobierno </a>
+            </li>
+            <li class="nav-item">
+              <a href="https://www.gob.mx/" target="_blank" rel="noopener noreferrer" class="nav-link text-snow"> 
                 <img src= "assets/lupa.png" style="mix-blend-mode: screen; height: 40px; width: auto;" alt="lupa">
-            </a>
-        </li>
-      </ul>
-    </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid bg-write">
+        <a class="navbar-brand text-ghost-write" href="#">
+          <img src= "assets/logo_infotec.png" style="height: 50px; width: auto;" alt="infotec">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-center">
+            <li class="nav-item">
+              <a *ngIf="!loginService.isLoggedIn()" class="nav-link text-dark-slate fs-6 fw-bold" routerLink="/login"> Iniciar Sesión </a>
+            </li>
+            <li class="nav-item">
+              <a *ngIf="loginService.isLoggedIn()" class="nav-link text-dark-slate fs-6 fw-bold" (click)="logout()"> Cerrar Sesión </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   </div>
-</nav>
 
-
-<nav class="navbar navbar-expand-lg navbar-light">
-  <div class="container-fluid bg-write">
-    <a class="navbar-brand text-ghost-write" href="#">
-        <img src= "assets/infotec.png.png" style="height: 50px; width: auto;" alt="infotec">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto align-items-center">
-        <li class="nav-item">
-            <a *ngIf="!loginService.isLoggedIn()" class="nav-link text-dark-slate fs-6 fw-bold" routerLink="/login"> Iniciar Sesión </a>
-        </li>
-        <li class="nav-item">
-            <a *ngIf="loginService.isLoggedIn()" class="nav-link text-dark-slate fs-6 fw-bold" (click)="logout()"> Cerrar Sesión </a>
-        </li>
-      </ul>
-    </div>
+  <div class="home-content">
+    <router-outlet></router-outlet>
   </div>
-</nav>
+</div>
