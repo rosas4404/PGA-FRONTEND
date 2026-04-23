@@ -28,3 +28,6 @@ th:nth-child(5) { width: 20%; }
   font-size: 0.8rem; /* Opcional: ajusta el tamaño para que quepan bien los 10 */
   white-space: nowrap; /* Evita que el texto se parta en dos líneas */
 }
+:host {
+  display: block;
+}

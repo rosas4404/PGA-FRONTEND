@@ -1,3 +1,4 @@
+<div class="page-container">
 <div class="card shadow-sm border-0">
 
   <!-- cabecera -->
@@ -65,10 +66,10 @@
         <tbody>
           <tr *ngFor="let d of documentos; let i = index">
             <td class = "text-center">{{ d.idDocumento }}</td>
-            <td class = "text-center">{{ d.nombre }}</td>
+            <td class = "text-start">{{ d.nombre }}</td>
             <td class = "text-center">{{ d.tipo }}</td>
             <td class = "text-center"><span [ngClass]="d.activo == true ? 'badge bg-success' : 'badge bg-danger' ">
-              {{ d.activo ? 'Habilitado' : 'Deshabilitado' }}</span></td>
+            ● {{ d.activo ? 'HABILITADO' : 'DESHABILITADO' }}</span></td>
             <td class="text-center">
 
               <!-- Editar -->
@@ -158,6 +159,7 @@
       </ul>
     </nav>
   </div>
+</div>
 </div>
 
 <!-- MODAL FORMULARIO -->

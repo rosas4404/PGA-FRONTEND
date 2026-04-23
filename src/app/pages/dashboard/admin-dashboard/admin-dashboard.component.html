@@ -1,4 +1,4 @@
-<div class="d-flex" style = "height: calc(100vh - 120px);">
+<div class="d-flex layout-dashboard">
   <div class="sidebar bg-arena text-maroon p-3" [class.collapsed]="isCollapsed">
 
       <div class="d-flex align-items-center">
@@ -137,7 +137,7 @@
   </div>
 
   <!-- CONTENIDO -->
-  <div class="flex-grow-1 p-4 bg-light overflow-auto" >
+  <div class="contenido-principal" >
     <router-outlet></router-outlet>
   </div>
 

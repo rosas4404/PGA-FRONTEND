@@ -1,17 +1,38 @@
 <div class="card shadow-sm border-0">
-    <div class="card-header bg-smoke d-flex justify-content-center align-items-center mb-3">
-        <h5 class="m-0 fw-bold text-maroon">{{actividad?.titulo}}</h5>
+    <div class="card-header bg-smoke position-relative d-flex justify-content-center align-items-center mb-3">
+
+        <button 
+            class="btn btn-sm btn-outline-primary position-absolute start-0 ms-3"
+            (click)="volver()">
+            <i class="bi bi-arrow-left"></i>
+            Regresar
+        </button>
+
+        <h5 class="m-0 fw-bold text-maroon text-center">{{actividad?.titulo}}</h5>
     </div>
     <div class = "card-body px-4">
         <div class="row g-3 mb-3 ms-3">
             <div class="col-md-8">
                 <p class="mb-2"><strong>Descripción:</strong> {{ actividad?.descripcion }}</p>
-                <p class="mb-2"><strong>Campo:</strong> {{ actividad?.campo }}</p>
+                <p class="mb-2"><strong>Campo:</strong> {{ actividad?.campo || 'General' }}</p>
                 <p class="mb-2"><strong>Origen:</strong> {{ actividad?.origen }}</p>
-
+                <div class="d-flex justify-content-between">
+                    <strong>Instrucciones:
+                        <a [href] = " 'http://localhost:8080/api/grupo/actividad/' + actividad?.idActividadGrupo + '/instrucciones'" target="_blank">
+                            {{actividad?.urlInstrucciones?.split('/')?.pop()}}
+                        </a>
+                    </strong>
+                    <button class="btn btn-outline-primary" style="font-size: 0.6rem;"
+                            title="Actualizar instrucciones"
+                            (click) = "abrirModal(instruccionesModal)">
+                           
+                            <i class="bi bi-upload" ></i>
+                            
+                    </button>
+                </div>
             </div>
             <div class="col-md-4 border-start">
-                <p class="mb-2"><strong>Fecha:</strong> {{ actividad?.fechaAsignacion }}</p>
+                <p class="mb-2"><strong>Fecha de asignación:</strong> {{ actividad?.fechaAsignacion }}</p>
                 <p class="mb-2"><strong>Alcance:</strong> {{ actividad?.alcance }}</p>
                 <p class="mb-0"> <strong>Entrega:</strong>
                     <span class="badge px-1 py-1 ms-2" 
@@ -22,82 +43,147 @@
             </div>
         </div>
         <hr>
-        <div div class="row justify-content-center g-3">
+        <div div class="row justify-content-center g-3 mt-4">
             <div class="col-6 col-md-2 text-center">
-                <div class="bg-light rounded p-3 h-100">
+                <div class = "card shadow-sm border-0 p-3 filtro-card"
+                    [ngClass]="{'active-card': filtro === 'TODOS'}"
+                    (click) = "cambiarFiltro( filtro = 'TODOS')">
                     <small class="text-muted">Asignadas</small>
                     <h4 class="fw-bold text-secondary mb-0">{{ actividad?.asignadas }}</h4>
                 </div>
             </div>
-            <div class="col-6 col-md-2 text-center">
-                <div class="bg-light rounded p-3 h-100">
+            <div class="col-6 col-md-2 text-center" *ngIf = "actividad?.reqEntrega">
+                <div class = "card shadow-sm border-0 p-3 filtro-card"
+                    [ngClass]="{'active-card': filtro === 'ENTREGADAS'}"
+                    (click) = "cambiarFiltro( filtro = 'ENTREGADAS')">
                     <small class="text-muted">Entregadas</small>
                     <h4 class="fw-bold text-primary mb-0">{{ actividad?.entregadas }}</h4>
                 </div>
             </div>
 
-            <div class="col-6 col-md-2 text-center">
-                <div class="bg-light rounded p-3 h-100">
+            <div class="col-6 col-md-2 text-center" >
+                <div class = "card shadow-sm border-0 p-3 filtro-card"
+                    [ngClass] = "{'active-card': filtro === 'EXENCIONES'}"
+                    (click) = "cambiarFiltro( filtro = 'EXENCIONES')">
                     <small class="text-muted">Exenciones</small>
                     <h4 class="fw-bold text-warning mb-0">{{ actividad?.excentadas }}</h4>
                 </div>
             </div>
 
-            <div class="col-6 col-md-2 text-center">
-                <div class="bg-light rounded p-3 h-100">
+            <div class="col-6 col-md-2 text-center" *ngIf = "actividad?.reqEntrega">
+                <div class = "card shadow-sm border-0 p-3 filtro-card"
+                    [ngClass] = "{'active-card': filtro === 'APROBADAS'}"
+                    (click) = "cambiarFiltro( filtro = 'APROBADAS')">
                     <small class="text-muted">Aprobadas</small>
                     <h4 class="fw-bold text-success mb-0">{{ actividad?.aprobadas }}</h4>
                 </div>
             </div>
 
-            <div class="col-6 col-md-2 text-center">
-                <div class="bg-light rounded p-3 h-100">
+            <div class="col-6 col-md-2 text-center" *ngIf = "actividad?.reqEntrega">
+                <div class = "card shadow-sm border-0 p-3 filtro-card"
+                    [ngClass] = "{'active-card': filtro === 'INCOMPLETAS'}"
+                    (click) = "cambiarFiltro( filtro = 'INCOMPLETAS')">
                     <small class="text-muted">Incompletas</small>
                     <h4 class="fw-bold text-danger mb-0">{{ actividad?.incompletas }}</h4>
                 </div>
             </div>
-        </div>   
+
+            <!--cards para actividades sin entrega-->
+            <div class="col-6 col-md-2 text-center" *ngIf = "!actividad?.reqEntrega">
+                <div class = "card shadow-sm border-0 p-3 filtro-card"
+                    [ngClass]="{'active-card': filtro === 'ENTREGADAS'}"
+                    (click) = "cambiarFiltro( filtro = 'ENTREGADAS')">
+                    <small class="text-muted">Completadas</small>
+                    <h4 class="fw-bold text-success mb-0">{{ actividad?.entregadas }}</h4>
+                </div>
+            </div>
+            <div class="col-6 col-md-2 text-center" *ngIf = "!actividad?.reqEntrega">
+                <div class = "card shadow-sm border-0 p-3 filtro-card"
+                    [ngClass] = "{'active-card': filtro === 'NOINICIADAS'}"
+                    (click) = "cambiarFiltro( filtro = 'NOINICIADAS')">
+                    <small class="text-muted">Sin Iniciar</small>
+                    <h4 class="fw-bold text-dark-slate mb-0">{{ actividad?.noIniciadas }}</h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-2 text-center" *ngIf = "!actividad?.reqEntrega">
+                <div class = "card shadow-sm border-0 p-3 filtro-card"
+                    [ngClass] = "{'active-card': filtro === 'ESPERA'}"
+                    (click) = "cambiarFiltro( filtro = 'ESPERA')">
+                    <small class="text-muted">En espera</small>
+                    <h4 class="fw-bold text-warning-emphasis mb-0">{{ actividad?.espera }}</h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-2 text-center" *ngIf = "!actividad?.reqEntrega">
+                <div class = "card shadow-sm border-0 p-3 filtro-card"
+                    [ngClass] = "{'active-card': filtro === 'PROGRESO'}"
+                    (click) = "cambiarFiltro( filtro = 'PROGRESO')">
+                    <small class="text-muted">En Progreso</small>
+                    <h4 class="fw-bold text-info-emphasis mb-0">{{ actividad?.progreso }}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-3 ">
+            <button class="btn btn-outline-primary"
+                *ngIf="actividad?.alcance === 'INDIVIDUAL'"
+                (click) = "abrirModalAsignar(asignarModal)">
+                <i class="bi bi-person-plus"></i>
+            </button>
+
+        </div>
         
-        <div class="table-responsive mt-5">
+        <div class="table-responsive mt-3">
             <table class="table  align-middle table-hover table-striped w-100">
                 <thead class="table-light text-center ">
                     <tr>
                         <th>Alumno</th>
                         <th>Estado</th>
-                        <th>Fecha de Entrega</th>
-                        <th>Exento</th>
+                        <th *ngIf = "actividad?.reqEntrega">Fecha de Entrega</th>
+                        <th *ngIf = "!actividad?.reqEntrega">Comentarios</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="text-center">
-                    <tr *ngFor="let a of asignaciones"  >
+                    <tr *ngFor=" let a of asignacionesFiltradas()"  >
                         <td class="text-start ">{{a.nombre}}</td>
                         <td>{{a.estadoTarea.replace( "_", " ")}}</td>
-                        <td>{{a.fechaEntrega   || "--"}}</td>
-                        <td>{{a.excento ? 'Exento' : 'No Excento'}}</td>
-                        <td>
+                        <td *ngIf = "actividad?.reqEntrega">{{a.fechaEntrega   || "--"}}</td>
+                        <td *ngIf = "!actividad?.reqEntrega">{{a.comentarios   || "--"}}</td>
+                        
+                        <td  class="text-start ">
                             <button class="btn btn-sm btn-outline-primary me-2"
-                                    title = "Detalles">
+                                    title = "Detalles"
+                                    (click)="abrirDetalle(a,detalleModal)">
                                     <i class="bi bi-info-circle"></i>   
                             </button>  
                             <button class="btn btn-sm btn-outline-primary me-2"
-                                    title="Descargar Entrega" >
+                                    title="Descargar Entrega" 
+                                    *ngIf="!a.excento && a.urlEntrega"
+                                    (click)="descargarEntrega(a.idActividadAlumno)">
                                     <i class="bi bi-download"></i>
                             </button>
                                
                             <button class="btn btn-sm btn-outline-primary me-2"
-                                    title="Calificar" >
+                                    title="Calificar"
+                                    *ngIf="!a.excento && a.urlEntrega" 
+                                    (click)="abrirCalificarEntrega(a, calificarModal)">
                                     <i class="bi bi-check2-circle"></i>
                             </button>
                                 
                             <button class="btn btn-sm btn-outline-danger me-2"
                                     title = "Exentar"
-                                    *ngIf="!a.excento"
-                                    (click)="AbrirConfirmacion(a,ExencionModal)">
+                                    *ngIf="!a.excento && !a.urlEntrega"
+                                    (click)="abrirConfirmacion(a,ExencionModal)">
                                     <i class="bi bi-person-x"></i>
                                    
                             </button>    
                             
+                        </td>
+                    </tr>
+                    <tr *ngIf="asignacionesFiltradas().length === 0">
+                        <td colspan="6" class="text-center text-muted py-4">
+                            No existen asignaciones que cumplan el criterio seleccionado.
                         </td>
                     </tr>
                 </tbody>
@@ -148,13 +234,216 @@
         </div>
     </form>
 </div>
+    <div class="modal-footer justify-content-center">
+        <button class="btn btn-outline-secondary"
+            (click)="modal.dismiss()">
+            Cancelar
+        </button>
+        <button class="btn btn-danger"
+                [disabled]="formExentar.invalid"
+            (click)="exentar(modal)">
+            Confirmar
+        </button>
+    </div>
+</ng-template>
+
+
+<!--modal de detalles-->
+<ng-template #detalleModal let-modal>
+    <div class="modal-header bg-smoke justify-content-center">
+        <h5 class="modal-title text-maroon text-center">Detalle de Asignación</h5>
+        <button type="button"
+            class="btn-close position-absolute end-0 me-3"
+            (click)="modal.dismiss()">
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="mb-3 small text-muted">
+            <div><strong>Alumno:</strong> {{asignacionSeleccionada.nombre}}</div>
+            <div><strong>Estado:</strong> {{asignacionSeleccionada.estadoTarea.replace("_"," ")}}</div>
+            <div><strong>Fecha:</strong> {{asignacionSeleccionada.fechaEntrega || "--" }}</div>
+        </div>
+        <div class="mb-3">
+            <label class="fw-bold">Comentarios del alumno</label>
+            <div class="bg-light p-2 rounded mt-1 small">
+                {{asignacionSeleccionada.comentarios || 'Sin comentarios'}}
+            </div>
+        </div>
+    
+        <div class="mb-3">
+          <label class="fw-bold">Observaciones</label>
+            <div class="bg-light p-2 rounded mt-1 small">
+                {{asignacionSeleccionada.observaciones || 'Sin observaciones'}}
+            </div>
+        </div>
+        <div class="mb-3" *ngIf="asignacionSeleccionada.excento">
+            <label class="fw-bold">Motivo de exención</label>
+            <div class="bg-light p-2 rounded mt-1 small">
+                {{asignacionSeleccionada.motivoExencion || 'Sin motivo registrado'}}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-center">
+        <button class="btn btn-outline-secondary"
+                style="font-size:0.9rem;"
+                (click)="modal.dismiss()">
+                    Cerrar
+        </button>
+    </div>
+</ng-template>
+
+<!--modal para calificar-->
+<ng-template #calificarModal let-modal>
+    <div class="modal-header bg-smoke justify-content-center">
+        <h5 class="modal-title text-maroon text-center">Calificar Actividad</h5>
+        <button type="button"
+            class="btn-close position-absolute end-0 me-3"
+            (click)="modal.dismiss()">
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class=" row mb-3 small text-muted">
+            <div class="col-md-8">
+                <div><strong>Alumno: </strong> {{asignacionSeleccionada.nombre}}</div>
+                <div><strong>Actividad: </strong> {{actividad.titulo}}</div>
+            </div>
+            
+            <div class="col-md-4">
+                <div><strong>Estado: </strong> {{asignacionSeleccionada.estadoTarea.replace("_"," ")}}</div>
+                <div><strong>Fecha: </strong> {{asignacionSeleccionada.fechaEntrega || "--" }}</div>
+            </div>
+        </div>
+        <form [formGroup]="formCalificar"> 
+            <div class="mb-3">
+                <label class="fw-bold">Estado</label>
+                <select
+                    class="form-select"
+                    formControlName ="estado"
+                    [ngClass]="{'is-invalid': formCalificar.get('estado')?.invalid && formCalificar.get('estado')?.touched}">
+                    <option value = "">Seleccione el estado ...</option>
+                    <option *ngFor="let n of calificacion" [value]="n"> {{n}} </option>
+                </select>
+                <div class="invalid-feedback" style="font-size:0.6rem;">
+                    Campo Obligatorio
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold">Observaciones</label>
+                <textarea class="form-control mt-1"
+                      formControlName="mensaje"
+                      [ngClass]="{'is-invalid': formCalificar.get('mensaje')?.invalid && formCalificar.get('mensaje')?.touched}"
+                      rows="3"
+                      placeholder="Escriba observaciones...">
+                </textarea>
+                <div class="invalid-feedback" style="font-size:0.6rem;">
+                    Campo Obligatorio
+                </div>
+            </div>
+        </form>    
+    </div>
+    <div class="modal-footer justify-content-center">
+        <button class="btn btn-outline-secondary"
+                style="font-size:0.9rem;"
+                (click)="modal.dismiss()">
+                    Cerrar
+        </button>
+        <button class="btn btn-success"
+                style="font-size:0.9rem;"
+                [disabled]="formCalificar.invalid"
+                (click)="calificarEntrega(modal)">
+                    Confirmar
+        </button>   
+    </div>
+</ng-template>
+
+<!--modal para asignar participantes-->
+<ng-template #asignarModal let-modal>
+    <div class="modal-header bg-smoke justify-content-center">
+        <h5 class="modal-title text-maroon text-center">Añadir Alumnos</h5>
+        <button type="button"
+            class="btn-close position-absolute end-0 me-3"
+            (click)="modal.dismiss()">
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div *ngIf="disponibles.length === 0" class="text-center text-muted">
+                Todos los alumnos ya tienen esta actividad
+        </div>
+        <p *ngIf="disponibles.length > 0" class="text-muted text-center mb-3 small">
+            Selecciona los alumnos que deseas agregar a la actividad
+        </p>
+        <div *ngFor = "let alumno of disponibles" class="alumno-item">
+            <input class="form-check-input " 
+                type="checkbox"
+                [id]="'alum-' + alumno.id"
+                [value]="alumno.id"
+                (change)="seleccionAlumno(alumno.id, $event)">
+    
+            <label class="form-check-label "
+                style="font-size: 0.9rem;" 
+                [for]="'alum-' + alumno.id">
+                {{alumno.nombre}}
+            </label>
+        </div>
+
+    </div>
+    <div class="modal-footer justify-content-center">
+        <button class="btn btn-outline-secondary"
+            (click)="modal.dismiss()">
+            Cancelar
+        </button>
+        <button class="btn btn-success"
+                [disabled]="alumnosSeleccionados.length == 0"
+            (click)="asignar(modal)">
+            Confirmar
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #instruccionesModal let-modal>
+  <div class="modal-header bg-smoke justify-content-center">
+    <h5 class="modal-title text-maroon text-center">Actualizar Instrucciones</h5>
+    <button type="button"
+      class="btn-close position-absolute end-0 me-3"
+      (click)="modal.dismiss()">
+    </button>
+  </div>
+
+  <div class="modal-body text-center">
+    <p>
+        ¿ Desea actualizar las instrucciones para la actividad:
+        <strong>{{ actividad.titulo }}</strong>
+        ?
+    </p>
+    <p class="text-muted small text-center">• El cambio solo afectará a este grupo: <strong>{{actividad.nombreGrupo}}</strong></p>
+    <hr>
+    <input type="file" #fileInput hidden accept = ".pdf"  class="form-control"
+            (change)="onFileSelected($event)">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-sm btn-outline-primary me-1"
+                    (click)="fileInput.click()" 
+                    title="Subir archivo (Máx. 2MB)">
+                    <i class="bi bi-upload"></i>
+                </button>
+                <span class="ms-1" >
+                    {{ archivoSeleccionado?.name || actividad.urlInstrucciones.split('/').pop()  }}
+                </span>
+            </div>
+            
+
+  </div>
   <div class="modal-footer justify-content-center">
     <button class="btn btn-outline-secondary"
-    (click)="modal.dismiss()">
+    (click) = "modal.dismiss()">
     Cancelar
     </button>
-    <button class="btn btn-danger"
-    (click)="exentar(modal)">
+    <button class="btn btn-success"
+    [disabled]="archivoSeleccionado == null"
+    (click)="actualizar(modal)">
     Confirmar
     </button>
     </div>

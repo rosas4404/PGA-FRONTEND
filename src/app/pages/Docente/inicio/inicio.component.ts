@@ -245,7 +245,7 @@ formatearHora(fechaStr: string): string {
 
 verGrupo(grupo: grupoDTODashboardResponse){
     
-    this.router.navigate(['/docente-dashboard/grupo/', grupo.idGrupo])
+    this.router.navigate(['/docente-dashboard/grupo/',grupo.idGrupo,grupo.nombre])
       .then(() => {
       console.log(grupo);
       console.log(grupo.idGrupo);

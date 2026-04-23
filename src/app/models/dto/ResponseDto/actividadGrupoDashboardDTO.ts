@@ -9,9 +9,13 @@ export interface actividadGrupoDashboardDTO {
     nombreGrupo: string,
     campo: string,
     origen : string,
+    urlInstrucciones : string,
     asignadas: number,
     entregadas: number,
     aprobadas: number,
     incompletas: number,
     excentadas: number
+    progreso : number,
+    espera : number,
+    noIniciadas : number
 }

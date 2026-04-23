@@ -47,12 +47,28 @@ export class ActividadBaseService {
       return this.http.put<actividadBaseDTOResponse>(`${this.baseUrl}/habilitarDeshabilitar/${idCampo}`,{})
     }
 
-    registro (actividad : actividadBaseDTORequest): Observable <actividadBaseDTOResponse>{
-      return this.http.post<actividadBaseDTOResponse>(this.baseUrl, actividad)
+    registro (dto: actividadBaseDTORequest, file : File | null): Observable <actividadBaseDTOResponse>{
+      const formData = new FormData();
+      formData.append(
+        'actividadBaseRequestDto',new Blob([JSON.stringify(dto)], { type: 'application/json' })
+      );
+
+      if (file) {
+        formData.append('archivo', file);
+      }
+      return this.http.post<actividadBaseDTOResponse>(this.baseUrl, formData)
     }
 
-    actualizar(actividad : actividadBaseDTORequest, idActividad: number) : Observable <actividadBaseDTOResponse>{
-          return this.http.put<actividadBaseDTOResponse> (`${this.baseUrl}/${idActividad}`,actividad)
+    actualizar(dto: actividadBaseDTORequest, file : File | null, idActividad: number) : Observable <actividadBaseDTOResponse>{
+       const formData = new FormData();
+      formData.append(
+        'actividadBaseRequestDto',new Blob([JSON.stringify(dto)], { type: 'application/json' })
+      );
+
+      if (file) {
+        formData.append('archivo', file);
+      }
+          return this.http.put<actividadBaseDTOResponse> (`${this.baseUrl}/${idActividad}`,formData)
 
     }
 }

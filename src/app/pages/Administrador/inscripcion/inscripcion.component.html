@@ -1,3 +1,4 @@
+<div class="page-container">
 <div class="card shadow-sm border-0">
 
   <!-- Titulo -->
@@ -79,9 +80,9 @@
             <td>{{i.alumno}}</td>
             <td class = "text-center">{{i.idInscripcion}}</td>
             <td class = "text-center">{{i.nombreGrupo || 'Sin Asignar'}}</td>
-            <td class = "text-center">{{i.tipo}}</td>
+            <td class = "text-start">{{i.tipo }}</td>
             <td class = "text-center"><span [ngClass]="i.estado == true? 'badge bg-success' : 'badge bg-danger' "> 
-             {{ i.estado ? 'Habilitado' : 'Deshabilitado' }}</span></td>
+              ● {{ i.estado ? 'HABILITADO' : 'DESHABILITADO' }}</span></td>
             
             <td class="text-center">
             
@@ -154,7 +155,7 @@
 
   </div>
 </div>
-
+</div>
 <!--Modal crear inscripcion-->
 <ng-template #crearModal let-modal>
   <!-- Header --> 
@@ -188,7 +189,7 @@
        
 
         <!-- Body 1-paso 1 crear -->
-        <div  *ngIf="paso==1">
+        <div  *ngIf="paso==1" >
         <form [formGroup]="crearForm">
 
         <!-- Escuela -->
@@ -205,8 +206,7 @@
                 Campo Obligatorio
               </div>
           </div>
-        </div
-        >  
+        </div>  
         <div class="mb-3">
           <!--Nivel Estudio -->
           <div class="input-group">
