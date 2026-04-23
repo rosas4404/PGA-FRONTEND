@@ -1,0 +1,55 @@
+<div class="container p-1">
+    <div>
+        <h4 class="fw-semibold text-maroon mb-1">
+            {{ saludo }}, {{ usuarioActual?.nombre }} {{usuarioActual?.apellidoPaterno}}
+        </h4>
+        <small class="text-muted mb-">
+            {{ fechaActual | date:'EEEE, d MMMM y':'':'es-MX' }}
+        </small>
+    </div>        
+    <div class="row g-4 justify-content-center mt-2">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 border-top border-secondary border-4">
+        <div class="card-body text-center">
+          <i class="bi bi-clipboard-data fs-1 text-secondary mb-2"></i>
+          <h5 class="card-title fw-bold">Usuarios</h5>
+          <p class="card-text small text-muted">Lista detallada de usuarios registrados y sus estados actuales.</p>
+          <button class="btn btn-secondary w-100" (click)="descargarReporteUsuarios()">
+            Consultar Reporte
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 border-top border-primary border-4">
+        <div class="card-body text-center">
+          <i class="bi bi-clipboard-data fs-1 text-primary mb-2"></i>
+          <h5 class="card-title fw-bold">Expediente</h5>
+          <p class="card-text small text-muted">Lista con el estado del expediente de los alumnos.</p>
+          <button class="btn btn-primary w-100" (click)="descargarReporteExpedientes()">
+            Ver Expediente
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 border-top border-secondary border-4">
+        <div class="card-body text-center">
+          <i class="bi bi-clipboard-data fs-1 text-secondary mb-2"></i>
+          <h5 class="card-title fw-bold">Reporte Inscripciones</h5>
+          <p class="card-text small text-muted">Reporte por alumno de acuerdo con sus inscripciones.</p>
+          <button class="btn btn-secondary text-white w-100" (click)="irALista()">
+            Ir a lista de alumnos
+          </button>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+</div>
+
+
+

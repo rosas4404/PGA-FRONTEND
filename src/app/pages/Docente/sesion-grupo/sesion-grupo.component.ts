@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { InscripcionService } from '../../../services/inscripcion.service';
@@ -16,7 +16,8 @@ import { sesionDetalleDTO } from '../../../models/dto/ResponseDto/sesionDetalleD
 import { sesionDTO } from '../../../models/dto/ResponseDto/sesionDTO';
 import { sesionDTORequest } from '../../../models/dto/RequestDto/sesionDTORequest';
 import { sesionUpdateDTO } from '../../../models/dto/RequestDto/sesionUpdateDTO';
-
+import { asistenciaDTORequest } from '../../../models/dto/RequestDto/asistenciaDTORequest';
+import { EstadoAsistencia } from '../../../models/enum/EstadoAsistencia';
 @Component({
   selector: 'app-sesion-grupo',
   standalone: true,
@@ -30,9 +31,11 @@ export class SesionGrupoComponent implements OnInit{
   sesionDetalle! : sesionDetalleDTO;
   sesionDocente : sesionDocenteDTOResponse[] =[];
   grupos: grupoDTODashboardResponse[] = [];
+  asistenciaTomar! : asistenciaDTORequest;
 
   sesionForm!: FormGroup;
   idUsuario!:number;
+  asistenciaForm!: FormGroup;
   
   esIndividual = false;
   alumnos: alumnoGrupoDTOResponse[] = []; // se cargan alumnos
@@ -41,17 +44,19 @@ export class SesionGrupoComponent implements OnInit{
   alumnosDetalle: sesionAlumnoDetalleDTO[]=[];
   public alcanceEnum = Alcance;
 
+  estadoAsistencia = [{value: 'ASISTIO', label:'ASISTIO'},{value:'FALTO', label:'FALTO'}, {value:'RETARDO', label:'RETARDO'}];
+
   //paginacion
   totalPages=0;
   page = 0;
-  size = 3;
+  size = 6;
 
   //FILTRO DINAMICO
   filtroFormulario!: FormGroup;
   totalElements = 0;
 
   modalRef: any;
-  modo: 'crear' | 'ver' | 'editarSesion' | 'editarAlumnos' = 'crear';
+  modo: 'crear' | 'ver' | 'editarSesion' | 'consultaAsistencia' | 'tomarAsistencia' |'editarAlumnos' = 'crear';
 
   minFecha = new Date().toISOString().slice(0,16);
 
@@ -72,6 +77,10 @@ export class SesionGrupoComponent implements OnInit{
       idGrupo:this.idGrupo,
       idsInscripcion:[[]]
     })
+
+    this.asistenciaForm = this.fb.group({
+      asistencias:this.fb.array([])
+    });
 
     this.filtroFormulario = this.fb.group({
       idocente : this.idUsuario,
@@ -261,7 +270,70 @@ export class SesionGrupoComponent implements OnInit{
     this.cargarSesion(id, 'ver', modal);
   }
 
-  cargarSesion(id: number, modo: 'ver' | 'editarSesion' | 'editarAlumnos', modal: any) {
+  get formularioAsistenciaInvalido(): boolean {
+    const asistencias = this.asistenciaForm.value.asistencias;
+    return asistencias.some((a: any) => 
+      !a.estado || a.estado === 'SIN_INICIAR'
+    );
+  }
+
+  cargarFormularioAsistencia(){
+    const control = this.asistenciaForm.get('asistencias') as FormArray;
+    control.clear();
+
+    this.alumnosDetalle.forEach(alumno => {
+      let estadoInicial : EstadoAsistencia | null = null;
+
+      if(alumno.estadoAsistencia && alumno.estadoAsistencia !== EstadoAsistencia.SIN_INICIAR){
+        estadoInicial = alumno.estadoAsistencia;
+      }
+
+      control.push(this.fb.group({
+        idSesionAlumno: [alumno.idSesionAlumno],
+        estado: [estadoInicial, Validators.required]
+      }));
+    });
+
+    this.asistenciaForm.updateValueAndValidity();
+  }
+
+  prepararAsistencia(id: number, modal: any) {
+    this.sesioneService.obtenerDetallesSesion(id).subscribe(sesion => {
+      this.sesionDetalle = sesion;
+      this.alumnosDetalle = sesion.alumnos;
+      this.modo = 'tomarAsistencia';
+      this.cargarFormularioAsistencia(); 
+      this.abrirModal(modal);
+    });
+  }
+  
+  asistencia(id: number, modo: 'tomarAsistencia', modal: any){
+    
+    const formValue: asistenciaDTORequest[]=this.asistenciaForm.value.asistencias;
+    
+    const sinSeleccionar = formValue.some(a => !a.estado || a.estado  === EstadoAsistencia.SIN_INICIAR);
+
+    if (sinSeleccionar) {
+      this.toastr.warning('Seleccionar el estado de todos los alumnos');
+      this.asistenciaForm.markAllAsTouched();
+      return;
+    }
+
+    
+
+    this.sesioneService.tomarAsistencia(id, formValue).subscribe({
+            next: () => {
+              console.log(formValue);
+              this.toastr.success('Éxito', 'Asistencia registrada correctamente');
+              this.cargarSesiones();
+              modal.close();
+            },
+            error: (err)=>{
+              this.toastr.error(err.error.message || 'err', 'Error en el registro');
+            }});
+  }
+
+  cargarSesion(id: number, modo: 'ver' | 'editarSesion' | 'editarAlumnos'| 'consultaAsistencia', modal: any) {
     this.sesioneService.obtenerDetallesSesion(id).subscribe(sesion => {
       this.sesionDetalle = sesion;
       this.alumnosDetalle = sesion.alumnos;
@@ -314,7 +386,9 @@ export class SesionGrupoComponent implements OnInit{
   }
 
   cerrarModal(modal:any){
-    modal.dismiss();
+    if (this.modalRef) {
+      this.modalRef.dismiss();
+    }
   }
 
   abrirModal(content: any) {
@@ -323,9 +397,6 @@ export class SesionGrupoComponent implements OnInit{
       backdrop: 'static',
       keyboard: false,
       centered: true
-    });
-    this.modalRef.result.finally(() => {
-      this.cerrarModal(content);
     });
   }  
 }

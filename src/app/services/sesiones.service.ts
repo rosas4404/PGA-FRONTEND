@@ -8,6 +8,8 @@ import { sesionDTO } from '../models/dto/ResponseDto/sesionDTO';
 import { sesionDetalleDTO } from '../models/dto/ResponseDto/sesionDetalleDTO';
 import { sesionUpdateDTO } from '../models/dto/RequestDto/sesionUpdateDTO';
 import { PageResponse } from '../models/pageResponse';
+import { asistenciaDTORequest } from '../models/dto/RequestDto/asistenciaDTORequest';
+import { ReporteAsistencia } from '../models/dto/ResponseDto/reporteAsistencia';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +34,9 @@ export class SesionesService {
   }
 
   //tomar asistencia
-
+  tomarAsistencia(idSesion: number, asistenciaDTORquest: asistenciaDTORequest[]):Observable<sesionDetalleDTO>{
+    return this.httpClient.post<sesionDetalleDTO>(`${this.apiUrl}/${idSesion}/asistencia`, asistenciaDTORquest);
+  }
 
   //detalles de asistencia por grupo
   obtenerDetallesSesion(idSesion: number):Observable<sesionDetalleDTO>{
@@ -61,6 +65,10 @@ export class SesionesService {
   }
 
   //reporte de asistencias por grupo 
+  getReporteAsistencia(): Observable<ReporteAsistencia[]> {
+    return this.httpClient.get<ReporteAsistencia[]>(this.apiUrl + '/grupos/asistencias');
+  }
+
   consultaGeneralPage(idDocente:number, page: number,size: number,filtros?: any): Observable<PageResponse<sesionDocenteDTOResponse>> {
     let params = new HttpParams()
       .set('page', page)

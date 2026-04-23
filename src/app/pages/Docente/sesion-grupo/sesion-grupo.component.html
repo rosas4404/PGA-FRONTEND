@@ -67,7 +67,7 @@
             <td class = "text-center">{{ s.plataforma }}</td>
             <td class = "text-center">{{ s.alcance }}</td>
             <td class="text-center">
-              <button class="btn btn-sm btn-outline-info me-2" 
+              <button class="btn btn-sm btn-outline-primary me-2" 
                       (click)="cargarSesion(s.idSesion, 'ver', sesionModal)" title="Ver">
                 <i class="bi bi-eye"></i>
               </button>
@@ -77,9 +77,19 @@
                 <i class="bi bi-pencil"></i>
               </button>
 
-              <button class="btn btn-sm btn-outline-success" *ngIf="s.alcance==alcanceEnum.INDIVIDUAL"
+              <button class="btn btn-sm btn-outline-primary me-2" *ngIf="s.alcance==alcanceEnum.INDIVIDUAL"
                       (click)="cargarSesion(s.idSesion, 'editarAlumnos', sesionModal)" title="Alumnos">
                 <i class="bi bi-people"></i>
+              </button>
+
+              <button class="btn btn-sm btn-outline-primary me-2" 
+                      (click)="cargarSesion(s.idSesion, 'consultaAsistencia', sesionModal)" title="Consulta asisencia">
+                <i class="bi bi-eye"></i>
+              </button>
+
+              <button class="btn btn-sm btn-outline-primary me-2" 
+                      (click)="prepararAsistencia(s.idSesion, sesionModal)" title="Tomar asisencia">
+                <i class="bi bi-check2-square"></i>
               </button>
             </td>
           </tr>
@@ -133,14 +143,16 @@
     <div class="modal-header bg-smoke flex-column align-items-center">
       <h5 class="modal-title fw-bold text-maroon">
         {{ modo === 'crear' ? 'Registro Sesión' : 
-           modo === 'editarSesion' ? 'Actualizar Detalles' : 
+           modo === 'editarSesion' ? 'Actualizar Detalles' :
+           modo === 'consultaAsistencia' ? 'Asistencia Detalles' :
+           modo === 'tomarAsistencia' ? 'Registro Asistencia' : 
            modo === 'editarAlumnos' ? 'Gestionar Alumnos' : 'Detalle Sesión' }}
       </h5>
       <button type="button" class="btn-close position-absolute end-0 top-0 m-3" (click)="cerrarModal(modal)"></button>
     </div>
 
     <div class="modal-body">
-      <div *ngIf="modo !== 'editarAlumnos'">
+      <div *ngIf="!['editarAlumnos', 'consultaAsistencia', 'tomarAsistencia'].includes(modo)">
         <div class="row g-3">
           <ng-container *ngIf="modo === 'ver'; else camposEdicion">
             <div class="col-md-6">
@@ -210,9 +222,52 @@
         </div>
       </div>
 
+      <div *ngIf="modo === 'consultaAsistencia'" style="max-height: 200px; overflow-y: auto;">
+        <table class="table table-sm table-hover mb-0">
+          <tbody class="small">
+            <tr *ngFor="let alumno of alumnosDetalle">
+              <td class="border-bottom p-2">
+                <i class="bi bi-person-check-fill text-success me-2"></i>
+                  {{ alumno.nombreAlumno }} {{ alumno.apellidoPaterno }}
+              </td>
+              <td class="border-bottom p-2 text-end text-uppercase fw-semibold">
+                {{ alumno.estadoAsistencia }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="modo === 'tomarAsistencia'" [formGroup]="asistenciaForm" style="max-height: 300px; overflow-y: auto;">
+        <table class="table table-sm table-hover mb-0">
+          <tbody class="small" formArrayName="asistencias">
+            <tr *ngFor="let alumno of alumnosDetalle; let i = index" [formGroupName]="i">
+              <td class="border-bottom p-2 align-middle">
+                <i class="bi bi-person-fill text-primary me-2"></i>
+                {{ alumno.nombreAlumno }} {{ alumno.apellidoPaterno }}
+              </td>
+              <td class="border-bottom p-2 text-end">
+               <select formControlName="estado" 
+                        class="form-select form-select-sm d-inline-block w-auto"
+                        [ngClass]="{'is-invalid': asistenciaForm.get('asistencias')?.get(i + '.estado')?.invalid && 
+                                                  asistenciaForm.get('asistencias')?.get(i + '.estado')?.touched}">
+                  <option [ngValue]="null">Selecciona</option>
+                  <option *ngFor="let e of estadoAsistencia" [ngValue]="e.value">
+                    {{ e.label }}
+                  </option>
+                </select>
+                <div class="invalid-feedback" style="font-size:0.6rem;">
+                  Campo Obligatorio
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <div class="mt-2" *ngIf="esIndividual || modo === 'ver' || modo === 'editarAlumnos'">
         <hr *ngIf="modo === 'ver'" class="mt-0 mb-3">
-        <h6 class="fw-bold text-maroon mb-3">Alumnos Participantes</h6>
+        <h6 class="fw-bold text-maroon mb-3" *ngIf="!['consultaAsistencia', 'editarSesion', 'tomarAsistencia'].includes(modo)">Alumnos Participantes</h6>
         
         <div *ngIf="modo === 'ver'" class="grid-checkbox border p-2 bg-light rounded" style="max-height: 200px; overflow-y: auto;">
           <div *ngFor="let alumno of alumnosDetalle" class="small p-2 border-bottom">
@@ -221,7 +276,7 @@
           </div>
         </div>
 
-        <div *ngIf="modo !== 'ver'" class="border rounded p-3 bg-white" style="max-height: 250px; overflow-y: auto;">
+        <div *ngIf="!['ver','consultaAsistencia', 'editarSesion', 'tomarAsistencia'].includes(modo)" class="border rounded p-3 bg-white" style="max-height: 250px; overflow-y: auto;">
           <div *ngIf="alumnos.length === 0" class="text-muted small p-2">
             No hay alumnos inscritos al grupo.
           </div>
@@ -240,11 +295,19 @@
     </div>
 
     <div class="modal-footer justify-content-center">
-      <button *ngIf="modo !== 'ver'" type="submit" [disabled]="sesionForm.invalid" class="btn btn-success px-4">
+      <button *ngIf="modo === 'tomarAsistencia'" type="button" 
+              (click)="asistencia(sesionDetalle.idSesion, 'tomarAsistencia', modal)" 
+              class="btn btn-success px-4" [disabled]="formularioAsistenciaInvalido">
+        Registrar Asistencia
+      </button>
+
+      <button *ngIf="['crear', 'editarSesion', 'editarAlumnos'].includes(modo)" 
+              type="submit" [disabled]="sesionForm.invalid" class="btn btn-success px-4">
         {{ modo === 'crear' ? 'Guardar Sesión' : 'Actualizar' }}
       </button>
+
       <button type="button" class="btn btn-secondary px-4" (click)="modal.close()">
-        {{ modo === 'ver' ? 'Cerrar' : 'Cancelar' }}
+        {{ modo === 'ver' || modo === 'consultaAsistencia' ? 'Cerrar' : 'Cancelar' }}
       </button>
     </div>
   </form>
