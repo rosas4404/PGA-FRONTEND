@@ -7,15 +7,21 @@
         </button>
       </div>
 
-      <div class="d-flex align-items-center gap-2">
-        <i class="bi bi-person-fill-gear text-maroon fs-4 ms-3"></i>
-        <h5 class="fw-bold text-maroon m-0" *ngIf="!isCollapsed">ADMINISTRADOR</h5>
-      </div>
-
 
     <ul class="nav nav-pills flex-column gap-2 flex-grow-1">
 
-      <li class="nav-item mt-2" 
+      <li class="nav-item" [attr.title]="isCollapsed ? 'Administrador' : null">
+        <a class="nav-link text-maroon sidebar-link d-flex align-items-center gap-2"
+          routerLink="inicioAdmin"
+          routerLinkActive="active">
+          <i class="bi bi-person-fill-gear fs-4"></i>
+          <span class="fw-bold m-0 text-uppercase" *ngIf="!isCollapsed">
+            {{usuario?.nombre}} {{usuario?.apellidoPaterno}}
+          </span>
+        </a>
+      </li>
+
+      <li class="nav-item" 
        [attr.title]="isCollapsed ? 'Cursos' : null"
        routerLinkActive="active"
        [routerLinkActiveOptions]="{ exact: true }">

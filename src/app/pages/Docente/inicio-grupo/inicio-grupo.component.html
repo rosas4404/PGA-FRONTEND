@@ -21,11 +21,11 @@
     <!-- DERECHA: ACCIONES -->
     <div class="col-md-4 grupo-acciones d-flex flex-column justify-content-center align-items-end">
       
-      <button class="btn btn-outline-primary mb-2 w-100">
+      <button class="btn btn-outline-primary mb-2  w-100" (click)="descargarReporte(grupo.idGrupo)">
         Reporte alumnos
       </button>
 
-      <button class="btn btn-outline-primary mb-2  w-100">
+      <button class="btn btn-outline-primary mb-2  w-100" (click)="descargarReporteSeguimiento(grupo.idGrupo)">
         Reporte general
       </button>
 

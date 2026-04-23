@@ -29,6 +29,8 @@ import { ActividadesGrupoComponent } from './pages/Docente/actividades-grupo/act
 import { ActividadComponent } from './pages/Docente/actividad/actividad.component';
 import { SesionGrupoComponent } from './pages/Docente/sesion-grupo/sesion-grupo.component';
 import { AlumnosGrupoComponent } from './pages/Docente/alumnos-grupo/alumnos-grupo.component';
+import { ReporteAsistenciaComponent } from './pages/Docente/reporte-asistencia/reporte-asistencia.component';
+import { InicioAdminComponent } from './pages/Administrador/inicio-admin/inicio-admin.component';
 
 
 
@@ -37,6 +39,8 @@ export const routes: Routes = [
     {path:'home', component:HomeComponent},
     {path: 'admin-dashboard', component:AdminDashboardComponent, canActivate:[adminGuard],
         children:[
+            { path: '', redirectTo: 'inicioAdmin', pathMatch: 'full' },
+            {path: 'inicioAdmin', component : InicioAdminComponent},
             {path:'usuarios',
                 children:[ 
                     { path: 'alumnos', component: UsuariosComponent, data: {usuario: 'alumnos'}},
@@ -72,7 +76,8 @@ export const routes: Routes = [
                     { path: 'actividades', component:ActividadesGrupoComponent},
                     { path: 'actividad/:idActividad', component: ActividadComponent },
                     { path: 'sesiones', component:SesionGrupoComponent},
-                    { path: 'participantes', component:AlumnosGrupoComponent}
+                    { path: 'participantes', component:AlumnosGrupoComponent},
+                    { path: 'sesionReporte/:nombreGrupo', component:ReporteAsistenciaComponent}
                 ]
             }
         ]
