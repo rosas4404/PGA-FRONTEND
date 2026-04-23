@@ -3,13 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { usuarioDTOResponse } from '../../../models/dto/ResponseDto/usuarioDTOResponse';
 import { UsuarioService } from '../../../services/usuario.service';
 import { LoginService } from '../../../services/login.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReporteService } from '../../../services/reporte.service';
 
 @Component({
   selector: 'app-inicio-admin',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './inicio-admin.component.html',
   styleUrl: './inicio-admin.component.scss'
 })
@@ -131,6 +131,6 @@ export class InicioAdminComponent implements OnInit{
   }
 
   irALista(){
-    this.router.navigate(['/usuarios/alumnos']);
+    this.router.navigate(['usuarios/alumnos']);
   }
 }

@@ -81,7 +81,7 @@
                                 <strong>{{ s.nombreGrupo }}: {{ s.tema}}</strong><br>
                                 <small>{{ formatearHora(s.fecha) }}</small>
                             </div>
-                            !--solo aparece cuando hay mas de tres ssiones en un dia-->
+                            <!--solo aparece cuando hay mas de tres ssiones en un dia-->
                             <small *ngIf="obtenerSesionesDia(dia).length > 3"> + {{ obtenerSesionesDia(dia).length - 3 }} más...
                             </small>
                         </div>

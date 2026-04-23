@@ -1,4 +1,4 @@
-<div class="container p-1">
+<div class="page-container">
     <div>
         <h4 class="fw-semibold text-maroon mb-1">
             {{ saludo }}, {{ usuarioActual?.nombre }} {{usuarioActual?.apellidoPaterno}}
@@ -40,7 +40,7 @@
           <i class="bi bi-clipboard-data fs-1 text-secondary mb-2"></i>
           <h5 class="card-title fw-bold">Reporte Inscripciones</h5>
           <p class="card-text small text-muted">Reporte por alumno de acuerdo con sus inscripciones.</p>
-          <button class="btn btn-secondary text-white w-100" (click)="irALista()">
+          <button class="btn btn-secondary text-white w-100" routerLink="/admin-dashboard/usuarios/alumnos">
             Ir a lista de alumnos
           </button>
         </div>
