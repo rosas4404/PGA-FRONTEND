@@ -9,13 +9,13 @@ import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@ang
   styleUrl: './panel-grupo.component.scss'
 })
 export class PanelGrupoComponent implements OnInit{
-idGrupo: string | null | undefined ;
+nombreGrupo: string | null | undefined ;
 
 constructor(
   private route : ActivatedRoute,
 ){
 }
 ngOnInit(): void {
-
+  this.nombreGrupo = this.route.snapshot.paramMap.get('nombre');
 }
 }

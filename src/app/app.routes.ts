@@ -29,61 +29,70 @@ import { ActividadesGrupoComponent } from './pages/Docente/actividades-grupo/act
 import { ActividadComponent } from './pages/Docente/actividad/actividad.component';
 import { SesionGrupoComponent } from './pages/Docente/sesion-grupo/sesion-grupo.component';
 import { AlumnosGrupoComponent } from './pages/Docente/alumnos-grupo/alumnos-grupo.component';
+import { RegistroActividadesComponent } from './pages/Docente/registro-actividades/registro-actividades.component';
 
 
 
 export const routes: Routes = [
     
-    {path:'home', component:HomeComponent},
-    {path: 'admin-dashboard', component:AdminDashboardComponent, canActivate:[adminGuard],
-        children:[
-            {path:'usuarios',
-                children:[ 
-                    { path: 'alumnos', component: UsuariosComponent, data: {usuario: 'alumnos'}},
-                    { path: 'docentes', component: UsuariosComponent, data: {usuario: 'docentes'}}
-                ]
-            },
-            {path:'inscripcion', component: InscripcionComponent},
-            {path: 'grupos', component:GrupoComponent},
-            {path: 'cursos', component:CursoComponent},
-            {path: 'campos', component: CampoFormativoComponent},
-            {path: 'catalogo-actividades', component: ActividadBaseComponent},
-
-            {path: 'documentos', component:DocumentoComponent},
-            {path: 'consulta-revision',
-                children:[
-                    { path: '', component: ConsultaRevisonComponent },
-                    { path: ':idUsuario', component: ConsultaRevisonComponent },
-                    { path: ':idUsuario/expedientes', component: ExpedienteComponent }
-                ]
-            },
-            {path:'perfil', component: PerfilComponent},
-        ]
-    },
-    {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard],
+    { path:'', component:HomeComponent,
         children : [
-            { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-            {path:'perfil', component: PerfilComponent},
-            {path: 'inicio', component : InicioComponent},
-            {path: 'sesiones', component : SesionesComponent},
-            {path:'grupo/:idGrupo' , component:PanelGrupoComponent,
+            {path: 'admin-dashboard', component:AdminDashboardComponent, canActivate:[adminGuard],
                 children:[
-                    { path: '', component: InicioGrupoComponent },
-                    { path: 'actividades', component:ActividadesGrupoComponent},
-                    { path: 'actividad/:idActividad', component: ActividadComponent },
-                    { path: 'sesiones', component:SesionGrupoComponent},
-                    { path: 'participantes', component:AlumnosGrupoComponent}
+                    {path:'usuarios',
+                        children:[ 
+                            { path: 'alumnos', component: UsuariosComponent, data: {usuario: 'alumnos'}},
+                            { path: 'docentes', component: UsuariosComponent, data: {usuario: 'docentes'}}
+                        ]
+                    },
+                    {path:'inscripcion', component: InscripcionComponent},
+                    {path: 'grupos', component:GrupoComponent},
+                    {path: 'cursos', component:CursoComponent},
+                    {path: 'campos', component: CampoFormativoComponent},
+                    {path: 'catalogo-actividades', component: ActividadBaseComponent},
+
+                    {path: 'documentos', component:DocumentoComponent},
+                    {path: 'consulta-revision',
+                        children:[
+                            { path: '', component: ConsultaRevisonComponent },
+                            { path: ':idUsuario', component: ConsultaRevisonComponent },
+                            { path: ':idUsuario/expedientes', component: ExpedienteComponent }
+                        ]
+                    },
+                    {path:'perfil', component: PerfilComponent},
                 ]
-            }
+            },
+            {path: 'docente-dashboard', component:DocenteDashboardComponent, canActivate:[docenteGuard],
+                children : [
+                    { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+                    {path:'perfil', component: PerfilComponent},
+                    {path: 'inicio', component : InicioComponent},
+                    {path: 'sesiones', component : SesionesComponent},
+                    {path: 'actividades', component : RegistroActividadesComponent},
+                    {path:'grupo/:idGrupo/:nombre' , component:PanelGrupoComponent,
+                        children:[
+                            { path: '', component: InicioGrupoComponent },
+                            { path: 'actividades',
+                                children: [
+                                { path: '', component: ActividadesGrupoComponent },
+                                { path: ':idActividad', component: ActividadComponent }
+                                ]
+                            },
+                            { path: 'sesiones', component:SesionGrupoComponent},
+                            { path: 'participantes', component:AlumnosGrupoComponent}
+                        ]
+                    }
+                ]
+            },
+            {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard],
+                children:[
+                    {path:'perfil', component: PerfilComponent},
+                    {path:'expediente-alumno', component: ExpdienteAlumnoComponent},
+                ]
+            },
+            {path: 'login', component:LoginComponent},
+            {path: 'password', component:PasswordComponent, canActivate:[authGuard]},
+            {path: '**', redirectTo:''}
         ]
     },
-    {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard],
-        children:[
-            {path:'perfil', component: PerfilComponent},
-            {path:'expediente-alumno', component: ExpdienteAlumnoComponent},
-        ]
-    },
-    {path: 'login', component:LoginComponent},
-    {path: 'password', component:PasswordComponent, canActivate:[authGuard]},
-    {path: '**', redirectTo:''}//por si la ruta no existe 
 ];

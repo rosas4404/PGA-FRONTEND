@@ -13,6 +13,7 @@ import { grupoDTOResponse } from '../../../models/dto/ResponseDto/grupoDTORespon
 import { InscripcionFiltro } from '../../../models/filtros/inscripcionFiltro';
 import { InscripcionService } from '../../../services/inscripcion.service';
 import { GrupoService } from '../../../services/grupo.service';
+import { Tipo } from '../../../models/enum/tipo';
 
 @Component({
   selector: 'app-inscripcion',
@@ -51,17 +52,17 @@ export class InscripcionComponent implements OnInit{
     tipo: null,
     idUsuario: 0
   } 
-
-   grupos: grupoDTOResponse [] = [];
+  Tipo = Tipo;
+  grupos: grupoDTOResponse [] = [];
 
   tipos = [ { value: 'Servicio_Social', label: 'Servicio Social' },
-            { value: 'Practicas_Profesionales', label: 'Practicas Profesionales' },
+            { value: 'Practicas_Profesionales', label: 'Prácticas Profesionales' },
             { value: 'Jovenes_Construyendo_El_Futuro', label: 'Jovenes Construyendo el Futuro' }
           ];
   
   nivelEstudio = [ { value: 'MEDIO SUPERIOR', label: 'MEDIO SUPERIOR' },
                    { value: 'LICENCIATURA', label: 'LICENCIATURA' },
-                   { value: 'POST GRADO', label: 'POST GRAD0' }
+                   { value: 'POST GRADO', label: 'POSTGRAD0' }
                  ];
 
   filtros : InscripcionFiltro ={

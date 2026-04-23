@@ -15,10 +15,15 @@ export class ActividadAlumnoService {
   constructor(private httpClient: HttpClient) { }
 
   obtenerAsignaciones(idActividadGrupo :  number) : Observable <actividadAlumnoDTOResponse[]>{
-    return this.httpClient.get<actividadAlumnoDTOResponse[]>(`${this.apiUrl}/actividad/${idActividadGrupo}`)
+    return this.httpClient.get<actividadAlumnoDTOResponse[]>(`${this.apiUrl}/actividad/${idActividadGrupo}`);
   }
 
   exentarActividad(idActividad : number, dto : cambiarEstadoTareaDTO) {
-    return this.httpClient.put(`${this.apiUrl}/${idActividad}/exentar`, dto)
+    return this.httpClient.put(`${this.apiUrl}/${idActividad}/exentar`, dto);
   }
+
+  calificarEntrega(idActividadAlumno : number, dto : cambiarEstadoTareaDTO) : Observable<actividadAlumnoDTOResponse>{
+    return this.httpClient.put<actividadAlumnoDTOResponse>(`${this.apiUrl}/${idActividadAlumno}/observacion`, dto)
+  }
+
 }

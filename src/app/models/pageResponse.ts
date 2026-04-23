@@ -4,4 +4,5 @@ export interface PageResponse<T> {
   totalElements: number;
   size: number;
   number: number;
+  last : boolean;
 }

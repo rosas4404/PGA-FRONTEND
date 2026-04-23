@@ -8,4 +8,5 @@ export interface actividadGrupoDTOResponse {
     idGrupo : number,
     nombreGrupo : string,
     campo : string
+   
 }

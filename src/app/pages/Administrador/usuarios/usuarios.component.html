@@ -1,4 +1,4 @@
-
+<div class="page-container">
 <div class="card shadow-sm border-0">
 
   <!-- Titulo -->
@@ -74,7 +74,7 @@
             <td class = "text-center">{{u.telefono}}</td>
             <td class = "text-center">{{u.created_At}}</td>
             <td class = "text-center"><span [ngClass]="u.activo == true? 'badge bg-success' : 'badge bg-danger' "> 
-             {{ u.activo ? 'Habilitado' : 'Deshabilitado' }}</span></td>
+             ● {{ u.activo ? 'HABILITADO' : 'DESHABILITADO' }}</span></td>
             
             <td class="text-center">
               <!--mas informacion-->
@@ -149,7 +149,7 @@
 
   </div>
 </div>
-
+</div>
 
 <!--modal de confirmacion-->
 <ng-template #confirmarModal let-modal>

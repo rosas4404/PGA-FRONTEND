@@ -1,3 +1,38 @@
-.modal-body {
-  min-height: 100px; 
+
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+th:nth-child(1) { width: 10%; }
+th:nth-child(2) { width: 30%; }
+th:nth-child(3) { width: 30%; }
+th:nth-child(4) { width: 15%; }
+th:nth-child(5) { width: 25%; }
+
+
+.link-box {
+  margin-left: 4px;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
+.estado-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
+.aviso {
+  flex-direction: row;  
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #856404;
+}
+
+.aviso i {
+  color: #ffc107;
+  margin-top: 2px; /* alinea con texto */
 }

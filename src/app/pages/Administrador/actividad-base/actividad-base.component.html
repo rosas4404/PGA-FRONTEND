@@ -1,3 +1,5 @@
+
+<div class="page-container">
 <div class="card shadow-sm border-0">
 
   <!-- Titulo -->
@@ -74,11 +76,11 @@
 
         <tbody>
           <tr *ngFor="let a of actividades"  >
-            <td>{{a.idActividad}}</td>
-            <td class = "text-center">{{a.titulo}}</td>
-            <td class = "text-center">{{a.campoFormativo.nombre}}</td>
+            <td class = "text-center">{{a.idActividad}}</td>
+            <td class = "text-start">{{a.titulo}}</td>
+            <td class = "text-start">{{a.campoFormativo.nombre}}</td>
             <td class = "text-center"><span [ngClass]="a.activo == true? 'badge bg-success' : 'badge bg-danger' "> 
-             {{ a.activo ? 'Habilitado' : 'Deshabilitado' }}</span></td>
+             ● {{ a.activo ? 'HABILITADO' : 'DESHABILITADO' }}</span></td>
             
             <td class="text-center">
             
@@ -151,162 +153,191 @@
 </nav>
 
   </div>
+  </div>
 </div>
 
 
 
 <!--Detalles modal-->
 <ng-template #detallesModal let-modal>
-
-  <div class="modal-header flex-column bg-smoke ">
-    <h5 class="modal-title fw-bold text-maroon text-center">Información Actividad Base</h5>
-    <button type="button" 
+  <div class="modal-content modal-unificado">
+    <!--header-->
+    <div class="modal-header flex-column bg-smoke ">
+      <h5 class="modal-title fw-bold text-maroon text-center">Información Actividad Base</h5>
+      <button type="button" 
             class="btn-close position-absolute end-0 top-0 m-3" 
-            (click)="modal.dismiss()"></button>
+            (click)="modal.dismiss()">
+      </button>
+    </div>
+    <!--body-->
+    <div class="modal-body modal-body-step">
+      <div class="body-container">
+        <div class="bloque">
+          <label class="fw-bold">Titulo</label>
+          <span>{{ actividadSeleccionada.titulo }}</span>
+        </div>
+        <div class="bloque">
+          <label class="fw-bold">Descripción</label>
+          <span>{{ actividadSeleccionada.descripcion }}</span>
+        </div>
+        <div class="bloque">
+          <label class="fw-bold">Estado <span class="badge estado-badge" [ngClass]="actividadSeleccionada.activo ? 'bg-success' : 'bg-danger'">
+           ● {{ actividadSeleccionada.activo ? 'Habilitado' : 'Deshabilitado' }}
+          </span></label>
+        </div>
+        <div class="divider"></div>
+        <div class="bloque">
+          <label class="fw-bold">Campo Formativo</label>
+          <span>{{ actividadSeleccionada.campoFormativo?.nombre }}</span>
+        </div>
+        <div class="bloque">
+          <label class="fw-bold">Descripción del campo</label>
+          <span>{{ actividadSeleccionada.campoFormativo?.descripcion }}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="bloque" *ngIf="actividadSeleccionada.urlInstrucciones">
+          <label class="fw-bold me-2">Instrucciones:  <a class="link-box" [href]="'http://localhost:8080/api/actividadBase/' + actividadSeleccionada.idActividad + '/instrucciones'" target="_blank">
+              {{  actividadSeleccionada.urlInstrucciones.split('/').pop() }}
+            </a></label>     
+        </div>
+      </div>      
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button class="btn btn-outline-secondary" (click)="cerrarModal()">Cerrar</button>
+    </div>
   </div>
-
-  <div class="modal-body">
-
-    <div class="row mb-2">
-      <div class="col-4"><strong>Título:</strong></div>
-      <div class="col-8">{{ actividadSeleccionada.titulo }}</div>
-    </div>
-
-    <div class="row mb-2">
-      <div class="col-4"><strong>Descripción:</strong></div>
-      <div class="col-8">{{ actividadSeleccionada.descripcion }}</div>
-    </div>
-
-    <div class="row mb-2">
-      <div class="col-4"><strong>Estado:</strong></div>
-      <div class="col-8">
-        <span class="badge"
-        [ngClass]="actividadSeleccionada.activo ? 'bg-success' : 'bg-danger'">
-          {{ actividadSeleccionada.activo ? 'Habilitado' : 'Deshabilitado' }}
-        </span>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="row mb-2">
-      <div class="col-4"><strong>Campo Formativo:</strong></div>
-      <div class="col-8">{{ actividadSeleccionada.campoFormativo?.nombre }}</div>
-    </div>
-
-    <div class="row mb-2">
-      <div class="col-4"><strong>Descripción:</strong></div>
-      <div class="col-8">{{ actividadSeleccionada.campoFormativo?.descripcion }}</div>
-    </div>
-
-  </div>
-
-  <div class="modal-footer justify-content-center">
-    <button class="btn btn-outline-secondary" (click)="modal.close()">Cerrar</button>
-  </div>
-
 </ng-template>
 
 <!--modal de confirmacion-->
 <ng-template #confirmarModal let-modal>
-  <div class="modal-header bg-warning-subtle justify-content-center">
-    <h5 class="modal-title text-maroon text-center">Confirmar acción</h5>
-    <button type="button"
-      class="btn-close position-absolute end-0 me-3"
-      (click)="modal.dismiss()">
-    </button>
-  </div>
-
-  <div class="modal-body text-center">
-    <p>
-        ¿ Desea {{ tituloAccion.toLowerCase() }}:
-        <strong>{{ tituloActividad }}</strong>
-        ?
-    </p>
-    <p style="white-space: pre-line;"> {{ accionTexto }}</p>
-  </div>
-  <div class="modal-footer justify-content-center">
-    <button class="btn btn-outline-secondary"
-    (click)="modal.dismiss()">
-    Cancelar
-    </button>
-    <button class="btn btn-danger"
-    (click)="activarDesactivar(modal)">
-    Confirmar
-    </button>
-    </div>
-</ng-template>
-
-<!--modal crear / editar -->
-<ng-template #crearModal let-modal>
-  <!--header-->
-  <div class="modal-header bg-smoke flex-column align-items-center">
-    <h5 class="modal-title fw-bold text-maroon">
-     {{ modoEdicion ? 'Actualizar Descripción' : 'Registro Actividad Base' }} 
-    </h5>
-    <!-- Botón cerrar -->
-    <button type="button" 
-      class="btn-close position-absolute end-0 top-0 m-3"
-      (click) = "cerrarModal()">
-    </button>
-  </div>
-  <div class=" modal-body  modal-body-step ">
-    <form [formGroup]="crearForm" (ngSubmit)="submit()" autocomplete="off">
-      <!-- Nombre -->
-      <div class="col-md-12 mt-3">
-        <div class="input-group" *ngIf="!modoEdicion">
-          <span class="input-group-text" style="font-size:0.9rem;"> Titulo </span>
-          <input type="text" class="form-control"
-            formControlName="titulo"
-            [ngClass]="{
-            'is-invalid': crearForm.get('titulo')?.invalid && crearForm.get('titulo')?.touched
-          }">
-          <div class="invalid-feedback" style="font-size:0.6rem;">
-            Campo obligatorio.
-          </div>
-        </div>
-        <div class="row mb-2" *ngIf="modoEdicion">
-          <div class="col-4"><strong>Titulo :</strong></div>
-          <div class="col-8">{{ crearForm.get('titulo')?.value }}</div>
-          </div>
+   <div class="modal-content modal-confirmacion">
+      <!--header-->
+      <div class="modal-header bg-warning-subtle justify-content-center">
+        <h5 class="modal-title text-maroon text-center">{{actividadSeleccionada.activo ? 'Deshabilitar Actividad' : 'Habilitar Actividad'}}</h5>
+        <button type="button"
+          class="btn-close position-absolute end-0 me-3"
+          (click)="modal.dismiss()">
+        </button>
       </div>
-      <div class="col-md-12 mt-3">
-        <div class="input-group">
-          <span class="input-group-text" style="font-size:0.9rem;">Descripción</span>
-          <input type="text" class="form-control"
-            formControlName="descripcion"
-            [ngClass] = "{'is-invalid': crearForm.get('descripcion')?.invalid && crearForm.get('descripcion')?.touched}">
-          <div class="invalid-feedback" style="font-size:0.6rem;">
-            Campo obligatorio.
+      <!--body-->
+      <div class="modal-body">
+        <div class="body-container">
+          <div class="bloque">
+            <p style="font-size: 1rem;">¿ Desea {{ tituloAccion.toLowerCase() }}: <strong>{{ tituloActividad }}</strong>?</p>
           </div>
-        </div>
-      </div>
-      <div class="col-md-12 mt-3 mb-4" *ngIf="!modoEdicion">
-        <div class="input-group">
-          <span class="input-group-text" style="font-size:0.9rem;">Campo Formativo</span>
-          <select class="form-select"
-            formControlName="idCampoFormativo">
-          <option value="">Seleccione campo formativo</option>
-          <option *ngFor="let c of campos"
-            [value]="c.idCampo">
-            {{ c.nombre }}
-            </option>
-          </select>
+          <div class="bloque aviso" *ngIf="actividadSeleccionada.activo">
+            <i class="bi bi-exclamation-triangle-fill" ></i>
+            <p> {{ accionTexto }}</p>
+          </div>
         </div>
       </div>
       <div class="modal-footer justify-content-center">
+      <button class="btn btn-outline-primary"
+        (click)="modal.dismiss()">
+        Cancelar
+      </button>
+      <button class="btn btn-success"
+        (click)="activarDesactivar(modal)">
+        Confirmar
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!--modal crear / editar -->
+<ng-template #crearModal  let-modal>
+  <div class="modal-content modal-unificado">
+    <!--header-->
+    <div class="modal-header bg-smoke flex-column align-items-center position-relative">
+      <h5 class="modal-title fw-bold text-maroon">
+        {{ modoEdicion ? 'Actualizar Descripción' : 'Registro Actividad Base' }} 
+      </h5>
+      <!-- Botón cerrar -->
+      <button type="button" 
+        class="btn-close position-absolute end-0 top-0 m-3"
+        (click) = "cerrarModal()">
+      </button>
+    </div>
+    <!--cuerpo-->
+    <div class=" modal-body  modal-body-step ">
+      <div class="body-container">
+        <form class="bloque" [formGroup]="crearForm" id="crearForm" (ngSubmit)="submit()" autocomplete="off">
+
+          <!-- Título -->
+          <div class="input-group">
+            <span class="input-group-text"> Titulo </span>
+            <input type="text" class="form-control"
+              formControlName="titulo"
+              [ngClass] = "{'is-invalid': crearForm.get('titulo')?.invalid && crearForm.get('titulo')?.touched}"
+            >
+          </div>
+          <div class="invalid-feedback d-block" *ngIf="crearForm.get('titulo')?.invalid && crearForm.get('titulo')?.touched">
+            Campo obligatorio.
+          </div>
+          
+          <!-- Descripcion -->
+          <div class="input-group">
+            <span class="input-group-text">Descripción</span>
+            <textarea rows ="5" class="form-control"
+              formControlName="descripcion"
+              [ngClass] = "{'is-invalid': crearForm.get('descripcion')?.invalid && crearForm.get('descripcion')?.touched}">
+            </textarea>
+          </div>
+          <div class=" d-flex align-items-center  mt-1">
+            
+
+            <div class="invalid-feedback d-block mb-0 "style="max-width: 70%;" *ngIf="crearForm.get('descripcion')?.invalid && crearForm.get('descripcion')?.touched">
+              Campo obligatorio.
+            </div>
+            <small class="ms-auto flex-shrink-0" style="font-size: 0.7rem;" 
+            [ngClass]="{'text-danger': crearForm.get('descripcion')?.value?.length >= 250, 
+            'text-muted': crearForm.get('descripcion')?.value?.length < 250}">
+              {{ crearForm.get('descripcion')?.value?.length || 0 }} / 250 caracteres
+            </small>
+          </div>
+          
+          
+          <!-- Campo Formativo -->
+          <div class="input-group">
+            <span class="input-group-text">Campo Formativo</span>
+            <select class="form-select"
+                formControlName="idCampoFormativo"
+                >
+              <option value="">Seleccione campo formativo</option>
+              <option *ngFor="let c of campos" [value]="c.idCampo">
+                {{ c.nombre }}
+              </option>
+            </select>
+          </div>
+          <!-- Archivo -->
+          <input type="file" #fileInput hidden accept = ".pdf"  class="form-control"
+          (change)="onFileSelected($event)">
+          <button type="button" class="btn btn-sm btn-outline-primary mt-4"
+            (click)="fileInput.click()" 
+            title="Subir archivo (Máx. 2MB)">
+            <i class="bi bi-upload me-2"></i>
+            {{ (modoEdicion || archivoSeleccionado) ? 'Cambiar archivo' : 'Subir archivo'}}
+          </button>
+          <span class="small text-muted ms-2" style="font-size: 0.8rem;" *ngIf="!modoEdicion">
+            {{ archivoSeleccionado?.name || 'Ningún archivo seleccionado' }}
+          </span>
+          <span class="small text-muted ms-2" style="font-size: 0.8rem;" *ngIf="modoEdicion">
+            {{ archivoSeleccionado?.name || actividadSeleccionada.urlInstrucciones.split('/').pop()  }}
+          </span>
+        </form>
+      </div>
+      </div>
+      <!--Footer-->
+      <div class="modal-footer justify-content-center">
         <button type="button"
           class="btn btn-outline-primary align-items-center"
-          (click)="modal.dismiss()">
+          (click)="cerrarModal()">
           Cancelar
         </button>
-        <button type="submit"
+        <button type="submit" form="crearForm"
               class="btn btn-success"
               [disabled]="crearForm.invalid">
               Guardar
         </button>
-
       </div>
-
-    </form>
   </div>

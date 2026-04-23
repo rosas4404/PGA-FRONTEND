@@ -6,4 +6,5 @@ export interface actividadBaseDTOResponse{
     descripcion : string;
     activo : boolean;
     campoFormativo: campoDTOResponse;
+    urlInstrucciones : string
 }

@@ -31,7 +31,7 @@ $snow: #FAFAFA;
 }
 
 .text-dark-slate {
-  color: $dark-slate-900;
+  color: $dark-slate-700;
 }
 
 .text-maroon {
@@ -89,12 +89,90 @@ $snow: #FAFAFA;
   //quital el color persistente despues de soltar el clic
   &:focus,
   &:focus-visible {
-    background-color: transparent !important; // O vuelve al color original
-    color: $maroon !important;
+  
     box-shadow: none !important;
     outline: none !important;
   };
 }
+.btn-close:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+btn-toggle {
+  background: transparent;
+  border: none;
+  color: maroon;
+}
+
+
+
+
+
+
+
+//contendio del dashboard
+.layout-dashboard {
+  flex: 1;
+  height: 100%; 
+  overflow: hidden;
+  display: flex;
+}
+//menu lateral desplegable
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  transition: all 0.3s ease;
+  height: 100%;
+  overflow-x: hidden;
+  white-space: nowrap; 
+  flex-shrink: 0;
+}
+
+/* Color base */
+.sidebar-link {
+  color: $maroon !important;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  overflow: hidden; 
+}
+
+/* Hover */
+.sidebar-link:hover {
+  background-color: rgba(128, 0, 0, 0.1); 
+  color:$maroon !important;
+  padding-left: 12px;
+}
+
+/* Activo */
+.sidebar-link.active {
+  background-color: rgba(128, 0, 0, 0.2) !important;
+  color:$maroon !important;
+  font-weight: 600;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+//contenido despueés de la barra lateral de navegación en el dash board
+.contenido-principal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+//contenedores información que se carga en el sapcio sobrante del dashboard 
+.page-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px;
+
+}
+
+
 
 
 //notificaciones
@@ -155,119 +233,91 @@ $snow: #FAFAFA;
 }
 
 
+//modal tamaño estandar para todos
 
-//menu desplegable
-.sidebar {
+.modal-unificado {
+  width: 100%;
+  max-width: 500px;  
+  margin: auto;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  width: 250px;
-  transition: all 0.3s ease;
+  height: 500px;      
 }
 
-/* Color base */
-.sidebar-link {
-  color: $maroon !important;
-  border-radius: 8px;
-  transition: all 0.2s ease-in-out;
-}
 
-/* Hover */
-.sidebar-link:hover {
-  background-color: rgba(128, 0, 0, 0.1); 
-  color:$maroon !important;
-  padding-left: 12px;
-}
-
-/* Activo */
-.sidebar-link.active {
-  background-color: rgba(128, 0, 0, 0.2) !important;
-  color:$maroon !important;
-  font-weight: 600;
-}
-
-.sidebar.collapsed {
-  width: 80px;
-}
-
-.btn-toggle {
-  background: transparent;
-  border: none;
-  color: maroon;
-}
-
-//conytorno inputs
-input:focus {
-  outline: none !important;
-  border-color: #8b5e3c !important;
-  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.25) !important;
-}
-//contorno select 
-select:focus {
-  outline: none !important;
-  border-color: #8b5e3c !important;
-  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.25) !important;
-}
-
-.table-light{
-  thead, th{
-    color: maroon !important;
-    font-weight: bold;
-  }
-}
-
-select.form-select:focus {
-  border-color: $maroon !important;
-  /* Un resplandor sutil en color peru/dorado */
-  box-shadow: 0 0 0 0.25rem rgba(188, 149, 92, 0.25) !important; 
-}
-
-.form-select option {
-  background-color: $white-smoke; /* Fondo gris claro */
-  color: $dark-slate-900;         /* Texto oscuro */
-  padding: 10px;
-}
-.main-content {
-  min-height: 0;
-  overflow-y: auto;     
-  height: 100vh;
-}
-
-//botones menu panel grupo
-.grupo-tabs {
+.modal-body-step {
+  flex: 1; 
+  padding: 16px;
   display: flex;
-  gap: 10px;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+  overflow-y: auto; 
+  overflow-x: hidden;
+  flex-direction: column;
 }
-.grupo-tabs {
+
+.body-container {
   display: flex;
-  gap: 10px;
-  border-bottom: 2px solid #eee;
+  gap: 8px;
+  flex-direction: column;
+  padding-top: 10px;
   padding-bottom: 10px;
-  margin-bottom: 15px;
+
 }
 
-.grupo-tabs button {
-  background: transparent;
-  border: none;
-  padding: 10px 18px;
-  cursor: pointer;
-  font-weight: 500;
-  color: #555;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+.bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.bloque label {
+  font-size: 0.85rem;
+  color: #6c757d;
+  
 }
 
-.grupo-tabs button:hover {
-  background: #f5f5f5;
+.bloque span,
+.bloque a {
+  font-size: 0.95rem;
+}
+.bloque .badge {
+  align-self: flex-start; 
 }
 
-.grupo-tabs button.active {
-  background:$maroon;
-  color: white;
+.modal-unificado .input-group-text {
+  font-size: 0.9rem;
+  min-width: 180px;
+  justify-content: center;
+}
+.modal-unificado .invalid-feedback {
+  display: block;
+  min-height: px;
+  font-size: 0.6rem;
+  
+}
+.modal-unificado .form-select, .form-control{
+  font-size: 0.9rem;
+}
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #dee2e6, transparent);
+  margin: 6px 0;
 }
 
-.grupo-contenido {
-  padding: 10px 0;
+.modal-confirmacion {
+  border-radius: 10px;
+}
+.modal-confirmacion .modal-body {
+  min-height: 140px;
+  padding: 20px;
+  text-align: center;
+  display: flex;             
+  justify-content: center;
+   
+}
+.modal-confirmacion .body-container {
+  
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center; 
 }
