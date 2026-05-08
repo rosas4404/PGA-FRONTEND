@@ -1,0 +1,30 @@
+<div class="grupo-layout">
+  <div>
+     <div class="grupo-tabs">
+      <button routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >
+        Inicio
+      </button>
+
+      <button [routerLink]="" routerLinkActive="active"   class="btn-disabled" [disabled]="mensajeError">
+        Actividades
+      </button>
+
+      <button [routerLink]="['sesiones-alumno']" routerLinkActive="active"   class="btn-disabled" [disabled]="mensajeError">
+        Sesiones
+      </button>
+
+      <button [routerLink]="" routerLinkActive="active"  class="btn-disabled" [disabled]="mensajeError">
+        Seguimiento
+      </button>
+
+      <div class="nombre-grupo">
+          <h6 class="mb-0">{{ nombreGrupo }}</h6>
+        </div>
+    </div>
+
+    <div class="grupo-contenido">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+ 
+</div>

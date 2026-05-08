@@ -342,11 +342,11 @@
         </ng-container>
       <!-- Botones para el Paso 2  CREAR-->
         <ng-container *ngIf="paso === 2 && modo==='crear'">
-          <button type="button" class="btn btn-secondary" (click)="omitir(modal)">
+          <button type="button" class="btn btn-secondary" [disabled]="hayActividadesSeleccionadas()" (click)="omitir(modal)">
             Omitir
           </button>
 
-          <button type="button" class="btn btn-success" (click)="guardar(modal)">
+          <button type="button" class="btn btn-success" [disabled]="!hayActividadesSeleccionadas()" (click)="guardar(modal)">
             Guardar
           </button>
         </ng-container>

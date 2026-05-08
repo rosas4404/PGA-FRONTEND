@@ -56,7 +56,7 @@ export class InscripcionComponent implements OnInit{
   grupos: grupoDTOResponse [] = [];
 
   tipos = [ { value: 'Servicio_Social', label: 'Servicio Social' },
-            { value: 'Practicas_Profesionales', label: 'Prácticas Profesionales' },
+            { value: 'Practicas_Profesionales', label: 'Practicas Profesionales' },
             { value: 'Jovenes_Construyendo_El_Futuro', label: 'Jovenes Construyendo el Futuro' }
           ];
   

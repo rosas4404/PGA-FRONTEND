@@ -24,3 +24,14 @@
     white-space: nowrap;
     display: inline-block;
 }
+
+.nombre-usuario {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;       /* máximo 2 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  max-width: 140px;            /* ajusta según tu sidebar */
+  word-break: break-word;
+}

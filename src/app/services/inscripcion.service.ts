@@ -8,6 +8,8 @@ import { crearInscripcionDTO } from '../models/dto/RequestDto/crearInscripcionDT
 import { asignarGrupoDTO } from '../models/asignarGrupoDTO';
 import { Observable } from 'rxjs';
 import { alumnoGrupoDTOResponse } from '../models/dto/ResponseDto/alumnoGrupoDTOResponse';
+import { grupoDTOResponse } from '../models/dto/ResponseDto/grupoDTOResponse';
+import { grupoAlumnoDTOResponse } from '../models/dto/ResponseDto/grupoAlumnoDTOResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -69,5 +71,14 @@ export class InscripcionService {
   //consulta por id
   consultaPorId(idInscripcion: number): Observable<InscripcionResponseDTO>{
     return this.httpClient.get<InscripcionResponseDTO>(`${this.baseUrl}/${idInscripcion}`);
+  }
+
+  //grupo por alumnos con inscripion activa
+  consultaGrupoAlumno(idUsuario: number): Observable<grupoAlumnoDTOResponse>{
+    return this.httpClient.get<grupoAlumnoDTOResponse>(`${this.baseUrl}/grupoAlumno/${idUsuario}`);
+  }
+  //grupos por alumno con inscripciones desactivads 
+  consultaGruposAlumno(idUsuario: number): Observable<grupoAlumnoDTOResponse[]>{
+    return this.httpClient.get<grupoAlumnoDTOResponse[]>(`${this.baseUrl}/gruposAlumno/${idUsuario}`);
   }
 }

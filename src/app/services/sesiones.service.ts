@@ -10,6 +10,7 @@ import { sesionUpdateDTO } from '../models/dto/RequestDto/sesionUpdateDTO';
 import { PageResponse } from '../models/pageResponse';
 import { asistenciaDTORequest } from '../models/dto/RequestDto/asistenciaDTORequest';
 import { ReporteAsistencia } from '../models/dto/ResponseDto/reporteAsistencia';
+import { sesionDetalleAlumnoDTO } from '../models/dto/ResponseDto/sesionDetalleAlumnoDTOResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -90,5 +91,27 @@ export class SesionesService {
     }
 
     return this.httpClient.get<PageResponse<sesionDocenteDTOResponse>>(`${this.apiUrl}/docente/${idDocente}/sesiones`,{ params });}
+
+    consultaAlumnoPage(idInscripcion:number, page: number,size: number,filtros?: any): Observable<PageResponse<sesionDetalleAlumnoDTO>> {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size);
+
+    if (filtros) {
+      if (filtros.idInscripcion) {
+        params = params.set('idInscripcion', filtros.idInscripcion);
+      }
+      if (filtros.idGrupo) {
+        params = params.set('idGrupo', filtros.idGrupo);
+      }
+      if (filtros.momentoSesion) {
+        params = params.set('momentoSesion', filtros.momentoSesion);
+      }
+      if (filtros.alcance) {
+        params = params.set('alcance', filtros.alcance);
+      }
+    }
+
+    return this.httpClient.get<PageResponse<sesionDetalleAlumnoDTO>>(`${this.apiUrl}/alumno/${idInscripcion}/sesiones`,{ params });}
 
 }
