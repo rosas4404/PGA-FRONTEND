@@ -19,19 +19,30 @@
     <div *ngIf = "grupos.length > 0">
         <div class="row g-4 justify-content-center mt-2"  (mouseenter)="pausarAutoPlay()" (mouseleave)="reanudarAutoPlay()">
             <div class= "col-md-4" *ngFor="let grupo of paginas [paginaActual]">
-                <div class = "grupo-card">
-                    <div class="grupo-header">
-                        <h6 class="fw-bold mb-1">{{ grupo.nombre }}</h6>
-                        <small class="text-muted">{{ grupo.nombreCurso }}</small>
+                <div class = "grupo-card h-100 shadow-sm">
+                    <div class="grupo-header p-4 pb-2">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="mb-0 fw-bold text-primary">{{ grupo.nombre }}</h5>
+                            <span class="badge rounded-pill px-3 py-2 border"
+                                [ngClass]="grupo.estado === 'HABILITADO' ? 'bg-success-subtle text-success border-success' : 'bg-danger-subtle text-danger border-danger'">
+                            <span class="dot">●</span> {{ grupo.estado }}
+                            </span>
+                        </div>
+                        <p class="text-secondary small mb-0">{{ grupo.nombreCurso }}</p>    
                     </div>
-                    <div class="grupo-body">
-                        <span class="alumnos">
-                            {{ grupo.alumnos }} alumnos
-                        </span>
+                    
+                    <hr class="mx-4 my-2 opacity-10">
+
+                    <div class="grupo-body p-4 pt-2">
+                        <div class="info-row mb-2 d-flex align-items-center gap-2">
+                            <span class="text-muted small uppercase fw-semibold">Alumnos:</span>
+                            <p class="mb-0 text-dark">{{ grupo.alumnos }} alumnos</p>
+                        </div>
+
+                        <button class="btn btn-outline-primary w-100 fw-bold" (click)="verGrupo(grupo)">
+                            Entrar
+                        </button>
                     </div>
-                    <button class="btn btn-primary w-100 mt-3" (click)="verGrupo(grupo)">
-                        Entrar
-                    </button>
                 </div>
             </div>
         </div>

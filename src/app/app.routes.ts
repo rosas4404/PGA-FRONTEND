@@ -29,10 +29,14 @@ import { ActividadesGrupoComponent } from './pages/Docente/actividades-grupo/act
 import { ActividadComponent } from './pages/Docente/actividad/actividad.component';
 import { SesionGrupoComponent } from './pages/Docente/sesion-grupo/sesion-grupo.component';
 import { AlumnosGrupoComponent } from './pages/Docente/alumnos-grupo/alumnos-grupo.component';
-import { ReporteAsistenciaComponent } from './pages/Docente/reporte-asistencia/reporte-asistencia.component';
 import { InicioAdminComponent } from './pages/Administrador/inicio-admin/inicio-admin.component';
 import { RegistroActividadesComponent } from './pages/Docente/registro-actividades/registro-actividades.component';
-
+import { InicioAlumnoComponent } from './pages/Alumno/inicio-alumno/inicio-alumno.component';
+import { InicioGrupoHabilitadoComponent } from './pages/Alumno/inicio-grupo-habilitado/inicio-grupo-habilitado.component';
+import { PanelGrupoAlumnoComponent } from './pages/Alumno/panel-grupo-alumno/panel-grupo-alumno.component';
+import { InicioGruposDeshaComponent } from './pages/Alumno/inicio-grupos-desha/inicio-grupos-desha.component';
+import { GrupoDeshabilitadoComponent } from './pages/Alumno/grupo-deshabilitado/grupo-deshabilitado.component';
+import { SesionesAlumnoComponent } from './pages/Alumno/sesiones-alumno/sesiones-alumno.component';
 
 
 export const routes: Routes = [
@@ -90,8 +94,27 @@ export const routes: Routes = [
             },
             {path: 'alumno-dashboard', component:AlumnoDashboardComponent, canActivate:[alumnoGuard],
                 children:[
+                    { path: '', redirectTo: 'inicioAlumno', pathMatch: 'full' },
+                    {path:'inicioAlumno', component : InicioAlumnoComponent},
                     {path:'perfil', component: PerfilComponent},
                     {path:'expediente-alumno', component: ExpdienteAlumnoComponent},
+                    {path:'panel-grupo-alumno', component: PanelGrupoAlumnoComponent,
+                        children:[
+                            { path: '', component: InicioGrupoHabilitadoComponent},
+                            { path: 'sesiones-alumno', component: SesionesAlumnoComponent},
+                        ]
+                    },
+                    {path:'inicio-grupos-desh',
+                        children:[
+                            {path: '', component: InicioGruposDeshaComponent},
+                            {path:'grupo-deshabilitado/:idInscripcion/:idGrupo', component: GrupoDeshabilitadoComponent,
+                                children: [
+                                { path: '', component: InicioGrupoHabilitadoComponent},
+                                { path: 'sesiones-alumno', component: SesionesAlumnoComponent},
+                                ]
+                            },
+                        ]
+                    }
                 ]
             },
             {path: 'login', component:LoginComponent},

@@ -84,7 +84,7 @@
 
               <button class="btn btn-sm btn-outline-primary me-2" 
                       (click)="cargarSesion(s.idSesion, 'consultaAsistencia', sesionModal)" title="Consulta asisencia">
-                <i class="bi bi-eye"></i>
+                <i class="bi bi-card-checklist"></i>
               </button>
 
               <button class="btn btn-sm btn-outline-primary me-2" 
@@ -223,6 +223,14 @@
       </div>
 
       <div *ngIf="modo === 'consultaAsistencia'" style="max-height: 200px; overflow-y: auto;">
+        <ng-container class="mb-2">
+          <div class="col-md-6">
+            <span><strong>Fecha: </strong> {{ sesionDetalle.fecha }}</span>
+          </div>
+          <div class="col-md-6">
+            <span><strong>Tema: </strong> {{ sesionDetalle.tema }}</span>
+          </div>
+        </ng-container>
         <table class="table table-sm table-hover mb-0">
           <tbody class="small">
             <tr *ngFor="let alumno of alumnosDetalle">
@@ -239,6 +247,14 @@
       </div>
 
       <div *ngIf="modo === 'tomarAsistencia'" [formGroup]="asistenciaForm" style="max-height: 300px; overflow-y: auto;">
+        <ng-container class="mb-2">
+          <div class="col-md-6">
+            <span><strong>Fecha: </strong> {{ sesionDetalle.fecha }}</span>
+          </div>
+          <div class="col-md-6">
+            <span><strong>Tema: </strong> {{ sesionDetalle.tema }}</span>
+          </div>
+        </ng-container>
         <table class="table table-sm table-hover mb-0">
           <tbody class="small" formArrayName="asistencias">
             <tr *ngFor="let alumno of alumnosDetalle; let i = index" [formGroupName]="i">
@@ -251,7 +267,7 @@
                         class="form-select form-select-sm d-inline-block w-auto"
                         [ngClass]="{'is-invalid': asistenciaForm.get('asistencias')?.get(i + '.estado')?.invalid && 
                                                   asistenciaForm.get('asistencias')?.get(i + '.estado')?.touched}">
-                  <option [ngValue]="null">Selecciona</option>
+                  <!--<option [ngValue]="null"></option>-->
                   <option *ngFor="let e of estadoAsistencia" [ngValue]="e.value">
                     {{ e.label }}
                   </option>
@@ -295,19 +311,19 @@
     </div>
 
     <div class="modal-footer justify-content-center">
+      <button type="button" class="btn btn-secondary px-4" (click)="modal.close()">
+        {{ modo === 'ver' || modo === 'consultaAsistencia' ? 'Cerrar' : 'Cancelar' }}
+      </button>
+
       <button *ngIf="modo === 'tomarAsistencia'" type="button" 
               (click)="asistencia(sesionDetalle.idSesion, 'tomarAsistencia', modal)" 
               class="btn btn-success px-4" [disabled]="formularioAsistenciaInvalido">
-        Registrar Asistencia
+        Registrar
       </button>
 
       <button *ngIf="['crear', 'editarSesion', 'editarAlumnos'].includes(modo)" 
               type="submit" [disabled]="sesionForm.invalid" class="btn btn-success px-4">
-        {{ modo === 'crear' ? 'Guardar Sesión' : 'Actualizar' }}
-      </button>
-
-      <button type="button" class="btn btn-secondary px-4" (click)="modal.close()">
-        {{ modo === 'ver' || modo === 'consultaAsistencia' ? 'Cerrar' : 'Cancelar' }}
+        {{ modo === 'crear' ? 'Guardar' : 'Actualizar' }}
       </button>
     </div>
   </form>

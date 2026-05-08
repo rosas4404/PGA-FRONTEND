@@ -1,0 +1,42 @@
+<div *ngIf="mostrarLista">
+  <div *ngIf="mensajeError" class="alert alert-warning mt-3 text-center">
+     {{ mensajeError }}
+  </div>
+
+  <div class="row g-4 justify-content-center mt-2">
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let g of grupos">
+      <div class="grupo-card h-100 shadow-sm">
+        <div class="grupo-header p-4 pb-2">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="mb-0 fw-bold text-primary">{{ g.nombre }}</h5>
+            <span class="badge rounded-pill px-3 py-2 border"
+                  [ngClass]="g.estado === 'HABILITADO' ? 'bg-success-subtle text-success border-success' : 'bg-danger-subtle text-danger border-danger'">
+              <span class="dot">●</span> {{ g.estado }}
+            </span>
+          </div>
+          <p class="text-secondary small mb-0">{{ g.nombreCurso }}</p>
+        </div>
+
+        <hr class="mx-4 my-2 opacity-10">
+
+        <div class="grupo-body p-4 pt-2">
+          <div class="info-row mb-2 d-flex align-items-center gap-2">
+            <span class="text-muted small uppercase fw-semibold">Docente:</span>
+            <p class="mb-0 text-dark">{{ g.docente }}</p>
+          </div>
+          
+          <div class="info-row mb-4 d-flex align-items-center gap-2">
+            <span class="text-muted small uppercase fw-semibold">Periodo:</span>
+            <p class="mb-0 text-dark">{{ g.periodo }}</p>
+          </div>
+          
+          <button class="btn btn-outline-primary w-100 fw-bold" (click)="verDetalleGrupo(g.idInscripcion!, g.idGrupo!)">
+            Entrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

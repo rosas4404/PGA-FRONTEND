@@ -190,9 +190,9 @@ export class CursoComponent implements OnInit{
   abrirconfirmacion(curso: cursoDTOResponse, content: any) {
     this.cursoSeleccionado = curso;
     if(curso.activo===true){
-      this.accionTexto='desactivar el ' + curso.nombre
+      this.accionTexto='desactivar el curso: ' + curso.nombre
     }else{
-      this.accionTexto='activar el ' + curso.nombre
+      this.accionTexto='activar el curso: ' + curso.nombre
     }
     this.modalService.open(content, {
       centered: true
@@ -371,4 +371,8 @@ export class CursoComponent implements OnInit{
       }, 200);
   }
 
+  hayActividadesSeleccionadas(): boolean {
+    const actividades = this.cursoForm.get('idActividadesBase')?.value;
+    return actividades && actividades.length > 0;
+  }
 }

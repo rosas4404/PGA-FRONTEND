@@ -1,0 +1,23 @@
+<div class="grupo-layout">
+
+    <div class="grupo-tabs">
+        <button routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            Inicio
+        </button>
+
+        <div class="nombre-grupo">
+            <h6 class="mb-0">Consulta</h6>
+        </div>
+    </div>
+
+    <div class="acciones-secundarias">
+        <button class="btn btn-sm btn-outline-primary" (click)="volver()">
+            <i class="bi bi-arrow-left"></i>Regresar
+        </button>
+    </div>
+
+    <div class="grupo-contenido">
+        <router-outlet></router-outlet>
+    </div>
+
+</div>

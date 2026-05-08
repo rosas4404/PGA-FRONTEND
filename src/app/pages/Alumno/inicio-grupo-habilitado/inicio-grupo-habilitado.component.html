@@ -1,0 +1,107 @@
+<div *ngIf="mensajeError" class="alert alert-warning mt-3 text-center">
+  {{ mensajeError }}
+</div>
+
+<div class="grupo-card" *ngIf="grupo && !mensajeError">
+
+  <div class="row">
+
+    <!-- IZQUIERDA: INFO -->
+    <div class="col-md-12 grupo-info">
+      
+      <h4 class="grupo-nombre">{{ grupo?.nombre }}</h4>
+
+      <div class="grupo-detalles">
+        <div><strong>Docente: </strong>  {{ grupo?.docente }}</div>
+        <div><strong>Curso: </strong>  {{ grupo?.nombreCurso }}</div>
+        <div><strong>Periodo: </strong>  {{ grupo?.periodo }}</div>
+        <div>
+          <span class="badge rounded-pill px-3 py-2"
+                [ngClass]="grupo?.estado ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
+            ● {{ grupo?.estado }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grupo-card" *ngIf="grupo && !mensajeError">
+
+  <div class="row">
+
+    <!-- IZQUIERDA: INFO -->
+    <div class="col-md-12 grupo-info">
+      
+      <h4 class="grupo-nombre">DATOS DE LA INSCRIPCIÓN</h4>
+
+      <div class="inscripcion">
+        <div><strong>Fecha: </strong>  {{ inscripcion?.fechaInicio }} - {{ inscripcion?.fechaFin }} </div>
+        <div><strong>Tipo de inscripción: </strong>  {{ inscripcion?.tipo }}</div>
+        <div>
+          <span class="badge rounded-pill px-3 py-2"
+                [ngClass]="inscripcion?.estado ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
+            ● {{ inscripcion?.estado ? 'HABILITADO' : 'DESHABILITADO' }}
+          </span>
+        </div>
+        <div><strong>Escuela: </strong>  {{ inscripcion?.escuela }}</div>
+        <div><strong>Nivel de Estudio: </strong>  {{ inscripcion?.nivelEstudio }}</div>
+        <div><strong>Carrera: </strong>  {{ inscripcion?.carrera }}</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="grupo-card" *ngIf="grupoDeshabilitado">
+
+  <div class="row">
+
+    <!-- IZQUIERDA: INFO -->
+    <div class="col-md-12 grupo-info">
+      
+      <h4 class="grupo-nombre">{{ grupoDeshabilitado?.nombre }}</h4>
+
+      <div class="grupo-detalles">
+        <div><strong>Docente: </strong>  {{ grupoDeshabilitado?.docente }}</div>
+        <div><strong>Curso: </strong>  {{ grupoDeshabilitado?.nombreCurso }}</div>
+        <div><strong>Periodo: </strong>  {{ grupoDeshabilitado?.periodo }}</div>
+        <div>
+          <span class="badge rounded-pill px-3 py-2"
+                [ngClass]="grupoDeshabilitado?.estado ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
+            ● {{ grupoDeshabilitado?.estado }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grupo-card" *ngIf="grupoDeshabilitado">
+
+  <div class="row">
+
+    <!-- IZQUIERDA: INFO -->
+    <div class="col-md-12 grupo-info">
+      
+      <h4 class="grupo-nombre">DATOS DE LA INSCRIPCIÓN</h4>
+
+      <div class="inscripcion2">
+        <div><strong>Fecha: </strong>  {{ inscripcion?.fechaInicio }} - {{ inscripcion?.fechaFin }} </div>
+        <div><strong>Tipo de inscripción: </strong>  {{ inscripcion?.tipo }}</div>
+        <div><strong>Baja: </strong>  {{ inscripcion?.fechaBaja | date:'dd/MM/yyyy' }}</div>
+        <div>
+          <span class="badge rounded-pill px-3 py-2"
+                [ngClass]="inscripcion?.estado ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
+            ● {{ inscripcion?.estado ? 'HABILITADO' : 'DESHABILITADO' }}
+          </span>
+        </div>
+        <div><strong>Escuela: </strong>  {{ inscripcion?.escuela }}</div>
+        <div><strong>Nivel de Estudio: </strong>  {{ inscripcion?.nivelEstudio }}</div>
+        <div><strong>Carrera: </strong>  {{ inscripcion?.carrera }}</div>
+      </div>
+    </div>
+  </div>
+
+</div>
