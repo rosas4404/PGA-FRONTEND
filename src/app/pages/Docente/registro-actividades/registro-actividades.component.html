@@ -1,184 +1,451 @@
 <div class="page-container">
-<div class="card shadow-sm border-0">
-    <div class="card-header bg-smoke py-3">
-        <h5 class="mb-0 fw-bold text-maroon text-center">
-            Actividades
-        </h5>
+    <div class="actividad-tabs">
+        <button (click)="cambiarModoAccion( 'crear')"  [class.active]="modoAccion === 'crear'">
+            Registro
+        </button>
+        <button (click)="cambiarModoAccion('actualizar')"  [class.active]="modoAccion === 'actualizar'">
+            Actualización
+        </button>
     </div>
-        <div class="card-body">
-            <div class="d-flex justify-content-between">
-                <div class = "col col-md-4 d-flex align-items-center ">
-                    <div class="tabs-actividad">
-                        <button 
-                            [class.active]="modo === 'catalogo'" 
-                            (click)="cambiarModo('catalogo')">
-                            Desde catálogo
-                        </button>
-                        <button 
-                            [class.active]="modo === 'extra'" 
-                            (click)="cambiarModo('extra')">
-                            Actividad extra
-                        </button>
-                    </div>
+        
+    <div class="actividad-contenido">
+        <div *ngIf="modoAccion == 'crear'">
+            <div class = "w-100  mb-3" >
+                <div class = " progress" style="height: 5px;" >
+                    <div class = " progress-bar bg-maroon" [style.width.%] = "paso == 1 ? 33 : paso == 2 ? 66: 100"></div>
                 </div>
-                <div class = "col col-md-8 d-flex align-items-center ">
-                    <form [formGroup] = "registroExtraForm" *ngIf= "modo === 'extra'"  class="w-100">
-                        <div class = "mb-3">
-                            <div class="input-group">
-                                <span class="input-group-text">Titulo</span>
-                                <input 
-                                    type="text"
-                                    formControlName="titulo"
-                                    class="form-control"
-                                    [ngClass]="{'is-invalid': registroExtraForm.get('titulo')?.invalid && registroExtraForm.get('titulo')?.touched}">
-                                
-                                <div class="invalid-feedback" style="font-size:0.6rem;">
-                                    Campo Obligatorio
+                <div class="d-flex justify-content-between small mt-1">
+                    <span [ngClass] = "paso == 1 ? 'fw-bold text-maroon' : 'text-muted'">Registro</span>
+                    <span [ngClass] = "paso == 2 ? 'fw-bold text-maroon' : 'text-muted'">Instrucciones</span>
+                    <span [ngClass] = "paso == 3 ? 'fw-bold text-maroon' : 'text-muted'">Alcance</span>
+                </div>
+            </div>
+            <div *ngIf = "paso==1" class="w-100 d-flex flex-column h-100">
+                <div class="tabs-actividad mb-5">
+                    <button 
+                        [class.active]="modo === 'catalogo'" 
+                        (click)="cambiarModo('catalogo')">
+                            Desde catálogo
+                    </button>
+                    <button 
+                        [class.active]="modo === 'extra'" 
+                        (click)="cambiarModo('extra')">
+                            Actividad extra
+                    </button>
+                </div>
+                <div *ngIf= "modo === 'catalogo'" class="w-100">
+                    <div class="row justify-content-center mt-5">
+                        <div class="col col-md-8 ">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text " style="font-size:0.9rem;">Actividad</span>
+                                <div class="dropdown-actividades">
+                                    <button (click)="toggleDropdown()" class="btn-dropdown d-flex justify-content-between">
+                                        {{ actividadBaseSeleccionada?.titulo || 'Seleccionar actividad' }}
+                                        <i class="bi bi-chevron-down ms-2 "></i>
+                                    </button>
+                                    <div *ngIf="dropdownAbierto" class="dropdown-lista">
+                                        <div 
+                                            *ngFor="let actividad of disponiblesCatalogo" 
+                                            class="item"
+                                            (click)="seleccionarActividad(actividad)">
+                                                {{ actividad.titulo }}
+                                        </div>
+                                    </div> 
                                 </div>
                             </div> 
-                        </div> 
-                        <div class = "mb-3">
-                            <div class="input-group">
-                                <span class="input-group-text">Descripción</span>
-                                <textarea
-                                    rows ="5" class="form-control"
-                                    formControlName="descripcion"
-                                    [ngClass]="{'is-invalid': registroExtraForm.get('descripcion')?.invalid && registroExtraForm.get('descripcion')?.touched}">
-                                </textarea>
-                                <div class="invalid-feedback" style="font-size:0.6rem;">
-                                        Campo Obligatorio
-                                </div>
+                            <div class="input-group mt-2">
+                                <span class="input-group-text" style="font-size:0.9rem;">Titulo</span>
+                                <input 
+                                    type="text"
+                                    [value] = "actividadBaseSeleccionada?.titulo"
+                                    class="form-control"
+                                    disabled>
                             </div>
-                            <div class=" d-flex align-items-center  mt-1">
-                                <small class="ms-auto flex-shrink-0" style="font-size: 0.7rem;" 
-                                    [ngClass]="{'text-danger': registroExtraForm.get('descripcion')?.value?.length >= 250, 
-                                    'text-muted': registroExtraForm.get('descripcion')?.value?.length < 250}">
-                                    {{ registroExtraForm.get('descripcion')?.value?.length || 0 }} / 250 caracteres
-                                </small>
+                            <div class="input-group mt-2">
+                                <span class="input-group-text" style="font-size:0.9rem;">Descripción</span>
+                                <textarea    
+                                    [value] = "actividadBaseSeleccionada?.descripcion"
+                                    rows = "2"
+                                    class="form-control"
+                                    disabled>
+                                </textarea>
+                            </div>
+                            <div class="input-group mt-2">
+                                <span class="input-group-text" style="font-size:0.9rem;">Campo formativo</span>
+                                <input 
+                                type="text"
+                                [value] = "actividadBaseSeleccionada?.campoFormativo?.nombre"
+                                class="form-control"
+                                disabled>
                             </div>
                         </div>
-                    </form>
-                    <div *ngIf= "modo === 'catalogo'" class="w-100">
+                    </div>
+                </div>
+                <form [formGroup] = "registroExtraForm" *ngIf= "modo === 'extra'"  class=" row justify-content-center mt-5 w-100">
+                    <div class = " col col-md-8 mb-3">
                         <div class="input-group">
-                            <span class="input-group-text">Actividad</span>
-                            <div class="dropdown-actividades">
-                                <button (click)="toggleDropdown()" class="btn-dropdown d-flex justify-content-between">
-                                    Seleccionar actividad
-                                    <i class="bi bi-chevron-down ms-2 "></i>
-                                </button>
-                                <div *ngIf="dropdownAbierto" class="dropdown-lista">
-                                    <div 
-                                        *ngFor="let actividad of disponibles" 
-                                        class="item"
-                                        (click)="seleccionarActividad(actividad)">
-                                        {{ actividad.titulo }}
-                                    </div>
-                                </div> 
-                            </div>
-                        </div> 
-                        <div class="input-group mt-2">
-                            <span class="input-group-text">Titulo</span>
+                            <span class="input-group-text" style="font-size:0.9rem;">Titulo</span>
                             <input 
                                 type="text"
-                                value={{actividadBaseSeleccionada?.titulo}}
+                                formControlName="titulo"
                                 class="form-control"
-                                disabled>
+                                [ngClass]="{'is-invalid': registroExtraForm.get('titulo')?.invalid && registroExtraForm.get('titulo')?.touched}">
+                                <div class="invalid-feedback" style="font-size:0.6rem;"
+                                    *ngIf="registroExtraForm.get('titulo')?.invalid && registroExtraForm.get('titulo')?.touched">
+                                    Campo Obligatorio
+                                </div>
                         </div>
-                        <div class="input-group mt-2">
+                    </div> 
+                    <div class = "col col-md-8 mb-3">
+                        <div class="input-group">
                             <span class="input-group-text">Descripción</span>
-                            <textarea    
-                                [value] = "actividadBaseSeleccionada?.descripcion"
-                                rows = "2"
-                                class="form-control"
-                                disabled>
+                            <textarea
+                                rows ="2" class="form-control"
+                                formControlName="descripcion"
+                                [ngClass]="{'is-invalid': registroExtraForm.get('descripcion')?.invalid && registroExtraForm.get('descripcion')?.touched}">
                             </textarea>
                         </div>
-                    
-                        <div class="input-group mt-2">
-                            <span class="input-group-text">Campo formativo</span>
-                            <input 
-                                type="text"
-                                value={{actividadBaseSeleccionada?.campoFormativo?.nombre}}
-                                class="form-control"
-                            disabled>
+                        <div class="d-flex align-items-center  mt-1">
+                            <div class="invalid-feedback  d-block mb-0" style="font-size: 0.6rem; max-width: 70%;"
+                                *ngIf="registroExtraForm.get('descripcion')?.invalid && registroExtraForm.get('descripcion')?.touched">
+                                Campo Obligatorio
+                            </div>
+                            <small class="ms-auto flex-shrink-0" style="font-size: 0.7rem;" 
+                                [ngClass]="{'text-danger': registroExtraForm.get('descripcion')?.value?.length >= 250, 
+                                'text-muted': registroExtraForm.get('descripcion')?.value?.length < 250}">
+                                {{ registroExtraForm.get('descripcion')?.value?.length || 0 }} / 250 caracteres
+                            </small>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
-            <div class="divider mt-3"></div>
-
-            <div class="d-flex justify-content-between mt-3">
-                <div class="col-md-6 justify-content-center" >
-                    <div class="switch-box" *ngIf="modo == 'catalogo'">
-                        <label class="form-check form-switch">
-                            <input 
-                                class="form-check-input" 
-                                type="checkbox" 
-                                [checked]="setInstrucciones"
-                                (change)="setInstrucciones = !setInstrucciones">
-                            <span>Reemplazar instrucciones</span>
-                        </label>
-                    </div>
-                    <div class="switch-box">
-                        <label class="form-check form-switch">
-                            <input 
-                            class="form-check-input" 
-                            type="checkbox" 
-                            [checked]="setEntrega"
-                            (change)="setEntrega = !setEntrega">
-                            <span>Requiere entrega</span>
-                        </label>
-                    </div>
-                </div>
-                <div class = "col col-md-6 d-flex justify-content-center">
-                    <p *ngIf="modo == 'catalogo'">
-                        Instrucciones para la actividad <strong>{{ actividadBaseSeleccionada?.titulo }}</strong>:
-                        <a class="link-box" [href]="'http://localhost:8080/api/actividadBase/'+actividadBaseSeleccionada?.idActividad+ '/instrucciones'"target="_blank">
-                            {{actividadBaseSeleccionada?.urlInstrucciones?.split('/')?.pop()}}
+            <div *ngIf = "paso == 2" class="w-100 d-flex flex-column h-100">
+                <div class="card" *ngIf="modo === 'catalogo' && actividadBaseSeleccionada">
+                    <div class="card-body">
+                        <h6 class="mb-2">Instrucciones actuales</h6>
+                        <p class="mb-1">
+                            Actividad: <strong>{{ actividadBaseSeleccionada.titulo }}</strong>
+                        </p>
+                        <a class="link-box"
+                            [href]="'http://localhost:8080/api/actividadBase/'+actividadBaseSeleccionada.idActividad+'/instrucciones'"
+                            target="_blank">
+                            {{ actividadBaseSeleccionada.urlInstrucciones?.split('/')?.pop() }}
                         </a>
-                    </p>
-                    <div *ngIf=" setInstrucciones === true" class=" bloque bloque-archivo">
-                        <input type="file" #fileInput hidden accept = ".pdf"  class="form-control"
-                        (change)="onFileSelected($event)">
-                        <button type="button" class="btn btn-sm btn-outline-primary"
-                            (click)="fileInput.click()" 
-                            title="Subir archivo (Máx. 2MB)">
-                            <i class="bi bi-upload"></i>
-                                {{archivoSeleccionado ? 'Cambiar archivo' : 'Subir archivo'}}
-                        </button>
-                        <span class="file-name" >
-                            {{ archivoSeleccionado?.name || 'Seleccione un archivo' }}
-                        </span>
-                    </div>
 
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h6 class="mb-3">Configuración</h6>
+                        <form [formGroup]="configForm">
+                            <div class="form-check form-switch" >
+                            
+                                <input 
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    formControlName="setInstrucciones">
+                                <label>{{modo == 'catalogo' ?  'Reemplazar instrucciones' : 'Agregar instrucciones'}}</label>
+                            </div>
+
+                            <div class="form-check form-switch mt-2">
+                                <input 
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    formControlName="setEntrega">
+                                <label>Requiere entrega</label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mt-4" *ngIf="configForm.get('setInstrucciones')?.value === true">
+                    <div class="card-body">
+                        <h6 class="mb-2">Archivo de instrucciones</h6>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <button 
+                                type="button"
+                                class="btn btn-outline-primary btn-sm"
+                                (click)="fileInput.click()">
+                                <i class="bi bi-upload"></i>
+                                    {{ archivoSeleccionado ? 'Cambiar archivo' : 'Subir archivo' }}
+                            </button>
+
+                            <span class="text-muted small">
+                                {{ archivoSeleccionado?.name || 'Ningún archivo seleccionado' }}
+                            </span>
+                        </div>
+                        <input 
+                            type="file"
+                            #fileInput
+                            hidden
+                            accept=".pdf"
+                            (change)="onFileSelected($event)">
+
+                        <small class="text-muted d-block mt-2">
+                            Solo PDF (máx. 2MB)
+                        </small>
+                    </div>
                 </div>
             </div>
-            <div class="divider"></div>
-            <div class="d-flex justify-content-between mt-3">
-                <div class="col-md-6 justify-content-center" >
-                    <div class="switch-box">
-                        <label class="form-check form-switch">
-                            <input 
-                            class="form-check-input" 
-                            type="checkbox" 
-                            [checked]="esIndividual"
-                            (change)="esIndividual = !esIndividual">
-                            <span>Alcance individual</span>
-                        </label>
+            <div *ngIf = "paso == 3" class="w-100 d-flex flex-column h-100">
+                <div class="w-100">
+                    <div class="card mt-4">
+                        <div class = "card-body">
+                            <form [formGroup]="alcanceForm">
+                                <div class="form-check form-switch" >
+                                    <input 
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    formControlName="esIndividual">
+                                    <label>Alcance individual</label>
+                                </div>
+                            </form>
+                            <div *ngIf="alcanceForm.get('esIndividual')?.value == false">
+                                <p class="text-muted small">
+                                    La actividad será asignada a los grupos seleccionados
+                                </p>
+                                <div class="list-group mt-2">
+                                    <label 
+                                        *ngFor="let g of gruposFiltrados"
+                                        class="list-group-item d-flex align-items-center">
+                                        <input class="form-check-input me-2 " 
+                                            type="checkbox"
+                                            [id]="'grupo-' + g.nombre"
+                                            [value]="g.idGrupo"
+                                            (change)="seleccionGrupo(g.idGrupo, $event)">
+                                        <span>{{ g.nombre }}</span>   
+                                    </label>
+                                </div>
+                            </div>
+                            <div *ngIf="alcanceForm.get('esIndividual')?.value == true">
+                                <p class="text-muted small">
+                                    Seleccione el grupo y los alumnos
+                                </p>
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <label class="fw-semibold" style="font-size: 0.9rem;">Grupos</label>
+                                        <select 
+                                            class="form-select mt-2"
+                                            (ngModelChange)="cargarParticipantes($event)" 
+                                            [(ngModel)]="grupoSeleccionado">
+                                                <option [ngValue]="null">
+                                                    Selecciona un Grupo
+                                                </option>
+                                                <option *ngFor="let grupo of gruposFiltrados" [ngValue]="grupo">
+                                                    {{ grupo.nombre }}
+                                                </option>
+                                        </select>
+                                    </div>
+                                    
+                                     <div class="col-md-8">
+                                        <label class="fw-semibold" style="font-size: 0.9rem;">Usuarios</label>
+                                        <div class="list-group mt-2" style="max-height: 250px; overflow-y: auto;">
+                                            <label *ngFor="let a of alumnos"
+                                                class="list-group-item d-flex align-items-center">
+                                                    <input 
+                                                    class="form-check-input me-2"
+                                                    type="checkbox" 
+                                                    [value]="a.idInscripcion"
+                                                    (change)="seleccionAlumno(a.idInscripcion ,$event)"/>
+                                                    {{ a.nombre }} {{ a.apellidoPaterno }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6 justify-content-center" >
-                    <div class="input-group">
-                            <span class="input-group-text">Grupo</span>
-                            <select class="form-select" formControlName="idGrupo">
-                                <option value = "">Seleccione un grupo...</option>
-                                <option *ngFor="let g of grupos" [value]="g.idGrupo">{{ g.nombre }}</option>
-                            </select>          
-                        </div>
+            </div>
+            <div class="d-flex justify-content-between gap-2 mt-5">
+                <button class="btn btn-outline-secondary" *ngIf="paso == 1" 
+                    [disabled] = "(modo === 'catalogo' && !actividadBaseSeleccionada) ||
+                                (modo === 'extra' && !registroExtraForm.valid)" (click)="cancelar() ">
+                    Cancelar
+                </button>
+                <button class="btn btn-outline-primary align-items-center " *ngIf = "paso == 1" 
+                    [disabled]= " (modo === 'catalogo' && actividadBaseSeleccionada == null)  || 
+                        (modo === 'extra' && !registroExtraForm.valid )" 
+                    (click) = "modo === 'extra' && cargarGrupos(registroExtraForm.get('titulo')?.value); paso = 2">        
+                        Siguiente
+                </button>
+                <!--Paso 2 -->
+                <div *ngIf="paso == 2" class="w-100 d-flex justify-content-between">
+                    <button class="btn btn-outline-secondary"
+                        (click) = "regresar()" >
+                         Regresar
+                    </button>
+                    <button class="btn btn-outline-primary" (click)="paso = 3" 
+                        [disabled]=" (modo === 'catalogo' && configForm.get('setInstrucciones')?.value === true  && archivoSeleccionado == null) ||
+                        (modo === 'extra' && archivoSeleccionado == null)">
+                            Siguiente
+                    </button>
+                </div>
+                <!--Paso 3 -->
+                <div *ngIf="paso == 3" class="w-100 d-flex justify-content-between">
+                    <button class="btn btn-outline-secondary"
+                        (click) = "regresar()" >
+                        Regresar
+                    </button>
+                    <button class="btn btn-outline-success align-items-center"
+                        [disabled]=" (alcanceForm.get('esIndividual')?.value == true && idInscripciones.length <= 0) || 
+                        (alcanceForm.get('esIndividual')?.value == false && idGrupos.length <=0)"
+                        (click)="guardar()">
+                        Guardar
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
+        <div *ngIf="modoAccion == 'actualizar'">
+            <div class = "w-100  mb-3" >
+                <div class = " progress" style="height: 5px;" >
+                    <div class = " progress-bar bg-maroon" [style.width.%] = "paso == 1 ? 33 : paso == 2 ? 66: 100"></div>
+                </div>
+                <div class="d-flex justify-content-between small mt-1">
+                    <span [ngClass] = "paso == 1 ? 'fw-bold text-maroon' : 'text-muted'">Actividad</span>
+                    <span [ngClass] = "paso == 2 ? 'fw-bold text-maroon' : 'text-muted'">Instrucciones</span>
+                    <span [ngClass] = "paso == 3 ? 'fw-bold text-maroon' : 'text-muted'">Alcance</span>
+                </div>
+            </div>
+            <div *ngIf = "paso==1" class="w-100 d-flex flex-column h-100">
+                <div  class="w-100">
+                    <div class="row justify-content-center mt-5">
+                        <div class="col col-md-8 ">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text " style="font-size:0.9rem;">Actividad</span>
+                                <div class="dropdown-actividades">
+                                    <button (click)="toggleDropdown()" class="btn-dropdown d-flex justify-content-between">
+                                        Seleccionar actividad
+                                        <i class="bi bi-chevron-down ms-2 "></i>
+                                    </button>
+                                    <div *ngIf="dropdownAbierto" class="dropdown-lista">
+                                        <div 
+                                            *ngFor="let actividad of actividadesTotales" 
+                                            class="item"
+                                            (click)="seleccionarActividadActualizar(actividad)">
+                                                {{ actividad.titulo }}
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div> 
+                            <div class="input-group mt-2">
+                                <span class="input-group-text" style="font-size:0.9rem;">Titulo</span>
+                                <input 
+                                    type="text"
+                                    [value] = "actividadGrupoSeleccionada?.titulo"
+                                    class="form-control"
+                                    disabled>
+                            </div>
+                            <div class="input-group mt-2">
+                                <span class="input-group-text" style="font-size:0.9rem;">Descripción</span>
+                                <textarea    
+                                    [value] = "actividadGrupoSeleccionada?.descripcion"
+                                    rows = "2"
+                                    class="form-control"
+                                    disabled>
+                                </textarea>
+                            </div>
+                            <div class="input-group mt-2">
+                                <span class="input-group-text" style="font-size:0.9rem;">Campo formativo</span>
+                                <input 
+                                type="text"
+                                [value] = "actividadGrupoSeleccionada?.campo"
+                                class="form-control"
+                                disabled>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf = "paso == 2" class="w-100 d-flex flex-column h-100">
+               
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h6 class="mb-2">Archivo de instrucciones</h6>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <button 
+                                type="button"
+                                class="btn btn-outline-primary btn-sm"
+                                (click)="fileInput.click()">
+                                <i class="bi bi-upload"></i>
+                                    {{ archivoSeleccionado ? 'Cambiar archivo' : 'Subir archivo' }}
+                            </button>
+
+                            <span class="text-muted small">
+                                {{ archivoSeleccionado?.name || 'Ningún archivo seleccionado' }}
+                            </span>
+                        </div>
+                        <input 
+                            type="file"
+                            #fileInput
+                            hidden
+                            accept=".pdf"
+                            (change)="onFileSelected($event)">
+
+                        <small class="text-muted d-block mt-2">
+                            Solo PDF (máx. 2MB)
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf = "paso == 3" class="w-100 d-flex flex-column h-100">
+                <div class="w-100">
+                    <div class="card mt-4">
+                        <div class = "card-body">
+                            <p class="text-muted small">
+                                Seleccione los grupos en los que quiere aplicar los cambios
+                            </p>
+                            <div class="list-group mt-2">
+                                <label 
+                                    *ngFor="let g of actividadGrupoSeleccionada?.grupos"
+                                    class="list-group-item d-flex align-items-center">
+                                    <input class="form-check-input me-2 " 
+                                        type="checkbox"
+                                        [id]="'grupo-' + g.nombre"
+                                        [value]="g.idActividadGrupo"
+                                        (change)="seleccionGrupoActualizar(g.idActividadGrupo, $event)">
+                                    <span>{{ g.nombre }}</span>   
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+            <div class="d-flex justify-content-between gap-2 mt-5">
+                <button class="btn btn-outline-secondary" *ngIf="paso == 1" [disabled] = "!actividadBaseSeleccionada" (click)="cancelar()">
+                    Cancelar
+                </button>
+                <button class="btn btn-outline-primary align-items-center " *ngIf = "paso == 1" 
+                    [disabled]= "actividadGrupoSeleccionada == null" 
+                    (click) = "paso = 2">        
+                        Siguiente
+                </button>
+                <!--Paso 2 -->
+                <div *ngIf="paso == 2" class="w-100 d-flex justify-content-between">
+                    <button class="btn btn-outline-secondary"
+                        (click) = "regresar()" >
+                         Regresar
+                    </button>
+                    <button class="btn btn-outline-primary" (click)="paso = 3" 
+                        [disabled]=" archivoSeleccionado == null ">
+                        Siguiente
+                    </button>
+                </div>
+                <!--Paso 3 -->
+                <div *ngIf="paso == 3" class="w-100 d-flex justify-content-between">
+                    <button class="btn btn-outline-secondary"
+                        (click) = "regresar()" >
+                        Regresar
+                    </button>
+                    <button class="btn btn-outline-success align-items-center" *ngIf = "paso == 3"
+                        [disabled]=" idActividades.length <=0"
+                        (click) = "actualizar()">
+                        Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+     </div>
 </div>
 
 

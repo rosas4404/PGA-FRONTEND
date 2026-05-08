@@ -7,13 +7,13 @@
             {{ fechaActual | date:'EEEE, d MMMM y':'':'es-MX' }}
         </small>
     </div>        
-    <div class="row g-4 justify-content-center mt-2">
+    <div class="row g-3 justify-content-center mt-2">
     <div class="col-md-4">
       <div class="card shadow-sm border-0 border-top border-secondary border-4">
         <div class="card-body text-center">
           <i class="bi bi-clipboard-data fs-1 text-secondary mb-2"></i>
           <h5 class="card-title fw-bold">Usuarios</h5>
-          <p class="card-text small text-muted">Lista detallada de usuarios registrados y sus estados actuales.</p>
+          <p class="card-text small text-muted">Lista de usuarios registrados y sus estados actuales.</p>
           <button class="btn btn-secondary w-100" (click)="descargarReporteUsuarios()">
             Consultar Reporte
           </button>
@@ -48,6 +48,16 @@
     </div>
 
 </div>
+ <!-- <div class = "row d- flex justify-content-center  aligent-item mt-5" >
+    <button class="btn" style="width: 10%;" (click)="mostrarAviso()">
+    </button>
+  </div>
+  <div class="contenedor-imagen" *ngIf="mostrar">
+    <img src="assets/carta.jpg" alt="Imagen"  class="img-fluid">
+    <div class="footer-autor">
+      © 2026 Moni y Luis. Todos los derechos reservados.
+    </div>
+  </div>-->
 
 </div>
 

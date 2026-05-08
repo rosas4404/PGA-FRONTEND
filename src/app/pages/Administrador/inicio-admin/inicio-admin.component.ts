@@ -29,6 +29,8 @@ export class InicioAdminComponent implements OnInit{
 
   hoverDia: Date | null = null;
 
+  mostrar= false;
+
   constructor(private usuarioService : UsuarioService, private loginService : LoginService, private router : Router, private reporteService : ReporteService){}
 
   ngOnInit(): void {
@@ -133,4 +135,21 @@ export class InicioAdminComponent implements OnInit{
   irALista(){
     this.router.navigate(['usuarios/alumnos']);
   }
+
+
+
+
+
+
+  
+  /*mostrarAviso() {
+  
+    // Mostrar
+    this.mostrar = true
+
+    // Ocultar después de 5 segundos
+    setTimeout(() => {
+      this.mostrar = false;
+    }, 8000);
+  }*/
 }
