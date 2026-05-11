@@ -37,6 +37,8 @@ import { PanelGrupoAlumnoComponent } from './pages/Alumno/panel-grupo-alumno/pan
 import { InicioGruposDeshaComponent } from './pages/Alumno/inicio-grupos-desha/inicio-grupos-desha.component';
 import { GrupoDeshabilitadoComponent } from './pages/Alumno/grupo-deshabilitado/grupo-deshabilitado.component';
 import { SesionesAlumnoComponent } from './pages/Alumno/sesiones-alumno/sesiones-alumno.component';
+import { ActividadesAlumnoComponent } from './pages/Alumno/actividades-alumno/actividades-alumno.component';
+import { ActividadAlumnoComponent } from './pages/Alumno/actividad-alumno/actividad-alumno.component';
 
 
 export const routes: Routes = [
@@ -102,6 +104,12 @@ export const routes: Routes = [
                         children:[
                             { path: '', component: InicioGrupoHabilitadoComponent},
                             { path: 'sesiones-alumno', component: SesionesAlumnoComponent},
+                            { path: 'actividades-alumno',
+                                children:[
+                                    { path: '', component: ActividadesAlumnoComponent},
+                                    { path: ':idActividadAlumno/:idInscripcion', component: ActividadAlumnoComponent }
+                                ]
+                            },
                         ]
                     },
                     {path:'inicio-grupos-desh',
@@ -109,8 +117,7 @@ export const routes: Routes = [
                             {path: '', component: InicioGruposDeshaComponent},
                             {path:'grupo-deshabilitado/:idInscripcion/:idGrupo', component: GrupoDeshabilitadoComponent,
                                 children: [
-                                { path: '', component: InicioGrupoHabilitadoComponent},
-                                { path: 'sesiones-alumno', component: SesionesAlumnoComponent},
+                                { path: '', component: InicioGrupoHabilitadoComponent}
                                 ]
                             },
                         ]
