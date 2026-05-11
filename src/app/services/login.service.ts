@@ -25,12 +25,32 @@ export class LoginService {
   }
 
   //verificar si esta o no conectado
-  isLoggedIn(){
+  /*isLoggedIn(){
     let tokenStr = localStorage.getItem('token');
     if(tokenStr == undefined || tokenStr=='' || tokenStr==null){
       return false;
     }else{
       return true;
+    }
+  }*/
+  isLoggedIn(): boolean {//se verifica que el toquen no haya expidado, sea invalido y que exista 
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return false;
+    }
+    try {
+      const decoded: any = jwtDecode(token);
+      // Verificamos expiración
+      const currentTime = Date.now() / 1000;
+      if (decoded.exp < currentTime) {
+        // Token expirado
+        this.logout();
+        return false;
+      }
+      return true;
+    } catch (error) {
+      this.logout();
+      return false;
     }
   }
 

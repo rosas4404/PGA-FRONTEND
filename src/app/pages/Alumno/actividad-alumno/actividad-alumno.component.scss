@@ -1,0 +1,52 @@
+$maroon: #641134;
+table {
+  width: 100%;
+}
+th:nth-child(1) { width: 15%; }
+th:nth-child(2) { width: 5%; }
+th:nth-child(3) { width: 25%; }
+th:nth-child(4) { width: 8%; }
+
+
+.filtro-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filtro-card:hover {
+  transform: translateY(-3px);
+}
+
+.active-card {
+  border: 2px solid $maroon;
+  background-color: rgba($maroon, 0.05);
+}
+
+.filtro-card:active {
+  transform: scale(0.97);
+}
+
+.modal-body {
+  min-height: 100px; 
+}
+
+.alumno-item {
+  display: flex;
+  align-items: center;   
+  gap: 8px;
+  padding: 6px 0;
+}
+
+
+.alumno-item .form-check-input {
+  transform: scale(0.8);
+  margin: 0;
+  cursor: pointer;
+}
+
+
+.alumno-item .form-check-label {
+  font-size: 0.9rem;
+  margin: 0;
+  cursor: pointer;
+}
