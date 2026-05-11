@@ -1,0 +1,98 @@
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-smoke position-relative d-flex justify-content-center align-items-center mb-3">
+
+        <button 
+            class="btn btn-sm btn-outline-primary position-absolute start-0 ms-3"
+            (click)="volver()">
+            <i class="bi bi-arrow-left"></i>
+            Regresar
+        </button>
+
+        <h5 class="m-0 fw-bold text-maroon text-center">{{actividad?.titulo}}</h5>
+    </div>
+    <div class = "card-body px-4">
+        <div class="row g-3 mb-3 ms-3">
+            <div class="col-md-8">
+                <p class="mb-2"><strong>Descripción:</strong> {{ actividad?.descripcion }}</p>
+                <p class="mb-2"><strong>Campo:</strong> {{ actividad?.campoFormativo || 'General' }}</p>
+                <p class="mb-2"><strong>Origen:</strong> {{ actividad?.origen }}</p>
+                <div class="d-flex justify-content-between">
+                    <strong>Instrucciones:
+                        <a [href] = " 'http://localhost:8080/api/grupo/actividad/' + actividad?.idActividadAlumno" target="_blank">
+                            {{actividad?.urlInstrucciones?.split('/')?.pop()}}
+                        </a>
+                    </strong>
+                </div>
+            </div>
+            <div class="col-md-4 border-start">
+                <p class="mb-2"><strong>Fecha de asignación:</strong> {{ actividad?.fechaAsignacion }}</p>
+                <p class="mb-0"> <strong>Entrega:</strong>
+                    <span class="badge px-1 py-1 ms-2" 
+                        [ngClass]="actividad?.reqEntrega ? 'bg-success' : 'bg-secondary'">
+                        {{ actividad?.reqEntrega ? 'Requiere entrega' : 'Sin entrega' }}
+                    </span>
+                </p> 
+            </div>
+        </div>
+    </div> 
+</div>   
+
+<div class="card shadow-sm border-0 mt-4" *ngIf="actividad?.reqEntrega">
+    <div class="card-header bg-smoke position-relative d-flex justify-content-center align-items-center mb-3">
+
+        <h5 class="m-0 fw-bold text-maroon text-center">Detalles</h5>
+    </div>
+    <div class = "card-body px-4">
+        <div class="row g-3 mb-3 ms-3">
+            <div class="col-md-8">
+                <p class="mb-2" *ngIf="!actividad.excento"><strong>Comentarios:</strong> {{ actividad?.comentarios ? actividad?.comentarios : '-------------'}}</p>
+                <p class="mb-2" *ngIf="!actividad.excento"><strong>Observaciones:</strong> {{ actividad?.observaciones ? actividad?.observaciones : '-------------'}}</p>
+                <p class="mb-2" *ngIf="actividad.excento"><strong>Estatus:</strong> 
+                    <span class="badge bg-info-sucess text-maroon border border-sucess px-3 ms-2">
+                        <i class="bi bi-stars me-1"></i> Exento
+                    </span>
+                </p>
+                <p class="mb-2" *ngIf="actividad.excento"><strong>Motivo:</strong> {{ actividad?.motivoExencion }}</p>
+                <p class="mb-2" *ngIf="!actividad.excento"><strong>Entregable:
+                    <a href = "javascript:void(0)" (click)="visualizar(actividad.idActividadAlumno, modalVisualizar, actividad?.urlEntrega!)">
+                            {{actividad?.urlEntrega?.split('/')?.pop()}}
+                    </a>
+                    </strong> 
+                </p>                
+            </div>
+            <div class="col-md-4 border-start">
+                <p class="mb-2" *ngIf="!actividad.excento"><strong>Fecha de entrega:</strong> {{ actividad?.fechaEntrega ? actividad?.fechaEntrega : '-------------'}}</p>
+                <p class="mb-2"><strong>Estado:</strong> {{ actividad?.estadoTarea?.replace('_', ' ')}}</p>
+                <p class="mb-2"><strong>Avance global:</strong> {{ actividad?.avanceGlobal }}</p>
+                <p class="d-flex justify-content-end mt-auto pt-3" *ngIf="!actividad.excento">
+                    <!-- Input oculto que se activa al pulsar el botón, el fileInput crea una referencia al elemento (cuando se selecciona el archivo)-->
+                    <input type="file" #fileInput style="display: none"  accept=".pdf, .jpg, .jpeg, .png"
+                        (change)="onFileSelected($event)">
+                    <!--cuando el usuario da click, angular simula un cick en el input oculto y entonces se abre el selector de archivos-->
+                    <button class="btn btn-sm btn-outline-primary me-2"
+                            (click)="fileInput.click()" 
+                            title="Subir archivo (Máx. 2MB)">
+                    <i class="bi bi-upload"></i> Subir Actividad
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div> 
+</div>   
+
+<ng-template #modalVisualizar let-modal>
+    <div class="modal-header bg-smoke flex-column align-items-center">
+        <h5 class="modal-title fw-bold text-maroon">
+        Consultar Entregable
+        </h5>
+        <button type="button" class="btn-close position-absolute end-0 top-0 m-3" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <iframe *ngIf="urlActividad" [src]="urlActividad" width="100%" height="500px"></iframe>
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button type="button" class="btn btn-secondary" (click)="modal.close()">
+            Cerrar
+      </button>
+  </div>
+</ng-template>
