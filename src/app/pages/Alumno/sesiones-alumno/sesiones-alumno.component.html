@@ -63,7 +63,7 @@
               <td class = "text-center">{{ s.tema }}</td>
               <td class = "text-center">{{ s.alcance }}</td>
               <td class = "text-center"><a [href]="s.url" target="_blank">{{ s.url }}</a></td>
-              <td class = "text-center">{{ s.estadoAsistencia }}</td>
+              <td class = "text-center">{{ $any(s?.estadoAsistencia)?.replace('_', ' ')}}</td>
             </tr>
 
             <tr *ngIf="sesionAlumno.length === 0">
