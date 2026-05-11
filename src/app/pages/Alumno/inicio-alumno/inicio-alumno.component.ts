@@ -1,19 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { usuarioDTOResponse } from '../../../models/dto/ResponseDto/usuarioDTOResponse';
 import { UsuarioService } from '../../../services/usuario.service';
 import { LoginService } from '../../../services/login.service';
 import { ReporteService } from '../../../services/reporte.service';
+import { SeguimientoSemanalService } from '../../../services/seguimiento-semanal.service';
+import { InscripcionService } from '../../../services/inscripcion.service';
+import { SeguimientoDashboardResponseDto } from '../../../models/dto/ResponseDto/SeguimientoDashboardResponseDto';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SemanaResponseDto } from '../../../models/dto/ResponseDto/SemanaResponseDto';
+import { ToastrService } from 'ngx-toastr';
+import { ActividadAlumnoDto } from '../../../models/dto/actividadAlumnoDto';
 
 @Component({
   selector: 'app-alumno',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink ],
   templateUrl: './inicio-alumno.component.html',
   styleUrl: './inicio-alumno.component.scss'
 })
 export class InicioAlumnoComponent implements OnInit{
+  @ViewChild('modalRecordatorio')
+  modalRecordatorio!: TemplateRef<any>;
 
   saludo: string = '';
   idUsuario : number = 0;
@@ -29,7 +38,30 @@ export class InicioAlumnoComponent implements OnInit{
 
   hoverDia: Date | null = null;
 
-  constructor(private usuarioService : UsuarioService, private loginService : LoginService, private router : Router, private reporteService : ReporteService){}
+  idInscripcion: number = 0;
+  mensajeError = '';
+  semanaActual : SeguimientoDashboardResponseDto | null = null;
+
+
+  proximoDomingo: Date = new Date();
+  modalRef:any;
+
+  sugeridos! : ActividadAlumnoDto[]
+
+  actividadesDisponibles: ActividadAlumnoDto[] = [];
+
+  seleccionadas: ActividadAlumnoDto[] = [];
+
+  constructor(
+    private usuarioService : UsuarioService, 
+    private loginService : LoginService, 
+    private router : Router, 
+    private reporteService : ReporteService,
+    private seguimientoSemanalService : SeguimientoSemanalService,
+    private inscripcionService : InscripcionService,
+    private modalService : NgbModal,
+    private toastr : ToastrService
+  ){}
 
   ngOnInit(): void {
     this.fechaActual = new Date();
@@ -37,8 +69,11 @@ export class InicioAlumnoComponent implements OnInit{
     this.anioActual = this.fechaActual.getFullYear();
     this.mesBase = this.mesActual;
     this.anioBase = this.anioActual;
+    const diasFaltantes = this.fechaActual.getDay() === 0 ? 0 : 7 - this.fechaActual.getDay();
+    this.proximoDomingo.setDate(this.fechaActual.getDate() + diasFaltantes);
     this.saludo = this.getSaludo();
     this.cargarUsuarioActual();
+    
   }
 
   cargarUsuarioActual(){
@@ -48,13 +83,44 @@ export class InicioAlumnoComponent implements OnInit{
         this.usuarioService.obtenerUsuarioId(this.idUsuario).subscribe({
           next: (data)=>{
             this.usuarioActual = data;
+            this.cargarInscripcionActual(this.usuarioActual.idUsuario);
           }
-        })
+        });
+
       } 
     });
 
   }
+  cargarInscripcionActual(idUsuario: number){
+    this.inscripcionService.consultaGrupoAlumno(idUsuario).subscribe({
+        next: (resp) => {
+          this.idInscripcion = resp.idInscripcion;
+          this.cargarSemanaActual(this.idInscripcion);
+        }, error: (err) => {
+            if (err.status === 409) {
+              this.mensajeError = err.error?.message || 'El alumno no cuenta con inscripciones activas';
+            } 
+        }
+    });
+  }
+  cargarSemanaActual(id : number){
+   this.seguimientoSemanalService.obtenerSemanaActual(id).subscribe({
+    next: (data) =>{
+      this.semanaActual = data;
+      
+      if(!this.semanaActual){
+        this.abrirModalRecordatorio();
+      }
+    }, 
+    error: (err)=>{
+      if(err.status === 404){
+        this.abrirModalRecordatorio();
+      }
 
+      
+    }
+   });
+  }
   getSaludo(): string {
     const hora = new Date().getHours();
 
@@ -132,5 +198,58 @@ export class InicioAlumnoComponent implements OnInit{
 
   irALista(){
     this.router.navigate(['usuarios/alumnos']);
+  }
+
+
+  abrirModalRecordatorio(){
+    this.modalRef = this.modalService.open(this.modalRecordatorio, {
+      centered: true,
+      backdrop: 'static',
+      keyboard: false
+      });
+      this.modalRef.result.finally(() => {
+        this.cerrarModal();
+      });
+  }
+
+  cerrarModal(){
+    this.modalRef?.dismiss();
+  }
+
+
+  crearSemana(modal : any){
+    this.seguimientoSemanalService.crearSemana (this.idInscripcion).subscribe({
+      next: data =>{
+        this.sugeridos = data.actividadesSugeridas;
+        this.semanaActual = { 
+          idSeguimientoSemanal: data.idSeguimientoSemanal,
+          numeroSemana : data.numeroSemana,
+          semanaInicio : data.semanaInicio,
+          semanaFin : data.semanaFin,
+          fechaLimiteEdicion : data.fechaLimiteEdicion,
+          porcentajeAvance : data.porcentajeAvance,
+          detalles: []
+        }
+
+        this.abrirModalCrear(modal)
+      },
+      error: err =>{
+        this.toastr.error(  err.error.message || "Error al crear semana" , 'Error' )
+      }
+    });
+  }
+
+  abrirModalCrear(modal: any){
+    if (this.modalRef){
+      this.cerrarModal();
+    }
+    this.modalRef = this.modalService.open(modal, {
+      centered: true,
+      backdrop: 'static',
+      keyboard: false
+      });
+      this.modalRef.result.finally(() => {
+        this.cerrarModal();
+      });
   }
 }

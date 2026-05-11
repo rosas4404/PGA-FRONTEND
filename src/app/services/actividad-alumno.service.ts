@@ -26,4 +26,8 @@ export class ActividadAlumnoService {
     return this.httpClient.put<actividadAlumnoDTOResponse>(`${this.apiUrl}/${idActividadAlumno}/observacion`, dto)
   }
 
+
+
+
+
 }
