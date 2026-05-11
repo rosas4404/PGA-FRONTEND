@@ -18,7 +18,7 @@
                 <p class="mb-2"><strong>Origen:</strong> {{ actividad?.origen }}</p>
                 <div class="d-flex justify-content-between">
                     <strong>Instrucciones:
-                        <a [href] = " 'http://localhost:8080/api/grupo/actividad/' + actividad?.idActividadAlumno" target="_blank">
+                        <a [href] = " 'http://localhost:8080/api/grupo/actividad/' + actividad?.idActividadAlumno + '/instrucciones'" target="_blank">
                             {{actividad?.urlInstrucciones?.split('/')?.pop()}}
                         </a>
                     </strong>
@@ -49,7 +49,7 @@
                 <p class="mb-2" *ngIf="!actividad.excento"><strong>Observaciones:</strong> {{ actividad?.observaciones ? actividad?.observaciones : '-------------'}}</p>
                 <p class="mb-2" *ngIf="actividad.excento"><strong>Estatus:</strong> 
                     <span class="badge bg-info-sucess text-maroon border border-sucess px-3 ms-2">
-                        <i class="bi bi-stars me-1"></i> Exento
+                        Exento
                     </span>
                 </p>
                 <p class="mb-2" *ngIf="actividad.excento"><strong>Motivo:</strong> {{ actividad?.motivoExencion }}</p>
