@@ -13,3 +13,13 @@ th:nth-child(7) { width: 20%; }
 .modal-body {
   min-height: 500px; 
 }
+:host {
+  display: block;
+  height: 100%;
+}
+
+.page-container {
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px 24px;
+}

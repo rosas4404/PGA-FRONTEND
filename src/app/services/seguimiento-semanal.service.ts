@@ -15,11 +15,9 @@ export class SeguimientoSemanalService {
   obtenerSemanaActual(idInscripcion : number): Observable<SeguimientoDashboardResponseDto>{
     return this.httpClient.get<SeguimientoDashboardResponseDto>(`${this.apiUrl}/${idInscripcion}/actual`,);
   }
-  obtenerHistorialAlumno(page: number, size: number, idInscripcion: number) : Observable <PageResponse<SeguimientoDashboardResponseDto>>{
-    let params= new HttpParams()
-        .set ('page', page.toString())
-        .set('size', size.toString());
-    return this.httpClient.get<PageResponse<SeguimientoDashboardResponseDto>>(`${this.apiUrl}/${idInscripcion}`);
+  obtenerHistorialAlumno(idInscripcion: number) : Observable <SeguimientoDashboardResponseDto[]>{
+    
+    return this.httpClient.get<SeguimientoDashboardResponseDto[]>(`${this.apiUrl}/${idInscripcion}`,);
   }
 
   crearSemana(idInscripcion : number) : Observable <SemanaResponseDto>{

@@ -39,6 +39,7 @@ import { GrupoDeshabilitadoComponent } from './pages/Alumno/grupo-deshabilitado/
 import { SesionesAlumnoComponent } from './pages/Alumno/sesiones-alumno/sesiones-alumno.component';
 import { ActividadesAlumnoComponent } from './pages/Alumno/actividades-alumno/actividades-alumno.component';
 import { ActividadAlumnoComponent } from './pages/Alumno/actividad-alumno/actividad-alumno.component';
+import { SeguimientoSemanalComponent } from './pages/Alumno/seguimiento-semanal/seguimiento-semanal.component';
 
 
 export const routes: Routes = [
@@ -110,14 +111,15 @@ export const routes: Routes = [
                                     { path: ':idActividadAlumno/:idInscripcion', component: ActividadAlumnoComponent }
                                 ]
                             },
+                            {path: 'seguimiento', component: SeguimientoSemanalComponent}
                         ]
                     },
                     {path:'inicio-grupos-desh',
                         children:[
-                            {path: '', component: InicioGruposDeshaComponent},
-                            {path:'grupo-deshabilitado/:idInscripcion/:idGrupo', component: GrupoDeshabilitadoComponent,
+                            { path: '', component: InicioGruposDeshaComponent},
+                            { path:'grupo-deshabilitado/:idInscripcion/:idGrupo', component: GrupoDeshabilitadoComponent,
                                 children: [
-                                { path: '', component: InicioGrupoHabilitadoComponent}
+                                    { path: '', component: InicioGrupoHabilitadoComponent}
                                 ]
                             },
                         ]

@@ -32,6 +32,10 @@ export class ActividadAlumnoService {
   obtenerActividadesPorInscripcion(idInscripcion: number): Observable<actividadAlumnoListaDTO[]>{
     return this.httpClient.get<actividadAlumnoListaDTO[]>(`${this.apiUrl}/inscripcion/${idInscripcion}`);
   }
+   //obtener lista de actividades por inscripcion disponibles
+  obtenerActividadesPorInscripcionDisponibles(idInscripcion: number): Observable<actividadAlumnoListaDTO[]>{
+    return this.httpClient.get<actividadAlumnoListaDTO[]>(`${this.apiUrl}/inscripcion/${idInscripcion}`);
+  }
 
   //obtener actividad por inscripcion 
   obtenerActividadPorInscripcion(idInscripcion: number, idActividadAlumno: number): Observable<actividadAlumnoDTO>{

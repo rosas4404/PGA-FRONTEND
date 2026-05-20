@@ -20,4 +20,6 @@ export interface actividadAlumnoDTO {
         urlInstrucciones : string,
         fechaAsignacion : string,
         reqEntrega : Boolean
+
+        seguimientoActivo: Boolean
 }

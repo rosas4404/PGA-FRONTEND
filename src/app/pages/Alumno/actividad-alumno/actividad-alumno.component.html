@@ -70,7 +70,8 @@
                         (change)="onFileSelected($event)">
                     <!--cuando el usuario da click, angular simula un cick en el input oculto y entonces se abre el selector de archivos-->
                     <button class="btn btn-sm btn-outline-primary me-2"
-                            (click)="fileInput.click()" 
+                            (click)="fileInput.click()"
+                            *ngIf="actividad.seguimientoActivo" 
                             title="Subir archivo (Máx. 2MB)">
                     <i class="bi bi-upload"></i> Subir Actividad
                     </button>

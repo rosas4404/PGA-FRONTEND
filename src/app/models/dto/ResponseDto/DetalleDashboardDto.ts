@@ -1,10 +1,11 @@
 export interface DetalleDashboardDto{
     idDetalleSeguimiento : number,
     estadoSemana: string,
-    avanceSemanal: number,
+    avanceReal: number,
     observacionesAlumno : string
     tituloActividad: String,
     avanceGlobalActividad : number
     idActividadAlumno : number
     requiereEntrega : Boolean
+    avanceEsperado: number,
 }

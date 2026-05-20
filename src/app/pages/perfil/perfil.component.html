@@ -1,16 +1,12 @@
 <div class="page-container">
-<div class="profile-card shadow-sm">
-
-  <!-- cabecera -->
-  <div class="profile-header d-flex align-items-center justify-content-between">
-
-    <div class="d-flex align-items-center gap-3">
-      
-      <!-- avatar -->
-      <div class="avatar">
-      {{usuario?.nombre ? usuario.nombre[0]:''}}{{usuario?.apellidoPaterno ? usuario.apellidoPaterno[0] :''}}
-      </div>
-
+  <div class="profile-card shadow-sm">
+    <!-- cabecera -->
+    <div class="profile-header d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        <!-- avatar -->
+        <div class="avatar">
+          {{usuario?.nombre ? usuario.nombre[0]:''}}{{usuario?.apellidoPaterno ? usuario.apellidoPaterno[0] :''}}
+        </div>
       <!-- Nombre -->
       <div>
         <h5 class="mb-0 fw-bold text-maroon">
@@ -18,9 +14,7 @@
         </h5>
         <small class="text-black ">{{rolUsuario}}</small>
       </div>
-
     </div>
-
     <!-- Estado -->
     <span class="badge rounded-pill px-3 py-2"
           [ngClass]="usuario.activo ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
@@ -28,7 +22,6 @@
     </span>
 
   </div>
-
   <!-- Informacion -->
   <div class="profile-body">
 
@@ -176,7 +169,6 @@
     </div>
   </div>
 </div>
-</div>
 <!-- FORMULARIO PARA CAMBIAR CONTRASEÑA--> 
 
 <div class="container mt-4" *ngIf="modo==='password'">
@@ -263,5 +255,8 @@
       </div>
     </div>
   </div>
+</div>
+
+
 </div>
 

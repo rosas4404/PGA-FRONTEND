@@ -32,3 +32,13 @@ th:nth-child(5) { width: 20%; }
   color:#a94442;
   font-weight:600;
 }
+:host {
+  display: block;
+  height: 100%;
+}
+
+.page-container {
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px 24px;
+}
