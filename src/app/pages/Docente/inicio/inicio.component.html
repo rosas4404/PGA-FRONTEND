@@ -31,12 +31,12 @@
                         <p class="text-secondary small mb-0">{{ grupo.nombreCurso }}</p>    
                     </div>
                     
-                    <hr class="mx-4 my-2 opacity-10">
+                    <hr class="mx-4 my-0 opacity-10">
 
-                    <div class="grupo-body p-4 pt-2">
-                        <div class="info-row mb-2 d-flex align-items-center gap-2">
-                            <span class="text-muted small uppercase fw-semibold">Alumnos:</span>
-                            <p class="mb-0 text-dark">{{ grupo.alumnos }} alumnos</p>
+                    <div class="grupo-body p-2 ">
+                        <div class="info-row mb-2 d-flex align-items-center">
+                            <span class="text-muted small uppercase fw-semibold">Alumnos: </span>
+                            <p class="mb-0 text-dark small ms-1"> {{ grupo.alumnos }} alumnos</p>
                         </div>
 
                         <button class="btn btn-outline-primary w-100 fw-bold" (click)="verGrupo(grupo)">

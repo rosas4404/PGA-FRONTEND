@@ -115,7 +115,6 @@ btn-toggle {
 .layout-dashboard {
   flex: 1;
   height: 100%; 
-  overflow: hidden;
   display: flex;
 }
 //menu lateral desplegable
@@ -161,16 +160,10 @@ btn-toggle {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   min-height: 0;
+  overflow: hidden;
 }
-//contenedores información que se carga en el sapcio sobrante del dashboard 
-.page-container {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px 24px;
 
-}
 
 
 
@@ -242,7 +235,7 @@ btn-toggle {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  height: 500px;      
+  height: 550px;      
 }
 
 

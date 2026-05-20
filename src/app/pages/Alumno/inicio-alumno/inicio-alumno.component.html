@@ -6,8 +6,420 @@
         <small class="text-muted mb-">
             {{ fechaActual | date:'EEEE, d MMMM y':'':'es-MX' }}
         </small>
-    </div>        
+    </div>     
+    
+    <div class="grupo-card mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="grupo-nombre mb-0">
+                Actividades de la semana
+            </h4>
+
+            <span *ngIf="semanaActual" class="badge bg-primary">
+                Semana {{ semanaActual.numeroSemana }}
+            </span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3" *ngIf="semanaActual" >
+            <p class="text-muted">
+                {{semanaActual?.semanaInicio}} - {{semanaActual?.semanaFin}}
+            </p>
+
+            <p class="text-muted">
+                Fecha límite: {{ semanaActual?.fechaLimiteEdicion}}
+            </p>
+            <p class="text-muted">
+              Progreso general: {{semanaActual?.porcentajeAvance || 0}}%
+            </p>
+            <button class="btn btn-outline-primary" 
+            (click)="abrirModalCrear(modalCrear)">
+                <i class="bi bi-plus-circle"></i> Agregar actividades
+            </button>
+
+        </div>
+        <div class="text-center py">
+
+        </div>
+        <div class="text-center" *ngIf="semanaActual as semana">
+            <p class="text-muted mt-3 mb-3" *ngIf="semana.detalles.length <=0">
+                Semana creada sin actividades
+            </p>
+
+                <div class="table-responsive border rounded-4 p-2 bg-white shadow-sm"> 
+                <table class="table align-middle table-borderless" *ngIf="semana.detalles?.length">
+                <thead class="table-light">
+                    <tr>
+                        <th>Actividad</th>
+                        <th>Estado</th>
+                        <th>Avance semanal</th>
+                        <th>Avance esperado</th>
+                        <th>Avance global</th>
+                        <th>Observaciones</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr *ngFor="let detalle of semana?.detalles">
+                        <td class="text-start">{{ detalle.tituloActividad}}</td>
+                        <td class="text-start">{{ detalle.estadoSemana.replace("_"," ") }}</td>
+                        <td class="text-center">
+                            <div class="progress">
+
+                                <div class="progress-bar"
+                                    [style.width.%]="detalle.avanceEsperado? (detalle.avanceReal * 100) / detalle.avanceEsperado: 0">
+                                    {{ detalle.avanceReal }}%
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ detalle.avanceEsperado }}%</td>
+                        <td>{{ detalle.avanceGlobalActividad }}%</td>
+                        <td> {{ detalle.observacionesAlumno || '—' }}</td>
+                        <td> 
+                            <button class="btn btn-outline-primary me-2" title="Marcar como completo " *ngIf="!detalle.requiereEntrega && detalle.estadoSemana != 'Completada'"
+                            (click)="marcarCompletada(detalle)">
+                                <i class="bi bi-check2-square"></i>
+                            </button>
+                            <button class="btn btn-outline-primary me-2" title="Ir a entrega" *ngIf="detalle.requiereEntrega"
+                            routerLink="/alumno-dashboard/panel-grupo-alumno/actividades-alumno/{{detalle.idActividadAlumno}}/{{idInscripcion}}">
+                                <i class="bi bi-arrow-up-right-square fs-6"></i>
+                            </button>
+                             <button class="btn btn-outline-primary" 
+                               (click)="abrirModalActualizar(modalActualizar, detalle)" title="Actualizar avance" *ngIf="detalle.estadoSemana != 'Completada' ">
+                                <i class="bi bi-arrow-clockwise fs-6"></i>
+                            </button>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div *ngIf="!semanaActual" class="text-center py-5">
+
+            <i class="bi bi-calendar-x fs-1 text-muted"></i>
+            <p class="text-muted mt-3 mb-3">
+                Aún no has realizado el registro de esta semana.
+            </p>
+            <button class="btn btn-outline-primary" (click)="crearSemana(modalCrear)">
+                Registrar semana
+            </button>
+        </div>
+    </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--modal de confirmacion-->
+<ng-template #modalRecordatorio let-modal>
+    <div class="modal-confirmacion">
+    <!--header-->
+    <div class="modal-header bg-warning-subtle justify-content-center">
+        <h5 class="modal-title text-maroon text-center">Registro semanal pendiente</h5>
+        <button type="button"
+          class="btn-close position-absolute end-0 me-3"
+          (click)="modal.dismiss()">
+        </button>
+    </div>
+    <!--body-->
+    <div class="modal-body">
+        <div class="body-container">
+            <div class="bloque">
+                <p style="font-size: 1rem;"> Aún no has realizado el registro de actividades correspondiente a esta semana.
+                <strong>Recuerda completarlo antes de la fecha límite.</strong></p>
+            </div>
+            <div class="d-flex align-items-center gap-2 mt-3">
+                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                <p class="mb-0"> <strong>Fecha límite:</strong> {{ proximoDomingo | date:'longDate' }} </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-center">
+        <button class="btn btn-outline-primary"
+            (click)="modal.dismiss()">
+            Recordar más tarde
+        </button>
+        <button class="btn btn-success" (click)="crearSemana(modalCrear)">
+            Registrar
+        </button>
+    </div>
+    </div>
+</ng-template>
+
+
+
+
+<!--modal crear-->
+<ng-template #modalCrear let-modal>
+    <div class="modal-unificado">
+        <!--header-->
+        <div class="modal-header bg-smoke flex-column align-items-center position-relative">
+            <h5 class="modal-title text-maroon text-center">Semana {{ semanaActual?.numeroSemana }}</h5>
+            <button type="button"
+                class="btn-close position-absolute end-0 top-0 m-3" 
+                (click)="cerrarCrear()">
+            </button>
+        </div>
+        <!--body-->
+        <div class="modal-body modal-body-step">
+
+            <p class="descripcion-modal">
+                Selecciona las actividades que trabajarás esta semana.
+            </p>
+            <div class="bloque-seccion" *ngIf="sugeridos.length > 0" >
+                <h6 > Actividades pendientes </h6>
+                <div class="actividad-card" *ngFor="let actividad of sugeridos" >
+
+                    <label class="d-flex align-items-center gap-2 w-100 actividad-label">
+                        <input
+                            type="checkbox"
+                            class="form-check-input"
+                            [checked]="seleccionadas.includes(actividad)"
+                            (change)="seleccionarActividad(actividad)"
+                        />
+                        <div class="flex-grow-1">
+                            <div class="actividad-titulo">
+                                {{ actividad.titulo }}
+                            </div>
+                            <small class="text-muted">
+                                Avance global:
+                                {{ actividad.avanceGlobal }}%
+                            </small>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="bloque-seccion">
+                <div class="titulo-bloque"> Agregar nuevas actividades</div>
+                <div class="d-flex gap-2">
+                    <select class="form-select" [(ngModel)]="actividadSeleccionada">
+                        <option [ngValue]="null">
+                            Selecciona una actividad
+                        </option>
+
+                        <option
+                            *ngFor="let actividad of actividadesFiltradas"
+                            [ngValue]="actividad"
+                        >
+                            {{ actividad.titulo }}
+                        </option>
+                    </select>
+                    <button
+                        class="btn btn-primary px-3"
+                        (click)="agregarActividad()"
+                        [disabled]="!actividadSeleccionada"
+                    >
+                        Agregar
+                    </button>
+                </div>
+            </div>
+            <div  class="bloque-seccion" *ngIf = "seleccionadas.length > 0">
+                <h6 class="titulo-bloque"> Actividades seleccionadas</h6>
+                <div class="chips-container">
+                    <div class="actividad-chip" *ngFor= "let actividad of seleccionadas">
+                        <span> {{ actividad.titulo }} </span>
+                        <button
+                            class="btn-remove"
+                            (click)="eliminarActividad(actividad)"
+                        >
+                        ✕
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="text-muted small">
+                Total:
+                {{ seleccionadas.length }}
+                actividades
+            </div>
+            <div class="d-flex gap-2">
+                <button
+                    class="btn btn-outline-secondary"
+                    (click)="cerrarCrear()"
+                >
+                    Cancelar
+                </button>
+                <button
+                    class="btn btn-success"
+                    [disabled]="seleccionadas.length === 0"
+                    (click)="registrarActividades()"
+                >
+                    Registrar actividades
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #modalActualizar let-modal>
+    <div class="modal-unificado">
+        <div class="modal-header bg-smoke flex-column align-items-center position-relative">
+            <div class="w-100 text-center">
+                <h5 class="modal-title fw-bold text-maroon">
+                    {{ detalleSeleccionado?.tituloActividad }}
+                </h5>
+            </div>
+            <button
+                type="button"
+                class="btn-close position-absolute end-0 top-0 m-3"
+                (click)="modal.dismiss()">
+            </button>
+        </div>
+        <div class="modal-body modal-body-step">
+            <div class="bloque-seccion">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div class="titulo-bloque">
+                        Avance global
+                    </div>
+
+                    <span class="fw-semibold">
+                        {{ detalleSeleccionado?.avanceGlobalActividad }}%
+                    </span>
+
+                </div>
+
+                <div class="progress progress-lg">
+
+                    <div
+                        class="progress-bar"
+                        [style.width.%]="detalleSeleccionado?.avanceGlobalActividad">
+
+                    </div>
+                </div>
+            </div>
+            <div class="bloque-seccion">
+
+                <div class="titulo-bloque">
+                    Estado semanal
+                </div>
+
+                <select
+                    class="form-select"
+                    [(ngModel)]="estadoSeleccionado">
+
+                    <option value="SIN INICIAR">
+                        Sin iniciar
+                    </option>
+
+                    <option value="EN PROGRESO">
+                        En progreso
+                    </option>
+
+                    <option value="EN ESPERA">
+                        En espera
+                    </option>
+                </select>
+            </div>
+            <div class="bloque-seccion">
+
+                <div class="titulo-bloque">
+                    Avance realizado
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    <button
+                        class="btn btn-outline-primary"
+                        (click)="seleccionarIncremento(10)">
+                        +10%
+                    </button>
+
+                    <button
+                        class="btn btn-outline-primary"
+                        (click)="seleccionarIncremento(20)">
+                        +20%
+                    </button>
+
+                    <button
+                        class="btn btn-outline-primary"
+                        (click)="seleccionarIncremento(30)">
+                        +30%
+                    </button>
+                    <button
+                        class="btn btn-outline-secondary"
+                        (click)="mostrarOtro = !mostrarOtro; incrementoSeleccionado = 0 ">
+                        Otro
+                    </button>
+                    <div *ngIf="mostrarOtro">
+                    <div class="input-group">
+                        <input
+                        type="number"
+                        class="form-control"
+                        min="1"
+                        max="100"
+                        [(ngModel)]="otroIncremento">
+
+                        <button
+                            class="btn btn-primary"
+                            (click)="aplicarOtroIncremento()">
+                            Aplicar
+                        </button>
+                    </div>
+                </div>
+                </div>
+                
+                <small
+                    class="text-muted mt-2"
+                    *ngIf="incrementoSeleccionado">
+                    Incremento seleccionado:
+                    +{{ incrementoSeleccionado }}%
+                </small>
+            </div>
+            <div class="bloque-seccion">
+                <div class="titulo-bloque">
+                    Observaciones
+                </div>
+                <textarea
+                    class="form-control"
+                    rows="3"
+                    [(ngModel)]="observaciones">
+                </textarea>
+            </div>
+        </div>
+        <div class="modal-footer modal-footer-custom">
+
+            <button
+                class="btn btn-outline-secondary"
+                (click)="modal.dismiss()">
+
+                Cancelar
+
+            </button>
+
+            <button
+                class="btn btn-primary"
+                [disabled]="!incrementoSeleccionado"
+                (click)="guardarActualizacion()">
+
+                Guardar actualización
+
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+        
 
 
 

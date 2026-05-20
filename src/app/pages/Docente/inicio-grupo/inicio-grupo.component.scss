@@ -1,3 +1,4 @@
+$maroon: #641134;
 .grupo-card {
   width: 100%;
   max-width: 100%;
@@ -20,7 +21,7 @@
 .grupo-nombre {
   margin: 1px 0 15px;
   font-weight: 450;
-  color: maroon;
+  color:$maroon;
   font-size: 25px;
 }
 
