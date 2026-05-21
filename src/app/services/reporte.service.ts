@@ -30,4 +30,8 @@ generarReporteUsuarios () : Observable <Blob>{
 generarReporteExpediente () : Observable <Blob>{
   return this.httpClient.get(`${this.apiUrl}/expediente/reporte`,{ responseType: 'blob' });
   }
+
+generarReporteSeguimientoSemanal (idUsuario: number) : Observable <Blob>{
+  return this.httpClient.get(`${this.apiUrl}/seguimientoSemanal/${idUsuario}/reporte`,{ responseType: 'blob' });
+  }
 }

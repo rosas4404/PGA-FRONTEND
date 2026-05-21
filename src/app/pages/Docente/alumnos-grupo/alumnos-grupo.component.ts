@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { InscripcionResponseDTO } from '../../../models/dto/ResponseDto/inscripcionResponseDTO';
 import { UsuarioService } from '../../../services/usuario.service';
 import { usuarioDTOResponse } from '../../../models/dto/ResponseDto/usuarioDTOResponse';
+import { ReporteService } from '../../../services/reporte.service';
 
 @Component({
   selector: 'app-alumnos-grupo',
@@ -31,7 +32,7 @@ export class AlumnosGrupoComponent implements OnInit{
 
   modalRef:any;
 
-  constructor (private grupoService: GrupoService, private usuarioService: UsuarioService , private inscripcionService:InscripcionService, private route : ActivatedRoute, private fb: FormBuilder, private toastr: ToastrService, private modalService: NgbModal){}
+  constructor (private grupoService: GrupoService, private usuarioService: UsuarioService , private inscripcionService:InscripcionService, private route : ActivatedRoute, private fb: FormBuilder, private toastr: ToastrService, private modalService: NgbModal, private reporteService: ReporteService){}
 
   ngOnInit(): void {
     this.idGrupo =  Number(this.route.parent?.snapshot.paramMap.get('idGrupo'));
@@ -90,6 +91,27 @@ export class AlumnosGrupoComponent implements OnInit{
 
   get alumnosDesvinculados() {
     return this.alumnos.filter(a => !a.estado);
+  }
+
+   descargarReporteSeguimientoSemnal(){
+
+    this.reporteService.generarReporteSeguimientoSemanal(this.idUsuario).subscribe((blob: Blob) => {
+      // Creamos un link temporal en el DOM
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      
+      a.download = `reporte_expedientes.pdf`; 
+      
+      document.body.appendChild(a);
+      a.click();
+      
+      // Limpieza
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }, error => {
+      console.error("Error al descargar el PDF", error);
+    });
   }
 
 }
