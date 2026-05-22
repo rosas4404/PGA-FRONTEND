@@ -18,7 +18,7 @@
                 <p class="mb-2"><strong>Origen:</strong> {{ actividad?.origen }}</p>
                 <div class="d-flex justify-content-between">
                     <strong>Instrucciones:
-                        <a [href] = " 'http://localhost:8080/api/grupo/actividad/' + actividad?.idActividadGrupo + '/instrucciones'" target="_blank">
+                        <a class="link-box" (click)="verInstrucciones(actividad .idActividadGrupo)">
                             {{actividad?.urlInstrucciones?.split('/')?.pop()}}
                         </a>
                     </strong>

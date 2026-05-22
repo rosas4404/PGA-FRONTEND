@@ -97,6 +97,9 @@ export class ActividadGrupoService {
     return this.httpClient.put<void>(`${this.apiUrl}/actividades/instrucciones`, formData);
     }
   
+    verInstrucciones(id: number) : Observable <Blob> {
+       return this.httpClient.get(`${this.apiUrl}/actividad/${id}/instrucciones`,{responseType: 'blob'});
+    }
 }
 
 

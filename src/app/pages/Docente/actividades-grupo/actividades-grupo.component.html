@@ -176,7 +176,7 @@
           <div class = "bloque">
             <p>
               Instrucciones para la actividad <strong>{{ actividadBaseSeleccionada?.titulo }}</strong>:
-              <a class="link-box" [href]="'http://localhost:8080/api/actividadBase/'+actividadBaseSeleccionada?.idActividad+ '/instrucciones'"target="_blank">
+              <a class="link-box" (click)="abrirInstrucciones()">
                 {{actividadBaseSeleccionada?.urlInstrucciones?.split('/')?.pop()}}
               </a>
             </p>

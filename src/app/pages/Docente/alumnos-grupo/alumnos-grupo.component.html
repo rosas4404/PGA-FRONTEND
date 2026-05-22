@@ -26,6 +26,11 @@
                         title="Consulta">
                   <i class="bi bi-eye"></i>
                 </button>
+                <button class="btn btn-sm btn-outline-primary me-2"
+                        (click)="descargarReporteSeguimientoSemnal(a.idInscripcion)"
+                        title="Reporte Seguimiento Semanal">
+                  <i class="bi bi-clipboard-data mb-2"></i>
+                </button>
               </td>
             </tr>
           </ng-container>
@@ -66,11 +71,7 @@
                         title="Consulta">
                   <i class="bi bi-eye"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-primary me-2"
-                        (click)="descargarReporteSeguimientoSemnal()"
-                        title="Reporte Seguimiento Semanal">
-                  <i class="bi bi-clipboard-data fs-1 text-primary mb-2"></i>
-                </button>
+                
               </td>
             </tr>
           </ng-container>

@@ -127,8 +127,7 @@
                             Actividad: <strong>{{ actividadBaseSeleccionada.titulo }}</strong>
                         </p>
                         <a class="link-box"
-                            [href]="'http://localhost:8080/api/actividadBase/'+actividadBaseSeleccionada.idActividad+'/instrucciones'"
-                            target="_blank">
+                            (click)="abrirInstrucciones()">
                             {{ actividadBaseSeleccionada.urlInstrucciones?.split('/')?.pop() }}
                         </a>
 

@@ -54,4 +54,6 @@ export class ActividadAlumnoService {
     return this.httpClient.get(`${this.apiUrl}/${idActividadAlumno}/entrega`, {responseType:'blob'});
   }
 
+  
+
 }

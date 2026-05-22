@@ -7,6 +7,7 @@ import { ActividadAlumnoService } from '../../../services/actividad-alumno.servi
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActividadGrupoService } from '../../../services/actividad-grupo.service';
 
 @Component({
   selector: 'app-actividad-alumno',
@@ -27,7 +28,7 @@ export class ActividadAlumnoComponent implements OnInit {
   idActividadSeleccionado!:number;//servira para enviar y ver el archivo
 
   constructor(private route : ActivatedRoute, private actividadAlumnoService : ActividadAlumnoService, private router : Router, 
-    private modalService : NgbModal, private toastr: ToastrService, private sanitizar: DomSanitizer){}
+    private modalService : NgbModal, private toastr: ToastrService, private sanitizar: DomSanitizer, private actividadGrupoService: ActividadGrupoService ){}
 
   ngOnInit(): void {
     this.idActividadAlumno =  Number(this.route.snapshot.paramMap.get('idActividadAlumno'));
@@ -41,7 +42,6 @@ export class ActividadAlumnoComponent implements OnInit {
     this.actividadAlumnoService.obtenerActividadPorInscripcion(this.idInscripcion, this.idActividadAlumno).subscribe({
       next: (data) =>{
         this.actividad = data;
-        console.log(this.actividad);
       }
     })
   }
@@ -96,6 +96,8 @@ onFileSelected(event:any){//se ejecuta cuando el usuario seleccioa un archivo en
   }
 
   visualizar(idActividadAlumno:number, modal:any, rutaDocumento:string){
+    console.log(idActividadAlumno)
+    console.log(this.idActividadAlumno)
     if (!rutaDocumento) {
       this.toastr.error('No se ha subido un archivo');
       return;
@@ -140,5 +142,18 @@ onFileSelected(event:any){//se ejecuta cuando el usuario seleccioa un archivo en
       }
     );
   }
+
+  abrirInstrucciones(id : number) {
+ 
+  this.actividadGrupoService.verInstrucciones(id).subscribe({
+    next: (blob) => {
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
 
 }

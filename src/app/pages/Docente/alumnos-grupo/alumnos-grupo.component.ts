@@ -93,9 +93,11 @@ export class AlumnosGrupoComponent implements OnInit{
     return this.alumnos.filter(a => !a.estado);
   }
 
-   descargarReporteSeguimientoSemnal(){
 
-    this.reporteService.generarReporteSeguimientoSemanal(this.idUsuario).subscribe((blob: Blob) => {
+
+
+   descargarReporteSeguimientoSemnal(idInscripcion : number){
+    this.reporteService.generarReporteSeguimientoSemanal(idInscripcion).subscribe((blob: Blob) => {
       // Creamos un link temporal en el DOM
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');

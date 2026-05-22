@@ -414,5 +414,17 @@ cancelar(){
             }
       })
     }
+    abrirInstrucciones() {
+  if(this.actividadBaseSeleccionada)
+  this.actividadesBaseService.verInstrucciones(this.actividadBaseSeleccionada.idActividad).subscribe({
+    next: (blob) => {
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
   }
 

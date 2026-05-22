@@ -252,7 +252,15 @@ export class UsuariosComponent implements OnInit {
       });
     }
     descargarReporte(id: number) { 1
-      window.open(`${baseUrl}/reporte/alumnos/${id}/reporte`, '_blank');
+     this.reporteService.generarReporteAlumno(id).subscribe({
+    next: (blob) => {
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
     }
   
 }

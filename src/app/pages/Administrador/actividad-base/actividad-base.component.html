@@ -196,7 +196,7 @@
         </div>
         <div class="divider"></div>
         <div class="bloque" *ngIf="actividadSeleccionada.urlInstrucciones">
-          <label class="fw-bold me-2">Instrucciones:  <a class="link-box" [href]="'http://localhost:8080/api/actividadBase/' + actividadSeleccionada.idActividad + '/instrucciones'" target="_blank">
+          <label class="fw-bold me-2">Instrucciones:  <a class="link-box" (click)="abrirInstrucciones(actividadSeleccionada.idActividad)">
               {{  actividadSeleccionada.urlInstrucciones.split('/').pop() }}
             </a></label>     
         </div>

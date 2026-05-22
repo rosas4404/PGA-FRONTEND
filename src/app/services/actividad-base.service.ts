@@ -71,4 +71,8 @@ export class ActividadBaseService {
           return this.http.put<actividadBaseDTOResponse> (`${this.baseUrl}/${idActividad}`,formData)
 
     }
+
+    verInstrucciones(idActividad: number) : Observable <Blob> {
+      return this.http.get(`${this.baseUrl}/${idActividad}/instrucciones`,{responseType: 'blob'});
+    }
 }

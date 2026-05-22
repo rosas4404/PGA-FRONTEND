@@ -333,6 +333,17 @@ actualizar(modal : any){
     }
   })
 }
+verInstrucciones(idActividadGrupo: number){
+  this.actividadesGrupoService.verInstrucciones(idActividadGrupo).subscribe({
+    next: (blob) => {
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
 
 }
 
