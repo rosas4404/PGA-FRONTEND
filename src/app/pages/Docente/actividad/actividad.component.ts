@@ -14,6 +14,8 @@ import { InscripcionService } from '../../../services/inscripcion.service';
 import { alumnoGrupoDTOResponse } from '../../../models/dto/ResponseDto/alumnoGrupoDTOResponse';
 import { identifierName } from '@angular/compiler';
 import { AgregarInscripcionesRequestDTO } from '../../../models/dto/RequestDto/agregarInscripcionesRequestDTO';
+import { grupoDTOResponse } from '../../../models/dto/ResponseDto/grupoDTOResponse';
+import { GrupoService } from '../../../services/grupo.service';
 
 
 @Component({
@@ -25,6 +27,7 @@ import { AgregarInscripcionesRequestDTO } from '../../../models/dto/RequestDto/a
 })
 export class ActividadComponent implements OnInit {
   idGrupo = 0;
+  grupo!: grupoDTOResponse;
   idActividad = 0;
   actividad!:  actividadGrupoDashboardDTO
   asignaciones : actividadAlumnoDTOResponse [] = []
@@ -59,7 +62,8 @@ export class ActividadComponent implements OnInit {
     private modalService : NgbModal,
     private toastr : ToastrService,
     private fb : FormBuilder,
-    private inscripcionService : InscripcionService
+    private inscripcionService : InscripcionService,
+    private grupoService : GrupoService
   ){}
 
   ngOnInit(): void {
@@ -76,7 +80,7 @@ export class ActividadComponent implements OnInit {
     console.log(this.idGrupo);
     this.cargarActividad();
     this.cargarAsignaciones();
-    
+    this.cargarGrupo();
   }
 
 
@@ -344,6 +348,14 @@ verInstrucciones(idActividadGrupo: number){
     }
   });
 }
+
+  cargarGrupo(){
+    this.grupoService.getGrupo(this.idGrupo).subscribe({
+      next: (data) =>{
+        this.grupo = data;
+      } 
+    })
+  }
 
 }
 

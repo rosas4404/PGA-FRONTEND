@@ -13,6 +13,8 @@ import { InscripcionService } from '../../../services/inscripcion.service';
 import { alumnoGrupoDTOResponse } from '../../../models/dto/ResponseDto/alumnoGrupoDTOResponse';
 import { asignarActividadExtraDto } from '../../../models/dto/RequestDto/asignarActividadExtraDto';
 import { AsignarActividadCatalogoDto } from '../../../models/dto/RequestDto/asignarActividadCatalogoDto';
+import { grupoDTOResponse } from '../../../models/dto/ResponseDto/grupoDTOResponse';
+import { GrupoService } from '../../../services/grupo.service';
 
 @Component({
   selector: 'app-actividades-grupo',
@@ -23,6 +25,7 @@ import { AsignarActividadCatalogoDto } from '../../../models/dto/RequestDto/asig
 })
 export class ActividadesGrupoComponent implements OnInit {
   idGrupo : number = 0;
+  grupo!: grupoDTOResponse;
 
   actividades : actividadGrupoDTOResponse[] = [];
   gruposCampos: CampoAgrupadoDTO[] = [];
@@ -54,13 +57,14 @@ export class ActividadesGrupoComponent implements OnInit {
     private fb : FormBuilder, 
     private modalService : NgbModal,
     private toastr : ToastrService,
-    private inscripcionService : InscripcionService
+    private inscripcionService : InscripcionService,
+    private grupoService : GrupoService,
     
   ){}
   ngOnInit(): void {
       this.idGrupo =  Number(this.route.parent?.parent?.snapshot.paramMap.get('idGrupo'));
       this.cargarActividadesGrupo();
-
+      this.cargarGrupo();
       this.registroExtraForm = this.fb.group({
         titulo : ["", Validators.required],
         descripcion : ["", Validators.required]
@@ -271,5 +275,13 @@ abrirInstrucciones() {
     }
   });
 }
+
+ cargarGrupo(){
+    this.grupoService.getGrupo(this.idGrupo).subscribe({
+      next: (data) =>{
+        this.grupo = data;
+      } 
+    })
+  }
 
 }

@@ -24,7 +24,7 @@
                     </strong>
                     <button class="btn btn-outline-primary" style="font-size: 0.6rem;"
                             title="Actualizar instrucciones"
-                            (click) = "abrirModal(instruccionesModal)">
+                            (click) = "abrirModal(instruccionesModal)" *ngIf="grupo?.estado === 'HABILITADO'">
                            
                             <i class="bi bi-upload" ></i>
                             
@@ -166,14 +166,14 @@
                                
                             <button class="btn btn-sm btn-outline-primary me-2"
                                     title="Calificar"
-                                    *ngIf="!a.excento && a.urlEntrega" 
+                                    *ngIf="!a.excento && a.urlEntrega && grupo?.estado === 'HABILITADO'" 
                                     (click)="abrirCalificarEntrega(a, calificarModal)">
                                     <i class="bi bi-check2-circle"></i>
                             </button>
                                 
                             <button class="btn btn-sm btn-outline-danger me-2"
                                     title = "Exentar"
-                                    *ngIf="!a.excento && !a.urlEntrega"
+                                    *ngIf="!a.excento && a.urlEntrega && grupo?.estado === 'HABILITADO'" 
                                     (click)="abrirConfirmacion(a,ExencionModal)">
                                     <i class="bi bi-person-x"></i>
                                    

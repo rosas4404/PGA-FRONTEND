@@ -21,7 +21,7 @@
     <!-- DERECHA: ACCIONES -->
     <div class="col-md-4 grupo-acciones d-flex flex-column justify-content-center align-items-end">
       
-      <button class="btn btn-outline-primary mb-2  w-100" (click)="descargarReporte(grupo.idGrupo)">
+      <button class="btn btn-outline-primary mb-2  w-100" (click)="descargarReporte(grupo.idGrupo)" *ngIf="grupo?.estado === 'HABILITADO'">
         Reporte alumnos
       </button>
 

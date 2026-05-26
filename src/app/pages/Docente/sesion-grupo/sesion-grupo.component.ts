@@ -18,6 +18,7 @@ import { sesionDTORequest } from '../../../models/dto/RequestDto/sesionDTOReques
 import { sesionUpdateDTO } from '../../../models/dto/RequestDto/sesionUpdateDTO';
 import { asistenciaDTORequest } from '../../../models/dto/RequestDto/asistenciaDTORequest';
 import { EstadoAsistencia } from '../../../models/enum/EstadoAsistencia';
+import { grupoDTOResponse } from '../../../models/dto/ResponseDto/grupoDTOResponse';
 @Component({
   selector: 'app-sesion-grupo',
   standalone: true,
@@ -27,6 +28,7 @@ import { EstadoAsistencia } from '../../../models/enum/EstadoAsistencia';
 })
 export class SesionGrupoComponent implements OnInit{
   idGrupo : number = 0;
+  grupo!: grupoDTOResponse;
   sesionSeleccionada! : sesionDTO;
   sesionDetalle! : sesionDetalleDTO;
   sesionDocente : sesionDocenteDTOResponse[] =[];
@@ -96,6 +98,7 @@ export class SesionGrupoComponent implements OnInit{
     });
 
     this.cargarGrupos();
+    this.cargarGrupo();
     this.cargarSesiones();
   }
 
@@ -398,5 +401,12 @@ export class SesionGrupoComponent implements OnInit{
       keyboard: false,
       centered: true
     });
-  }  
+  } 
+  cargarGrupo(){
+    this.grupoService.getGrupo(this.idGrupo).subscribe({
+      next: (data) =>{
+        this.grupo = data;
+      } 
+    })
+  } 
 }

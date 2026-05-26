@@ -2,7 +2,7 @@
   <!-- cabecera -->
   <div class="card-header bg-smoke d-flex justify-content-between align-items-center mb-3">
     <h5 class="m-0 fw-bold text-maroon">Gestión de Sesiones</h5>
-    <button class="btn btn-outline-primary" (click)="nuevaSesion(); abrirModal(sesionModal)">
+    <button class="btn btn-outline-primary" (click)="nuevaSesion(); abrirModal(sesionModal)" *ngIf="grupo?.estado === 'HABILITADO'">
       <i class="bi bi-plus-circle me-1"></i> Nueva Sesion
     </button>
   </div>
@@ -72,12 +72,12 @@
                 <i class="bi bi-eye"></i>
               </button>
 
-              <button class="btn btn-sm btn-outline-primary me-2"
+              <button class="btn btn-sm btn-outline-primary me-2" *ngIf="grupo?.estado === 'HABILITADO'"
                       (click)="cargarSesion(s.idSesion, 'editarSesion', sesionModal)" title="Editar Datos">
                 <i class="bi bi-pencil"></i>
               </button>
 
-              <button class="btn btn-sm btn-outline-primary me-2" *ngIf="s.alcance==alcanceEnum.INDIVIDUAL"
+              <button class="btn btn-sm btn-outline-primary me-2" *ngIf="s.alcance==alcanceEnum.INDIVIDUAL && grupo?.estado === 'HABILITADO'"
                       (click)="cargarSesion(s.idSesion, 'editarAlumnos', sesionModal)" title="Alumnos">
                 <i class="bi bi-people"></i>
               </button>
@@ -87,7 +87,7 @@
                 <i class="bi bi-card-checklist"></i>
               </button>
 
-              <button class="btn btn-sm btn-outline-primary me-2" 
+              <button class="btn btn-sm btn-outline-primary me-2" *ngIf="grupo?.estado === 'HABILITADO'"
                       (click)="prepararAsistencia(s.idSesion, sesionModal)" title="Tomar asisencia">
                 <i class="bi bi-check2-square"></i>
               </button>
