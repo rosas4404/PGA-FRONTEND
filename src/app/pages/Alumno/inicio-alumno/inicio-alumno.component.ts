@@ -117,6 +117,7 @@ export class InicioAlumnoComponent implements OnInit{
             if (err.status === 409) {
               this.mensajeError = err.error?.message || 'El alumno no cuenta con inscripciones activas';
             } 
+            
         }
     });
   }
